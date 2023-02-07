@@ -35,6 +35,18 @@ class ProjectManager {
     return null;
   };
 
+  searchTodoByTitle = (searchStr) => {
+    let matches = [];
+    for (let project of this.projects) {
+      for (let todo of project.todos) {
+        if (todo.title.toLowerCase().search(searchStr.toLowerCase()) !== -1) {
+          matches.push(todo);
+        }
+      }
+    }
+    return matches;
+  };
+
   toString = () => {
     let out = "";
     for (let project of this.projects) {

@@ -72,16 +72,6 @@ class Project {
     return true;
   };
 
-  searchByTitle = (searchStr) => {
-    let matches = [];
-    for (let todo of this.todos) {
-      if (todo.title.toLowerCase().search(searchStr.toLowerCase()) !== -1) {
-        matches.push(todo);
-      }
-    }
-    return matches;
-  };
-
   toString = () => {
     let msg = `Project Name: ${this.name}\n`;
     for (let i = 0; i < this.todos.length; i++) {

@@ -52,20 +52,20 @@ let todo7 = new Todo("Study for mid term");
 let project2 = new Project("Study Task", [todo6, todo7]);
 
 // Test ProjectManager no-arg constructor
-let projectsM = new ProjectManager();
+let projectM = new ProjectManager();
 
 // Test ProjectManager addProject and removeProject()
-projectsM.addProject(project1);
-projectsM.addProject(project2);
-console.log(projectsM.toString());
-projectsM.removeProject(project1);
-console.log(projectsM.toString());
+projectM.addProject(project1);
+projectM.addProject(project2);
+console.log(projectM.toString());
+projectM.removeProject(project1);
+console.log(projectM.toString());
 
 // Test searchByTitle()
 let todo8 = new Todo("Quiz 2");
 project2.addTodo(todo8);
-console.log(project2.toString());
-let results = project2.searchByTitle("Quiz");
-for (let res of results) {
-  console.log(res.toString());
+// console.log(project2.toString());
+let results = projectM.searchTodoByTitle("quiz");
+for (let todo of results) {
+  console.log(todo.toString());
 }
