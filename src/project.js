@@ -75,7 +75,7 @@ class Project {
   searchByTitle = (searchStr) => {
     let matches = [];
     for (let todo of this.todos) {
-      if (todo.title.search(searchStr) !== -1) {
+      if (todo.title.toLowerCase().search(searchStr.toLowerCase()) !== -1) {
         matches.push(todo);
       }
     }
