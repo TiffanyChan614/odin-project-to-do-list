@@ -72,6 +72,10 @@ class Project {
     return true;
   };
 
+  clearAllTodo = () => {
+    this.todos = [];
+  };
+
   toString = () => {
     let msg = `Project Name: ${this.name}\n`;
     for (let i = 0; i < this.todos.length; i++) {
