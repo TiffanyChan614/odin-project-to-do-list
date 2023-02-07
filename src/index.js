@@ -60,3 +60,12 @@ projectsM.addProject(project2);
 console.log(projectsM.toString());
 projectsM.removeProject(project1);
 console.log(projectsM.toString());
+
+// Test searchByTitle()
+let todo8 = new Todo("Quiz 2");
+project2.addTodo(todo8);
+console.log(project2.toString());
+let results = project2.searchByTitle("Quiz");
+for (let res of results) {
+  console.log(res.toString());
+}
