@@ -1,27 +1,9 @@
-class ToDo {
+class Todo {
   constructor(title, desc, dueDate, priority) {
     if (arguments.length === 0) {
       this.title = "Unknown";
       this.description = "";
       this.dueDate = null;
-      this.priority = null;
-      this.check = false;
-    } else if (arguments.length === 1) {
-      this.title = title;
-      this.description = "";
-      this.dueDate = null;
-      this.priority = null;
-      this.check = false;
-    } else if (arguments.length === 2) {
-      this.title = title;
-      this.description = desc;
-      this.dueDate = null;
-      this.priority = null;
-      this.check = false;
-    } else if (arguments.length === 3) {
-      this.title = title;
-      this.description = desc;
-      this.dueDate = dueDate;
       this.priority = null;
       this.check = false;
     } else {
@@ -76,4 +58,4 @@ class ToDo {
   };
 }
 
-export default ToDo;
+export default Todo;
