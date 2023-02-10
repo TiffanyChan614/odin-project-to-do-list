@@ -1,7 +1,7 @@
 class Project {
   constructor(name, todos) {
-    this.uncheckedTodos = [];
-    this.checkedTodos = [];
+    this.uncheckedTodos = {};
+    this.checkedTodos = {};
     if (arguments.length === 0) {
       this.name = "Project";
     } else if (arguments.length === 1) {
@@ -19,6 +19,10 @@ class Project {
 
   getNumTodo = () => {
     return this.uncheckedTodos.length;
+  };
+
+  getNumChecked = () => {
+    return this.checkedTodos.length;
   };
 
   getAllTodo = () => {
