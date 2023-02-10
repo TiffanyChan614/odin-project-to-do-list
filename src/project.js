@@ -16,13 +16,15 @@ class Project {
 
   getId = () => this.id;
 
+  getName = () => this.name;
+
   isEmpty = () => (this.uncheckedTodos.length === 0 ? true : false);
 
   getNumTodo = () => this.uncheckedTodos.length;
 
   getNumChecked = () => this.checkedTodos.length;
 
-  getAllTodo = () => this.uncheckedTodos;
+  getAllTodos = () => this.uncheckedTodos;
 
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;

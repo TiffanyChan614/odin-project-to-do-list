@@ -20,7 +20,7 @@ header {
 
 footer {
   text-align: center;
-  font-size: 0.6rem;
+  font-size: 0.8rem;
 }
 
 main {
@@ -28,9 +28,9 @@ main {
   flex: 1;
 }
 
-#sidebar {
+/* #sidebar {
   display: none;
-}
+} */
 
 #project-container {
   border: 1px solid black;

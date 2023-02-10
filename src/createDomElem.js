@@ -8,10 +8,10 @@ const createProjectList = (projectList, projects) => {
 };
 
 const addProjectBtns = (projectLi) => {
-  let editBtn = document.createElement("btn");
+  let editBtn = document.createElement("button");
   editBtn.className = "edit-project";
   editBtn.textContent = "Edit";
-  let clearBtn = document.createElement("btn");
+  let clearBtn = document.createElement("button");
   clearBtn.className = "clear-project";
   clearBtn.textContent = "Clear";
   projectLi.appendChild(editBtn);
@@ -28,16 +28,23 @@ const createTodoList = (todoList, todos) => {
 };
 
 const addTodoBtns = (todoLi) => {
-  let checkBtn = document.createElement("btn");
+  let checkBtn = document.createElement("button");
   checkBtn.className = "check-todo";
   checkBtn.textContent = "Check";
-  let editBtn = document.createElement("btn");
+  let editBtn = document.createElement("button");
   editBtn.className = "edit-todo";
   editBtn.textContent = "Edit";
-  let clearBtn = document.createElement("btn");
+  let clearBtn = document.createElement("button");
   clearBtn.className = "clear-todo";
   clearBtn.textContent = "Clear";
   todoLi.appendChild(checkBtn);
   todoLi.appendChild(editBtn);
   todoLi.appendChild(clearBtn);
+};
+
+export default {
+  createProjectList,
+  addProjectBtns,
+  createTodoList,
+  addTodoBtns,
 };

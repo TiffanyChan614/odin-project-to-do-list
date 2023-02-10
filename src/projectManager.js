@@ -35,6 +35,8 @@ class ProjectManager {
     return null;
   };
 
+  getAllProjects = () => this.projects;
+
   searchTodoByTitle = (searchStr) => {
     let matches = [];
     for (let project of this.projects) {
