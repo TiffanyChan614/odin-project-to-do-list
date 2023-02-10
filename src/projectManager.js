@@ -47,7 +47,7 @@ class ProjectManager {
     return matches;
   };
 
-  clearAll = () => {
+  clearAllProject = () => {
     this.projects = [];
   };
 
