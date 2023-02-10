@@ -16,10 +16,10 @@ class ProjectManager {
     this.projects.push(project);
   };
 
-  removeProject = (project) => {
+  removeProject = (id) => {
     if (this.isEmpty()) return;
     for (let p of this.projects) {
-      if (project.equals(p)) {
+      if (project.getId() === id) {
         this.projects = this.projects.filter((p) => !project.equals(p));
       }
     }
@@ -47,9 +47,7 @@ class ProjectManager {
     return matches;
   };
 
-  clearAllProject = () => {
-    this.projects = [];
-  };
+  clearAllProject = () => (this.projects = []);
 
   toString = () => {
     let out = "";

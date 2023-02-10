@@ -1,5 +1,7 @@
+const uuid = require("uuid");
 class Project {
   constructor(name, todos) {
+    this.id = uuid.v4();
     this.uncheckedTodos = {};
     this.checkedTodos = {};
     if (arguments.length === 0) {
@@ -12,22 +14,15 @@ class Project {
     }
   }
 
-  isEmpty = () => {
-    if (this.uncheckedTodos.length === 0) return true;
-    return false;
-  };
+  getId = () => this.id;
 
-  getNumTodo = () => {
-    return this.uncheckedTodos.length;
-  };
+  isEmpty = () => (this.uncheckedTodos.length === 0 ? true : false);
 
-  getNumChecked = () => {
-    return this.checkedTodos.length;
-  };
+  getNumTodo = () => this.uncheckedTodos.length;
 
-  getAllTodo = () => {
-    return this.uncheckedTodos;
-  };
+  getNumChecked = () => this.checkedTodos.length;
+
+  getAllTodo = () => this.uncheckedTodos;
 
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;
@@ -41,10 +36,10 @@ class Project {
     else return null;
   };
 
-  getTodo = (todo) => {
+  getTodo = (id) => {
     if (this.isEmpty()) return null;
     for (let td of this.uncheckedTodos) {
-      if (td.equals(todo)) {
+      if (td.getId() === id) {
         return td;
       }
     }
@@ -55,50 +50,36 @@ class Project {
     this.uncheckedTodos.push(todo);
   };
 
-  removeTodo = (todo) => {
+  removeTodo = (id) => {
     if (this.isEmpty()) return;
     for (let td of this.uncheckedTodos) {
-      if (td.equals(todo)) {
-        this.uncheckedTodos = this.uncheckedTodos.filter((td) =>
-          td.equals(todo)
+      if (td.getId() === id) {
+        this.uncheckedTodos = this.uncheckedTodos.filter(
+          (td) => td.getId() === id
         );
+        break;
       }
     }
   };
 
-  checkTodo = (todo) => {
+  checkTodo = (id) => {
     if (this.isEmpty()) return;
     for (let td of this.uncheckedTodos) {
-      if (td.equals(todo)) {
-        td.setCheck(true);
-        this.uncheckedTodos = this.uncheckedTodos.filter((td) =>
-          td.equals(todo)
+      if (td.getId() === id) {
+        td.check();
+        this.uncheckedTodos = this.uncheckedTodos.filter(
+          (td) => td.getId() === id
         );
         this.checkedTodos.push(td);
       }
     }
   };
 
-  equals = (project) => {
-    if (project.getNumTodo() !== this.getNumTodo()) {
-      return false;
-    } else {
-      for (let i = 0; i < project.getNumTodo(); i++) {
-        if (project.getAllTodo()[i] !== this.getAllTodo()[i]) {
-          return false;
-        }
-      }
-    }
-    return true;
-  };
+  equals = (project) => this.id === project.id;
 
-  clearAllTodo = () => {
-    this.uncheckedTodos = [];
-  };
+  clearAllTodo = () => (this.uncheckedTodos = []);
 
-  clearHistory = () => {
-    this.checkedTodos = [];
-  };
+  clearHistory = () => (this.checkedTodos = []);
 
   toString = () => {
     let msg = `Project Name: ${this.name}\n`;

@@ -1,5 +1,7 @@
+const uuid = require("uuid");
 class Todo {
   constructor(title, desc, dueDate, priority) {
+    this.id = uuid.v4();
     if (arguments.length === 0) {
       this.title = "Unknown";
       this.description = "";
@@ -15,6 +17,7 @@ class Todo {
     }
   }
 
+  getId = () => this.id;
   getTitle = () => this.title;
   setTitle = (title) => (this.title = title);
   getDescription = () => this.description;
@@ -37,15 +40,7 @@ class Todo {
     this["set" + field.charAt(0).toUpperCase() + field.slice(1)](newVal);
   };
 
-  equals = (todo) => {
-    return (
-      this.title === todo.title &&
-      this.description === todo.description &&
-      this.dueDate === todo.dueDate &&
-      this.priority === todo.priority &&
-      this.check === todo.check
-    );
-  };
+  equals = (todo) => this.id === todo.id;
 
   toString = () => {
     return (
