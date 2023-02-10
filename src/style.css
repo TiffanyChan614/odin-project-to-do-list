@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: -apple-system, "system-ui";
+}
+
+header {
+  display: flex;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.6rem;
+}
+
+main {
+  display: flex;
+  flex: 1;
+}
+
+#sidebar {
+  display: none;
+}
+
+#project-container {
+  border: 1px solid black;
+}

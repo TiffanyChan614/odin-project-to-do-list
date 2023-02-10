@@ -2,6 +2,7 @@ const createProjectList = (projectList, projects) => {
   for (let project of projects) {
     let li = document.createElement("li");
     li.textContent = project.getName();
+    li.id = `project-${project.getId()}`;
     projectList.appendChild(li);
   }
 };
@@ -21,6 +22,7 @@ const createTodoList = (todoList, todos) => {
   for (let todo of todos) {
     let li = document.createElement("li");
     li.textContent = todo.getTitle();
+    li.id = `todo-${todo.getId()}`;
     todoList.appendChild(todo);
   }
 };
@@ -35,6 +37,7 @@ const addTodoBtns = (todoLi) => {
   let clearBtn = document.createElement("btn");
   clearBtn.className = "clear-todo";
   clearBtn.textContent = "Clear";
+  todoLi.appendChild(checkBtn);
   todoLi.appendChild(editBtn);
   todoLi.appendChild(clearBtn);
 };
