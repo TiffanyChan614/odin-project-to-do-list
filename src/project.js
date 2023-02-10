@@ -1,33 +1,34 @@
 class Project {
   constructor(name, todos) {
-    this.todos = [];
+    this.uncheckedTodos = [];
+    this.checkedTodos = [];
     if (arguments.length === 0) {
       this.name = "Project";
     } else if (arguments.length === 1) {
       this.name = name;
     } else {
       this.name = name;
-      this.todos = todos;
+      this.uncheckedTodos = todos;
     }
   }
 
   isEmpty = () => {
-    if (this.todos.length === 0) return true;
+    if (this.uncheckedTodos.length === 0) return true;
     return false;
   };
 
   getNumTodo = () => {
-    return this.todos.length;
+    return this.uncheckedTodos.length;
   };
 
   getAllTodo = () => {
-    return this.todos;
+    return this.uncheckedTodos;
   };
 
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;
     let matches = [];
-    for (let todo of this.todos) {
+    for (let todo of this.uncheckedTodos) {
       if (todo.getTitle() === title) {
         matches.push(todo);
       }
@@ -38,7 +39,7 @@ class Project {
 
   getTodo = (todo) => {
     if (this.isEmpty()) return null;
-    for (let td of this.todos) {
+    for (let td of this.uncheckedTodos) {
       if (td.equals(todo)) {
         return td;
       }
@@ -47,14 +48,29 @@ class Project {
   };
 
   addTodo = (todo) => {
-    this.todos.push(todo);
+    this.uncheckedTodos.push(todo);
   };
 
   removeTodo = (todo) => {
     if (this.isEmpty()) return;
-    for (let td of this.todos) {
+    for (let td of this.uncheckedTodos) {
       if (td.equals(todo)) {
-        this.todos = this.todos.filter((td) => td.equals(todo));
+        this.uncheckedTodos = this.uncheckedTodos.filter((td) =>
+          td.equals(todo)
+        );
+      }
+    }
+  };
+
+  checkTodo = (todo) => {
+    if (this.isEmpty()) return;
+    for (let td of this.uncheckedTodos) {
+      if (td.equals(todo)) {
+        td.setCheck(true);
+        this.uncheckedTodos = this.uncheckedTodos.filter((td) =>
+          td.equals(todo)
+        );
+        this.checkedTodos.push(td);
       }
     }
   };
@@ -73,14 +89,18 @@ class Project {
   };
 
   clearAllTodo = () => {
-    this.todos = [];
+    this.uncheckedTodos = [];
+  };
+
+  clearHistory = () => {
+    this.checkedTodos = [];
   };
 
   toString = () => {
     let msg = `Project Name: ${this.name}\n`;
-    for (let i = 0; i < this.todos.length; i++) {
+    for (let i = 0; i < this.uncheckedTodos.length; i++) {
       msg += `To-do ${i + 1}:\n`;
-      msg += this.todos[i].toString() + "\n";
+      msg += this.uncheckedTodos[i].toString() + "\n";
     }
     return msg;
   };
