@@ -3,8 +3,11 @@ import CreateDomElem from "./createDomElem";
 const projectUl = document.querySelector("#project-list");
 const todoUl = document.querySelector("#todo-list");
 
-let refreshProject = (projectManager) => {
-  projectUl.textContent = "";
+let clearProject = () => (projectUl.textContent = "");
+
+let clearTodo = () => (todoUl.textContent = "");
+
+let showProject = (projectManager) => {
   CreateDomElem.createProjectList(projectUl, projectManager.getAllProjects());
   const projectLi = document.querySelectorAll("#project-list li");
   for (let p of projectLi) {
@@ -12,8 +15,7 @@ let refreshProject = (projectManager) => {
   }
 };
 
-let refreshTodo = (project) => {
-  todoUl.textContent = "";
+let showTodo = (project) => {
   CreateDomElem.createTodoList(todoUl, project.getAllTodos());
   const todoLi = document.querySelectorAll("#todo-list li");
   for (let t of todoLi) {
@@ -21,4 +23,4 @@ let refreshTodo = (project) => {
   }
 };
 
-export default { refreshProject, refreshTodo };
+export default { clearProject, clearTodo, showProject, showTodo };

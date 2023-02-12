@@ -5,4 +5,4 @@ import "./style.css";
 
 let projectM = new ProjectManager();
 projectM.addProject(new Project());
-DisplayControl.refreshProject(projectM);
+DisplayControl.showProject(projectM);
