@@ -1,3 +1,5 @@
+import Project from './project';
+
 class ProjectManager {
   constructor(projects) {
     if (arguments.length === 0) {
@@ -12,23 +14,24 @@ class ProjectManager {
     return false;
   };
 
-  addProject = (project) => {
+  addProject = (...args) => {
+    let project = new Project(...args);
     this.projects.push(project);
   };
 
   removeProject = (id) => {
     if (this.isEmpty()) return;
     for (let p of this.projects) {
-      if (project.getId() === id) {
+      if (p.getId() === id) {
         this.projects = this.projects.filter((p) => !project.equals(p));
       }
     }
   };
 
-  getProject = (project) => {
+  getProject = (id) => {
     if (this.isEmpty()) return null;
     for (let p of this.projects) {
-      if (project.equals(p)) {
+      if (p.getId() === id) {
         return p;
       }
     }
@@ -52,9 +55,9 @@ class ProjectManager {
   clearAllProject = () => (this.projects = []);
 
   toString = () => {
-    let out = "";
+    let out = '';
     for (let project of this.projects) {
-      out += project.toString() + "\n";
+      out += project.toString() + '\n';
     }
     return out;
   };

@@ -1,8 +1,10 @@
-import Project from "./project";
-import ProjectManager from "./projectManager";
-import DisplayControl from "./displayControl";
-import "./style.css";
+import Project from './project';
+import pm from './app.js';
+import displayControl from './display-control';
+import './style.css';
+import btnControl from './btn-control.js';
 
-let projectM = new ProjectManager();
-projectM.addProject(new Project());
-DisplayControl.showProject(projectM);
+pm.addProject('Programming');
+// let projects = pm.getAllProjects();
+// projects[0].addTodo();
+displayControl.showProjects(pm);

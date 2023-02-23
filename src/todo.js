@@ -1,18 +1,18 @@
-const uuid = require("uuid");
+const uuid = require('uuid');
 class Todo {
-  constructor(title, desc, dueDate, priority) {
+  constructor(...args) {
     this.id = uuid.v4();
-    if (arguments.length === 0) {
-      this.title = "Unknown";
-      this.description = "";
+    if (args.length === 0) {
+      this.title = 'Unknown';
+      this.description = '';
       this.dueDate = null;
       this.priority = null;
       this.check = false;
     } else {
-      this.title = title;
-      this.description = desc;
-      this.dueDate = dueDate;
-      this.priority = priority;
+      this.title = args[0];
+      this.description = args[1];
+      this.dueDate = args[2];
+      this.priority = args[3];
       this.check = false;
     }
   }
@@ -32,12 +32,12 @@ class Todo {
   check = () => (this.check = !this.check ? true : false);
 
   edit = (field, newVal) => {
-    let validField = ["title", "description", "dueDate", "priority", "check"];
+    let validField = ['title', 'description', 'dueDate', 'priority', 'check'];
     if (validField.indexOf(field) == -1) {
-      console.log("ERROR: invalid field");
+      console.log('ERROR: invalid field');
       return;
     }
-    this["set" + field.charAt(0).toUpperCase() + field.slice(1)](newVal);
+    this['set' + field.charAt(0).toUpperCase() + field.slice(1)](newVal);
   };
 
   equals = (todo) => this.id === todo.id;

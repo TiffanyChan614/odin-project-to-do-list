@@ -1,16 +1,18 @@
-const uuid = require("uuid");
+import Todo from './todo';
+
+const uuid = require('uuid');
 class Project {
-  constructor(name, todos) {
+  constructor(...args) {
     this.id = uuid.v4();
-    this.uncheckedTodos = {};
-    this.checkedTodos = {};
-    if (arguments.length === 0) {
-      this.name = "Project";
-    } else if (arguments.length === 1) {
-      this.name = name;
+    this.uncheckedTodos = [];
+    this.checkedTodos = [];
+    if (args.length === 0) {
+      this.name = 'Project';
+    } else if (args.length === 1) {
+      this.name = args[0];
     } else {
-      this.name = name;
-      this.uncheckedTodos = todos;
+      this.name = args[0];
+      this.uncheckedTodos = args[1];
     }
   }
 
@@ -48,7 +50,8 @@ class Project {
     return null;
   };
 
-  addTodo = (todo) => {
+  addTodo = (...args) => {
+    let todo = new Todo(...args);
     this.uncheckedTodos.push(todo);
   };
 
@@ -87,7 +90,7 @@ class Project {
     let msg = `Project Name: ${this.name}\n`;
     for (let i = 0; i < this.uncheckedTodos.length; i++) {
       msg += `To-do ${i + 1}:\n`;
-      msg += this.uncheckedTodos[i].toString() + "\n";
+      msg += this.uncheckedTodos[i].toString() + '\n';
     }
     return msg;
   };
