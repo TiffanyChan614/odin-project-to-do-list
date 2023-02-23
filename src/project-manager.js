@@ -67,7 +67,7 @@ class ProjectManager {
     return matches;
   };
 
-  clearAllProject = () => (this.projects = []);
+  clearAllProjects = () => (this.projects = []);
 
   toString = () => {
     let out = '';
