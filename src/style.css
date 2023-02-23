@@ -8,7 +8,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  font-family: -apple-system, "system-ui";
+  font-family: -apple-system, 'system-ui';
 }
 
 header {
@@ -34,4 +34,8 @@ main {
 
 #project-container {
   border: 1px solid black;
+}
+
+.project.selected {
+  background-color: aquamarine;
 }

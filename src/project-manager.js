@@ -6,6 +6,7 @@ class ProjectManager {
       this.projects = [];
     } else {
       this.projects = projects;
+      this.currProject = this.projects[0];
     }
   }
 
@@ -17,6 +18,9 @@ class ProjectManager {
   addProject = (...args) => {
     let project = new Project(...args);
     this.projects.push(project);
+    if (this.projects.length === 1) {
+      this.currProject = this.projects[0];
+    }
   };
 
   removeProject = (id) => {
@@ -27,6 +31,17 @@ class ProjectManager {
       }
     }
   };
+
+  setCurrProject = (id) => {
+    if (this.isEmpty()) return;
+    for (let p of this.projects) {
+      if (p.getId() === id) {
+        currProject = p;
+      }
+    }
+  };
+
+  getCurrProjectId = () => this.currProject.getId();
 
   getProject = (id) => {
     if (this.isEmpty()) return null;
