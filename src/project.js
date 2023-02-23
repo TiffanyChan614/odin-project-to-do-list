@@ -57,14 +57,7 @@ class Project {
 
   removeTodo = (id) => {
     if (this.isEmpty()) return;
-    for (let td of this.uncheckedTodos) {
-      if (td.getId() === id) {
-        this.uncheckedTodos = this.uncheckedTodos.filter(
-          (td) => td.getId() === id
-        );
-        break;
-      }
-    }
+    this.uncheckedTodos = this.uncheckedTodos.filter((td) => td.getId() !== id);
   };
 
   checkTodo = (id) => {

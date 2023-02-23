@@ -8,5 +8,6 @@ for (let p of projects) console.log(p.toString());
 // projects[0].addTodo();
 displayControl.activateProjectForm();
 displayControl.activateProjectEvent();
-displayControl.activateClearProjects();
+displayControl.activateClearAllProjects();
+displayControl.activateClearProject();
 displayControl.refreshProjects();

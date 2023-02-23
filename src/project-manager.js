@@ -4,31 +4,28 @@ class ProjectManager {
   constructor(projects) {
     if (arguments.length === 0) {
       this.projects = [];
+      this.currProject = null;
     } else {
       this.projects = projects;
       this.currProject = this.projects[0];
     }
   }
 
-  isEmpty = () => {
-    if (this.projects.length === 0) return true;
-    return false;
-  };
+  isEmpty = () => this.projects.length === 0;
 
   addProject = (...args) => {
     let project = new Project(...args);
     this.projects.push(project);
-    if (this.projects.length === 1) {
-      this.currProject = this.projects[0];
-    }
+    this.currProject = project;
   };
 
   removeProject = (id) => {
     if (this.isEmpty()) return;
-    for (let p of this.projects) {
-      if (p.getId() === id) {
-        this.projects = this.projects.filter((p) => !project.equals(p));
-      }
+    this.projects = this.projects.filter((p) => p.getId() !== id);
+    if (this.getCurrProjectId() === id) {
+      console.log('Selected is removed');
+      this.currProject = this.projects[0];
+      console.log(this.currProject.getName());
     }
   };
 
@@ -41,7 +38,7 @@ class ProjectManager {
     }
   };
 
-  getCurrProjectId = () => this.currProject.getId();
+  getCurrProjectId = () => (this.currProject ? this.currProject.getId() : null);
 
   getProject = (id) => {
     if (this.isEmpty()) return null;
