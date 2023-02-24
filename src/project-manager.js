@@ -45,7 +45,7 @@ class ProjectManager {
     if (this.isEmpty()) return;
     for (let p of this.projects) {
       if (p.getId() === id) {
-        currProject = p;
+        this.currProject = p;
       }
     }
   };
