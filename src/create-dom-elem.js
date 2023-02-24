@@ -25,7 +25,7 @@ const createTodoList = (todoList, todos) => {
     li.textContent = todo.getTitle();
     li.classList.add('todo');
     li.id = `todo-${todo.getId()}`;
-    todoList.appendChild(todo);
+    todoList.appendChild(li);
   }
 };
 

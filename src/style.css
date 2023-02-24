@@ -40,7 +40,10 @@ main {
   background-color: aquamarine;
 }
 
-#new-project-form,
-#edit-project-form {
+#project-form {
   display: none;
+}
+
+ul {
+  list-style: none;
 }

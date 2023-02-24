@@ -5,12 +5,8 @@ import './style.css';
 
 let projects = pm.getAllProjects();
 for (let p of projects) console.log(p.toString());
-// projects[0].addTodo();
-displayControl.activateAddProj();
-displayControl.activateProjForm();
-displayControl.activateProjEvent();
-displayControl.activateClearAllProj();
-displayControl.activateClearProj();
+projects[0].addTodo();
+console.log(projects[0].toString());
+displayControl.refreshTodos();
 displayControl.refreshProjects();
-displayControl.activateEditProj();
-displayControl.activateEditProjForm();
+displayControl.activateUI();

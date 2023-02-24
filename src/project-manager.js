@@ -41,13 +41,8 @@ class ProjectManager {
 
   editProject = (id, newName) => this.getProject(id).setName(newName);
 
-  setCurrProject = (id) => {
-    if (this.isEmpty()) return;
-    for (let p of this.projects) {
-      if (p.getId() === id) {
-        this.currProject = p;
-      }
-    }
+  setCurrProject = (project) => {
+    if (project) this.currProject = project;
   };
 
   getCurrProjectId = () => (this.currProject ? this.currProject.getId() : null);
