@@ -16,6 +16,8 @@ class Project {
     }
   }
 
+  setName = (projName) => (this.name = projName);
+
   getId = () => this.id;
 
   getName = () => this.name;

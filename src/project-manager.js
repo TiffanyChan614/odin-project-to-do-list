@@ -13,6 +13,16 @@ class ProjectManager {
 
   isEmpty = () => this.projects.length === 0;
 
+  getProject = (id) => {
+    if (this.isEmpty()) return null;
+    for (let p of this.projects) {
+      if (p.getId() === id) {
+        return p;
+      }
+    }
+    return null;
+  };
+
   addProject = (...args) => {
     let project = new Project(...args);
     this.projects.push(project);
@@ -23,11 +33,13 @@ class ProjectManager {
     if (this.isEmpty()) return;
     this.projects = this.projects.filter((p) => p.getId() !== id);
     if (this.getCurrProjectId() === id) {
-      console.log('Selected is removed');
+      // console.log('Selected is removed');
       this.currProject = this.projects[0];
-      console.log(this.currProject.getName());
+      // console.log(this.currProject.getName());
     }
   };
+
+  editProject = (id, newName) => this.getProject(id).setName(newName);
 
   setCurrProject = (id) => {
     if (this.isEmpty()) return;
@@ -39,16 +51,6 @@ class ProjectManager {
   };
 
   getCurrProjectId = () => (this.currProject ? this.currProject.getId() : null);
-
-  getProject = (id) => {
-    if (this.isEmpty()) return null;
-    for (let p of this.projects) {
-      if (p.getId() === id) {
-        return p;
-      }
-    }
-    return null;
-  };
 
   getAllProjects = () => this.projects;
 

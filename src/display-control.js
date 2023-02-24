@@ -7,11 +7,13 @@ const projForm = document.querySelector('#new-project-form');
 const projNameField = document.querySelector('#project-name');
 const clearProjectsBtn = document.querySelector('#clear-all-projects');
 const projectList = document.querySelector('#project-list');
+const editProjForm = document.querySelector('#edit-projects');
+const projNewNameField = document.querySelector('#new-project-name');
 
 const domIdToStorageId = (domId) => domId.substring(8);
 const storageIdToDomId = (storageId) => 'project-' + storageId;
 
-let selectedProjectId = storageIdToDomId(pm.getCurrProjectId());
+let currProjectId = storageIdToDomId(pm.getCurrProjectId());
 // console.log(selectedProjectId);
 
 const clearProjects = () => {
@@ -33,7 +35,7 @@ const showProjects = () => {
     const projectLi = document.querySelectorAll('#project-list .project');
     for (let p of projectLi) {
       createDomElem.addProjectBtns(p);
-      if (selectedProjectId && p.id === selectedProjectId) {
+      if (currProjectId && p.id === currProjectId) {
         // console.log('Current project: ' + p.id);
         p.classList.add('selected');
       }
@@ -61,50 +63,74 @@ const refreshTodos = (project) => {
   }
 };
 
-const activateProjectForm = () => {
+const activateProjForm = () => {
   projForm.addEventListener('submit', (e) => {
     e.preventDefault();
     //   console.log('submit');
     let projName = projNameField.value;
     if (projName) pm.addProject(projName);
     else pm.addProject();
-    selectedProjectId = storageIdToDomId(pm.getCurrProjectId());
+    currProjectId = storageIdToDomId(pm.getCurrProjectId());
     refreshProjects();
     //   console.log(pm.toString());
   });
 };
 
-const activateProjectEvent = () => {
+const activateProjEvent = () => {
   projectList.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('project') && target.id) {
       // console.log(`click ${target.id}`);
-      selectedProjectId = target.id;
-      pm.setCurrProject(domIdToStorageId(selectedProjectId));
+      currProjectId = target.id;
+      pm.setCurrProject(domIdToStorageId(currProjectId));
       refreshProjects();
     }
   });
 };
 
-const activateClearAllProjects = () => {
+const activateClearAllProj = () => {
   clearProjectsBtn.addEventListener('click', (e) => {
     pm.clearAllProjects();
     refreshProjects();
   });
 };
 
-const activateClearProject = () => {
+const activateClearProj = () => {
   projectList.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('clear-project')) {
       pm.removeProject(domIdToStorageId(target.parentNode.id));
       if (pm.isEmpty()) {
-        selectedProjectId = null;
+        currProjectId = null;
       } else {
-        selectedProjectId = storageIdToDomId(pm.getCurrProjectId());
+        currProjectId = storageIdToDomId(pm.getCurrProjectId());
       }
       refreshProjects();
     }
+  });
+};
+
+let selectedProj = null;
+
+const activateEditProj = () => {
+  projectList.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('edit-project')) {
+      editProjForm.style.display = 'block';
+      selectedProj = pm.getProject(domIdToStorageId(target.parentNode.id));
+      let oldName = selectedProj.getName();
+      projNewNameField.value = oldName;
+    }
+  });
+};
+
+const activateEditProjForm = () => {
+  editProjForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let newName = projNewNameField.value;
+    if (newName) pm.editProject(selectedProj.getId(), newName);
+    editProjForm.style.display = 'none';
+    refreshProjects();
   });
 };
 
@@ -115,8 +141,10 @@ export default {
   showTodos,
   refreshProjects,
   refreshTodos,
-  activateProjectForm,
-  activateProjectEvent,
-  activateClearAllProjects,
-  activateClearProject,
+  activateProjForm,
+  activateProjEvent,
+  activateClearAllProj,
+  activateClearProj,
+  activateEditProj,
+  activateEditProjForm,
 };

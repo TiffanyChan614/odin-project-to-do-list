@@ -39,3 +39,7 @@ main {
 .project.selected {
   background-color: aquamarine;
 }
+
+#edit-projects {
+  display: none;
+}

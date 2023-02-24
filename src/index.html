@@ -18,13 +18,18 @@
           <button type="button" id="add-project">Add new project</button>
           <button type="button" id="clear-all-projects">Clear All</button>
         </header>
+        <!-- <input type="text" id="new-project-name" placeholder="Project name" /> -->
+        <ul id="project-list"></ul>
         <form id="new-project-form" action="">
           <label for="name">Project name: </label>
           <input type="text" id="project-name" />
           <button type="submit" id="add-proj-btn">Add</button>
         </form>
-        <!-- <input type="text" id="new-project-name" placeholder="Project name" /> -->
-        <ul id="project-list"></ul>
+        <form id="edit-projects" action="">
+          <label for="new-project-name">Name</label>
+          <input type="text" id="new-project-name" />
+          <button type="submit" id="edit-proj-btn">Confirm</button>
+        </form>
       </aside>
       <section id="todo-container">
         <header id="todo-header">
