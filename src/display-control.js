@@ -162,11 +162,21 @@ const activateEditProj = () => {
     if (target.classList.contains('edit-project')) {
       projectMode = EDIT;
       projForm.style.display = 'block';
-      projToEditId = dtarget.parentNode.id;
+      projToEditId = target.parentNode.id;
       projToEdit = pm.getProject(projToEditId);
       let oldName = projToEdit.getName();
       projNameField.value = oldName;
     }
+  });
+};
+
+const activateClearTodo = () => {
+  todoUl.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('clear-todo')) {
+      pm.removeTodo(target.parentNode.id);
+    }
+    refreshTodos();
   });
 };
 
@@ -234,6 +244,7 @@ const activateUI = () => {
   activateClearAllProj();
   activateClearProj();
   activateEditProj();
+  activateClearTodo();
   activateAddTodo();
   activateEditTodo();
   activateTodoForm();
