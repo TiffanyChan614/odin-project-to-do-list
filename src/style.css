@@ -40,10 +40,15 @@ main {
   background-color: aquamarine;
 }
 
-#project-form {
+#project-form,
+#todo-form {
   display: none;
 }
 
 ul {
   list-style: none;
+}
+
+input {
+  display: block;
 }

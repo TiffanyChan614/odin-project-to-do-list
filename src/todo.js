@@ -9,7 +9,8 @@ class Todo {
       this.priority = null;
       this.check = false;
     } else {
-      this.title = args[0];
+      if (!this.title) this.title = 'Unknown';
+      else this.title = args[0];
       this.description = args[1];
       this.dueDate = args[2];
       this.priority = args[3];

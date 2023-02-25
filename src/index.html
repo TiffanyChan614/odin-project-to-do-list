@@ -22,16 +22,10 @@
         <ul id="project-list"></ul>
         <form id="project-form" action="">
           <h2>Project</h2>
-          <label for="name">Project name: </label>
+          <label for="project-name">Project name: </label>
           <input type="text" id="project-name" />
-          <button type="submit" id="submit-proj-btn">Add</button>
+          <button type="submit" id="submit-proj-btn">Confirm</button>
         </form>
-        <!-- <form id="edit-project-form" action="">
-          <h2>Edit Project</h2>
-          <label for="new-project-name">Name</label>
-          <input type="text" id="new-project-name" />
-          <button type="submit" id="edit-proj-btn">Confirm</button>
-        </form> -->
       </aside>
       <section id="todo-container">
         <header id="todo-header">
@@ -41,6 +35,21 @@
           <button type="button" id="show-completed">Show Completed</button>
         </header>
         <ul id="todo-list"></ul>
+        <form id="todo-form">
+          <label for="todo-title">Title: </label>
+          <input type="text" id="todo-title" />
+          <label for="todo-desc">Description: </label>
+          <input type="text" id="todo-desc" />
+          <label for="todo-date">Date: </label>
+          <input type="date" id="todo-date" />
+          <label for="todo-priority">Priority: </label>
+          <select id="todo-priority">
+            <option value="low">!</option>
+            <option value="medium">!!</option>
+            <option value="high">!!!</option>
+          </select>
+          <button type="submit" id="submit-todo-btn">Confirm</button>
+        </form>
       </section>
     </main>
   </body>

@@ -3,10 +3,8 @@ import pm from './app.js';
 import displayControl from './display-control';
 import './style.css';
 
-let projects = pm.getAllProjects();
-for (let p of projects) console.log(p.toString());
-projects[0].addTodo();
-console.log(projects[0].toString());
+// let projects = pm.getAllProjects();
+// console.log(projects[0].toString());
 displayControl.refreshTodos();
 displayControl.refreshProjects();
 displayControl.activateUI();

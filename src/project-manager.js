@@ -1,14 +1,9 @@
 import Project from './project';
 
 class ProjectManager {
-  constructor(projects) {
-    if (arguments.length === 0) {
-      this.projects = [];
-      this.currProject = null;
-    } else {
-      this.projects = projects;
-      this.currProject = this.projects[0];
-    }
+  constructor(...projects) {
+    this.projects = projects.length === 0 ? [] : projects;
+    this.currProject = this.projects.length > 0 ? this.projects[0] : null;
   }
 
   isEmpty = () => this.projects.length === 0;
@@ -23,8 +18,7 @@ class ProjectManager {
     return null;
   };
 
-  addProject = (...args) => {
-    let project = new Project(...args);
+  addProject = (project) => {
     this.projects.push(project);
     this.currProject = project;
   };
@@ -39,13 +33,17 @@ class ProjectManager {
     }
   };
 
+  addTodo = (todo) => this.currProject.addTodo(todo);
+
+  removeTodo = (id) => this.currProject.removeTodo(id);
+
   editProject = (id, newName) => this.getProject(id).setName(newName);
 
   setCurrProject = (project) => {
-    if (project) this.currProject = project;
+    if (project instanceof Project) this.currProject = project;
   };
 
-  getCurrProjectId = () => (this.currProject ? this.currProject.getId() : null);
+  getCurrProject = () => this.currProject;
 
   getAllProjects = () => this.projects;
 

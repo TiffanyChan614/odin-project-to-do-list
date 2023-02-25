@@ -1,5 +1,7 @@
 import createDomElem from './create-dom-elem';
+import Todo from './todo';
 import pm from './app';
+import Project from './project';
 
 const projUl = document.querySelector('#project-list');
 const todoUl = document.querySelector('#todo-list');
@@ -8,8 +10,12 @@ const projForm = document.querySelector('#project-form');
 const projNameField = document.querySelector('#project-name');
 const clearProjBtn = document.querySelector('#clear-all-projects');
 const projList = document.querySelector('#project-list');
-// const editProjForm = document.querySelector('#edit-project-form');
-// const projNewNameField = document.querySelector('#new-project-name');
+const addTodoBtn = document.querySelector('#add-todo');
+const todoForm = document.querySelector('#todo-form');
+const todoTitleField = document.querySelector('#todo-title');
+const todoDescField = document.querySelector('#todo-desc');
+const todoDateField = document.querySelector('#todo-date');
+const todoPriorityField = document.querySelector('#todo-priority');
 
 const domIdToStorageId = (domId) => domId.substring(8);
 const storageIdToDomId = (storageId) => 'project-' + storageId;
@@ -21,11 +27,17 @@ const updateCurrProject = () => pm.getProject(domIdToStorageId(currProjectId));
 const EDIT = 0,
   ADD = 1;
 
-let currProjectId = storageIdToDomId(pm.getCurrProjectId());
-let currProject = updateCurrProject();
+let currProject = pm.getCurrProject();
+console.log(currProject instanceof Project);
+console.log(typeof currProject);
+let currProjectId;
+if (currProject) currProjectId = storageIdToDomId(currProject.getId());
 let projToEdit = null;
 let projToEditId = null;
 let projectMode = ADD;
+let todoToEdit = null;
+let todoToEditId = null;
+let todoMode = ADD;
 
 const clearProjects = () => {
   if (projUl) {
@@ -90,10 +102,11 @@ const activateProjForm = () => {
     //   console.log('submit');
     if (projectMode === ADD) {
       let projName = projNameField.value;
-      if (projName) pm.addProject(projName);
+      let proj = new Project(projName);
+      if (projName) pm.addProject(proj);
       else pm.addProject();
-      currProjectId = storageIdToDomId(pm.getCurrProjectId());
-      currProject = updateCurrProject();
+      currProject = pm.getCurrProject();
+      currProjectId = storageIdToDomId(currProject.getId());
     } else if (projectMode === EDIT) {
       if (projToEdit) {
         let newName = projNameField.value;
@@ -139,8 +152,8 @@ const activateClearProj = () => {
         currProjectId = null;
         currProject = null;
       } else {
-        currProjectId = storageIdToDomId(pm.getCurrProjectId());
-        currProject = updateCurrProject();
+        currProject = pm.getCurrProject();
+        currProjectId = storageIdToDomId(currProject.getId());
       }
       refreshProjects();
       refreshTodos();
@@ -162,6 +175,32 @@ const activateEditProj = () => {
   });
 };
 
+const activateAddTodo = () => {
+  addTodoBtn.addEventListener('click', (e) => {
+    todoMode = ADD;
+    todoForm.style.display = 'block';
+    todoTitleField.value = '';
+    todoDescField.value = '';
+  });
+};
+
+const activateTodoForm = () => {
+  todoForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    // console.log(todoPriorityField);
+    let title = todoTitleField.value;
+    let desc = todoDescField.value;
+    let date = todoDateField.value;
+    let priority = todoPriorityField.value;
+    let newTodo = new Todo(title, desc, date, priority);
+    console.log(newTodo.toString());
+    pm.addTodo(newTodo);
+    refreshTodos();
+    todoForm.style.display = 'none';
+    console.log(pm.toString());
+  });
+};
+
 const activateUI = () => {
   activateAddProj();
   activateProjForm();
@@ -169,6 +208,8 @@ const activateUI = () => {
   activateClearAllProj();
   activateClearProj();
   activateEditProj();
+  activateAddTodo();
+  activateTodoForm();
 };
 
 export default {

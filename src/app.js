@@ -1,4 +1,9 @@
 import ProjectManager from './project-manager';
+import Project from './project';
+import Todo from './todo';
 let pm = new ProjectManager();
-pm.addProject('Default');
+let proj1 = new Project('Default');
+pm.addProject(proj1);
+let todo1 = new Todo();
+pm.addTodo(todo1);
 export default pm;

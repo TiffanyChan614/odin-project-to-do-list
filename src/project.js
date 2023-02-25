@@ -38,7 +38,7 @@ class Project {
         matches.push(todo);
       }
     }
-    if (matches) return matches;
+    if (matches.length > 0) return matches;
     else return null;
   };
 
@@ -52,8 +52,7 @@ class Project {
     return null;
   };
 
-  addTodo = (...args) => {
-    let todo = new Todo(...args);
+  addTodo = (todo) => {
     this.uncheckedTodos.push(todo);
   };
 
@@ -83,9 +82,11 @@ class Project {
 
   toString = () => {
     let msg = `Project Name: ${this.name}\n`;
-    for (let i = 0; i < this.uncheckedTodos.length; i++) {
-      msg += `To-do ${i + 1}:\n`;
-      msg += this.uncheckedTodos[i].toString() + '\n';
+    if (this.uncheckedTodos.length > 0) {
+      for (let i = 0; i < this.uncheckedTodos.length; i++) {
+        msg += `To-do ${i + 1}:\n`;
+        msg += this.uncheckedTodos[i].toString() + '\n';
+      }
     }
     return msg;
   };
