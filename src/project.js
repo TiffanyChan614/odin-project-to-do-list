@@ -75,7 +75,7 @@ class Project {
     if (this.isEmpty()) return;
     for (let td of this.uncheckedTodos) {
       if (td.getId() === id) {
-        td.check();
+        td.toggleCheck();
         this.uncheckedTodos = this.uncheckedTodos.filter(
           (td) => td.getId() === id
         );

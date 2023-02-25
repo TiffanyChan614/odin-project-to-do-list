@@ -25,7 +25,7 @@ class Todo {
   getCheck = () => this.check;
   setCheck = (check) => (this.check = check);
 
-  check = () => (this.check = !this.check ? true : false);
+  toggleCheck = () => (this.check = !this.check);
 
   edit = (newTitle, newDesc, newDate, newPriority) => {
     this.title = newTitle;

@@ -31,8 +31,8 @@ if (currProject) currProjectId = currProject.getId();
 let projToEdit = null;
 let projToEditId = null;
 let projectMode = ADD;
-let todoToEdit = null;
-let todoToEditId = null;
+let todoToModify = null;
+let todoToModifyId = null;
 let todoMode = ADD;
 
 const clearProjects = () => {
@@ -68,6 +68,7 @@ const showTodos = (project) => {
   createDomElem.createTodoList(todoUl, project.getAllTodos());
   const todoLi = document.querySelectorAll('#todo-list .todo');
   for (const t of todoLi) {
+    createDomElem.addTodoCheck(t);
     createDomElem.addTodoBtns(t);
   }
 };
@@ -170,6 +171,18 @@ const activateEditProj = () => {
   });
 };
 
+const activateCheckTodo = () => {
+  todoUl.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('check-todo')) {
+      todoToModifyId = target.parentNode.id;
+      pm.checkTodo(todoToModifyId);
+      pm.removeTodo(todoToModifyId);
+    }
+  });
+  refreshTodos();
+};
+
 const activateClearTodo = () => {
   todoUl.addEventListener('click', (e) => {
     const target = e.target;
@@ -197,15 +210,15 @@ const activateEditTodo = () => {
     if (target.classList.contains('edit-todo')) {
       todoMode = EDIT;
       todoForm.style.display = 'block';
-      todoToEditId = target.parentNode.id;
+      todoToModifyId = target.parentNode.id;
       // console.log(todoToEditId);
-      todoToEdit = pm.getTodo(todoToEditId);
+      todoToModify = pm.getTodo(todoToModifyId);
       // console.log(pm.toString());
       // console.log('Todo to edit: ', todoToEdit);
-      let oldTitle = todoToEdit.getTitle();
-      let oldDesc = todoToEdit.getDesc();
-      let oldDate = todoToEdit.getDate();
-      let oldPriority = todoToEdit.getPriority();
+      let oldTitle = todoToModify.getTitle();
+      let oldDesc = todoToModify.getDesc();
+      let oldDate = todoToModify.getDate();
+      let oldPriority = todoToModify.getPriority();
       todoTitleField.value = oldTitle;
       todoDescField.value = oldDesc;
       todoDateField.value = oldDate;
@@ -227,8 +240,8 @@ const activateTodoForm = () => {
       console.log(newTodo.toString());
       pm.addTodo(newTodo);
     } else if (todoMode === EDIT) {
-      if (todoToEdit) {
-        pm.editTodo(todoToEditId, title, desc, date, priority);
+      if (todoToModify) {
+        pm.editTodo(todoToModifyId, title, desc, date, priority);
       }
     }
     refreshTodos();
@@ -244,6 +257,7 @@ const activateUI = () => {
   activateClearAllProj();
   activateClearProj();
   activateEditProj();
+  activateCheckTodo();
   activateClearTodo();
   activateAddTodo();
   activateEditTodo();
