@@ -27,7 +27,7 @@ let currProject = pm.getCurrProject();
 // console.log(typeof currProject);
 let currProjectId;
 if (currProject) currProjectId = currProject.getId();
-console.log('Current project: ' + currProjectId);
+// console.log('Current project: ' + currProjectId);
 let projToEdit = null;
 let projToEditId = null;
 let projectMode = ADD;
@@ -176,6 +176,8 @@ const activateAddTodo = () => {
     todoForm.style.display = 'block';
     todoTitleField.value = '';
     todoDescField.value = '';
+    todoDateField.value = new Date().toISOString().split('T')[0];
+    todoPriorityField.value = 'None';
   });
 };
 
@@ -186,10 +188,10 @@ const activateEditTodo = () => {
       todoMode = EDIT;
       todoForm.style.display = 'block';
       todoToEditId = target.parentNode.id;
-      console.log(todoToEditId);
+      // console.log(todoToEditId);
       todoToEdit = pm.getTodo(todoToEditId);
-      console.log(pm.toString());
-      console.log('Todo to edit: ', todoToEdit);
+      // console.log(pm.toString());
+      // console.log('Todo to edit: ', todoToEdit);
       let oldTitle = todoToEdit.getTitle();
       let oldDesc = todoToEdit.getDesc();
       let oldDate = todoToEdit.getDate();
