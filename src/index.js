@@ -5,6 +5,7 @@ import './style.css';
 
 // let projects = pm.getAllProjects();
 // console.log(projects[0].toString());
+// console.log(pm.getCurrProject());
 displayControl.refreshTodos();
 displayControl.refreshProjects();
 displayControl.activateUI();

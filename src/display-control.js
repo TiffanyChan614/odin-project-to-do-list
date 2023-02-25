@@ -9,7 +9,6 @@ const addProjBtn = document.querySelector('#add-project');
 const projForm = document.querySelector('#project-form');
 const projNameField = document.querySelector('#project-name');
 const clearProjBtn = document.querySelector('#clear-all-projects');
-const projList = document.querySelector('#project-list');
 const addTodoBtn = document.querySelector('#add-todo');
 const todoForm = document.querySelector('#todo-form');
 const todoTitleField = document.querySelector('#todo-title');
@@ -17,21 +16,18 @@ const todoDescField = document.querySelector('#todo-desc');
 const todoDateField = document.querySelector('#todo-date');
 const todoPriorityField = document.querySelector('#todo-priority');
 
-const domIdToStorageId = (domId) => domId.substring(8);
-const storageIdToDomId = (storageId) => 'project-' + storageId;
 // console.log(pm.getCurrProjectId());
 // console.log(currProjectId);
-
-const updateCurrProject = () => pm.getProject(domIdToStorageId(currProjectId));
 
 const EDIT = 0,
   ADD = 1;
 
 let currProject = pm.getCurrProject();
-console.log(currProject instanceof Project);
-console.log(typeof currProject);
+// console.log(currProject instanceof Project);
+// console.log(typeof currProject);
 let currProjectId;
-if (currProject) currProjectId = storageIdToDomId(currProject.getId());
+if (currProject) currProjectId = currProject.getId();
+console.log('Current project: ' + currProjectId);
 let projToEdit = null;
 let projToEditId = null;
 let projectMode = ADD;
@@ -59,7 +55,7 @@ const showProjects = () => {
     for (let p of projectLi) {
       createDomElem.addProjectBtns(p);
       if (currProjectId && p.id === currProjectId) {
-        // console.log('Current project: ' + p.id);
+        console.log('Current project: ' + p.id);
         p.classList.add('selected');
       }
     }
@@ -100,17 +96,16 @@ const activateProjForm = () => {
   projForm.addEventListener('submit', (e) => {
     e.preventDefault();
     //   console.log('submit');
+    let projName = projNameField.value;
     if (projectMode === ADD) {
-      let projName = projNameField.value;
       let proj = new Project(projName);
       if (projName) pm.addProject(proj);
       else pm.addProject();
       currProject = pm.getCurrProject();
-      currProjectId = storageIdToDomId(currProject.getId());
+      currProjectId = currProject.getId();
     } else if (projectMode === EDIT) {
       if (projToEdit) {
-        let newName = projNameField.value;
-        pm.editProject(projToEditId, newName);
+        pm.editProject(projToEditId, projName);
       }
     }
     projForm.style.display = 'none';
@@ -121,12 +116,12 @@ const activateProjForm = () => {
 };
 
 const activateProjEvent = () => {
-  projList.addEventListener('click', (e) => {
+  projUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('project') && target.id) {
       // console.log(`click ${target.id}`);
       currProjectId = target.id;
-      currProject = updateCurrProject();
+      currProject = pm.getProject(currProjectId);
       // console.log('new currentProjectId = ' + currProjectId);
       pm.setCurrProject(currProject);
       refreshProjects();
@@ -144,16 +139,16 @@ const activateClearAllProj = () => {
 };
 
 const activateClearProj = () => {
-  projList.addEventListener('click', (e) => {
+  projUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('clear-project')) {
-      pm.removeProject(domIdToStorageId(target.parentNode.id));
+      pm.removeProject(target.parentNode.id);
       if (pm.isEmpty()) {
         currProjectId = null;
         currProject = null;
       } else {
         currProject = pm.getCurrProject();
-        currProjectId = storageIdToDomId(currProject.getId());
+        currProjectId = currProject.getId();
       }
       refreshProjects();
       refreshTodos();
@@ -162,14 +157,14 @@ const activateClearProj = () => {
 };
 
 const activateEditProj = () => {
-  projList.addEventListener('click', (e) => {
+  projUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('edit-project')) {
       projectMode = EDIT;
       projForm.style.display = 'block';
-      projToEditId = domIdToStorageId(target.parentNode.id);
+      projToEditId = dtarget.parentNode.id;
       projToEdit = pm.getProject(projToEditId);
-      let oldName = projToEdit.getName(projToEditId);
+      let oldName = projToEdit.getName();
       projNameField.value = oldName;
     }
   });
@@ -184,17 +179,46 @@ const activateAddTodo = () => {
   });
 };
 
+const activateEditTodo = () => {
+  todoUl.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('edit-todo')) {
+      todoMode = EDIT;
+      todoForm.style.display = 'block';
+      todoToEditId = target.parentNode.id;
+      console.log(todoToEditId);
+      todoToEdit = pm.getTodo(todoToEditId);
+      console.log(pm.toString());
+      console.log('Todo to edit: ', todoToEdit);
+      let oldTitle = todoToEdit.getTitle();
+      let oldDesc = todoToEdit.getDesc();
+      let oldDate = todoToEdit.getDate();
+      let oldPriority = todoToEdit.getPriority();
+      todoTitleField.value = oldTitle;
+      todoDescField.value = oldDesc;
+      todoDateField.value = oldDate;
+      todoPriorityField.value = oldPriority;
+    }
+  });
+};
+
 const activateTodoForm = () => {
   todoForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    // console.log(todoPriorityField);
     let title = todoTitleField.value;
     let desc = todoDescField.value;
     let date = todoDateField.value;
     let priority = todoPriorityField.value;
-    let newTodo = new Todo(title, desc, date, priority);
-    console.log(newTodo.toString());
-    pm.addTodo(newTodo);
+    if (todoMode === ADD) {
+      // console.log(todoPriorityField);
+      let newTodo = new Todo(title, desc, date, priority);
+      console.log(newTodo.toString());
+      pm.addTodo(newTodo);
+    } else if (todoMode === EDIT) {
+      if (todoToEdit) {
+        pm.editTodo(todoToEditId, title, desc, date, priority);
+      }
+    }
     refreshTodos();
     todoForm.style.display = 'none';
     console.log(pm.toString());
@@ -209,6 +233,7 @@ const activateUI = () => {
   activateClearProj();
   activateEditProj();
   activateAddTodo();
+  activateEditTodo();
   activateTodoForm();
 };
 

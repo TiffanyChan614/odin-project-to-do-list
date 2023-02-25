@@ -3,7 +3,7 @@ const createProjectList = (projectList, projects) => {
     let li = document.createElement('li');
     li.textContent = project.getName();
     li.classList.add('project');
-    li.id = `project-${project.getId()}`;
+    li.id = `${project.getId()}`;
     projectList.appendChild(li);
   }
 };
@@ -24,7 +24,7 @@ const createTodoList = (todoList, todos) => {
     let li = document.createElement('li');
     li.textContent = todo.getTitle();
     li.classList.add('todo');
-    li.id = `todo-${todo.getId()}`;
+    li.id = `${todo.getId()}`;
     todoList.appendChild(li);
   }
 };

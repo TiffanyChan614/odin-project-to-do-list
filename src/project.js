@@ -3,7 +3,7 @@ import Todo from './todo';
 const uuid = require('uuid');
 class Project {
   constructor(...args) {
-    this.id = uuid.v4();
+    this.id = `project-${uuid.v4()}`;
     this.uncheckedTodos = [];
     this.checkedTodos = [];
     if (args.length === 0) {
@@ -43,7 +43,10 @@ class Project {
   };
 
   getTodo = (id) => {
-    if (this.isEmpty()) return null;
+    if (this.isEmpty()) {
+      console.log(`Todo with ID ${id} cannot be found`);
+      return null;
+    }
     for (let td of this.uncheckedTodos) {
       if (td.getId() === id) {
         return td;
@@ -57,8 +60,15 @@ class Project {
   };
 
   removeTodo = (id) => {
-    if (this.isEmpty()) return;
+    if (this.isEmpty()) {
+      console.log(`Todo with ID ${id} cannot be found`);
+      return;
+    }
     this.uncheckedTodos = this.uncheckedTodos.filter((td) => td.getId() !== id);
+  };
+
+  editTodo = (id, newTitle, newDesc, newDate, newPriority) => {
+    this.getTodo(id).edit(newTitle, newDesc, newDate, newPriority);
   };
 
   checkTodo = (id) => {
@@ -81,7 +91,7 @@ class Project {
   clearHistory = () => (this.checkedTodos = []);
 
   toString = () => {
-    let msg = `Project Name: ${this.name}\n`;
+    let msg = `Project Name: ${this.name}\nProject ID: ${this.id}\n`;
     if (this.uncheckedTodos.length > 0) {
       for (let i = 0; i < this.uncheckedTodos.length; i++) {
         msg += `To-do ${i + 1}:\n`;
