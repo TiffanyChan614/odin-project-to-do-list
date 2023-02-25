@@ -65,11 +65,14 @@ const showProjects = () => {
 const showTodos = (project) => {
   if (!project || !todoUl) return;
   if (project.isEmpty()) return;
-  createDomElem.createTodoList(todoUl, project.getAllTodos());
-  const todoLi = document.querySelectorAll('#todo-list .todo');
-  for (const t of todoLi) {
-    createDomElem.addTodoCheck(t);
-    createDomElem.addTodoBtns(t);
+  const todos = project.getAllTodos();
+  createDomElem.createTodoList(todoUl, todos);
+  for (let todo of todos) {
+    const todoLi = document.querySelector(`#${todo.getId()}`);
+    createDomElem.addTodoCheck(todoLi, todo);
+    createDomElem.addTodoPriority(todoLi, todo);
+    createDomElem.addTodoTitle(todoLi, todo);
+    createDomElem.addTodoBtns(todoLi);
   }
 };
 

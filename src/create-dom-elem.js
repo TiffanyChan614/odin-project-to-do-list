@@ -22,18 +22,33 @@ const addProjectBtns = (projectLi) => {
 const createTodoList = (todoList, todos) => {
   for (let todo of todos) {
     let li = document.createElement('li');
-    li.textContent = todo.getTitle();
     li.classList.add('todo');
     li.id = `${todo.getId()}`;
     todoList.appendChild(li);
   }
 };
 
-const addTodoCheck = (todoLi) => {
+const addTodoCheck = (todoLi, todo) => {
   let check = document.createElement('input');
   check.type = 'checkbox';
-  check.className = 'check-todo';
-  todoLi.insertBefore(check, todoLi.firstChild);
+  check.classList.add('check-todo');
+  check.checked = todo.getCheck();
+  todoLi.appendChild(check);
+};
+
+const addTodoPriority = (todoLi, todo) => {
+  let priority = document.createElement('span');
+  if (todo.getPriority() === 'None') priority.textContent = '';
+  else priority.textContent = todo.getPriority();
+  priority.classList.add('todo-priority');
+  todoLi.appendChild(priority);
+};
+
+const addTodoTitle = (todoLi, todo) => {
+  let title = document.createElement('span');
+  title.textContent = todo.getTitle();
+  title.classList.add('todo-title');
+  todoLi.appendChild(title);
 };
 
 const addTodoBtns = (todoLi) => {
@@ -52,5 +67,7 @@ export default {
   addProjectBtns,
   createTodoList,
   addTodoCheck,
+  addTodoPriority,
+  addTodoTitle,
   addTodoBtns,
 };
