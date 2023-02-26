@@ -70,9 +70,10 @@ class ProjectManager {
   searchTodoByTitle = (searchStr) => {
     let matches = [];
     for (let project of this.projects) {
-      for (let todo of project.todos) {
-        if (todo.title.toLowerCase().search(searchStr.toLowerCase()) !== -1) {
-          matches.push(todo);
+      for (let todo of project.getAllTodos()) {
+        if (todo.title.toLowerCase().includes(searchStr.toLowerCase())) {
+          let match = { matchedProj: project, matchedTodo: todo };
+          matches.push(match);
         }
       }
     }

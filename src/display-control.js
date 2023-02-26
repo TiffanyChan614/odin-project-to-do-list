@@ -22,6 +22,9 @@ const sidebarBtn = document.querySelector('#sidebar-btn');
 const sidebar = document.querySelector('#project-container');
 const showCompletedBtn = document.querySelector('#show-completed');
 const currProjName = document.querySelector('#current-project-name');
+const searchContainer = document.querySelector('#search-container');
+const searchField = document.querySelector('#search-bar');
+const dropdownMenu = document.querySelector('#dropdown-menu');
 
 // console.log(pm.getCurrProjectId());
 // console.log(currProjectId);
@@ -92,11 +95,9 @@ const refreshProjects = () => {
 
 const refreshTodos = () => {
   if (currProject) {
-    let checkedTodos = pm.getCurrProject().getCheckedTodos();
-    let uncheckedTodos = pm.getCurrProject().getUncheckedTodos();
     clearTodos();
-    if (showCompleted) showTodos([...uncheckedTodos, ...checkedTodos]);
-    else showTodos(uncheckedTodos);
+    if (showCompleted) showTodos(pm.getCurrProject().getAllTodos());
+    else showTodos(pm.getCurrProject().getUncheckedTodos());
   }
 };
 
@@ -193,6 +194,22 @@ const activateEditProj = () => {
   });
 };
 
+const showTodoDetail = (todoLi) => {
+  todoLi.style.backgroundColor = 'light pink';
+  const descP = todoLi.querySelector('.todo-desc');
+  const dateP = todoLi.querySelector('.todo-date');
+  // console.log(descP, dateP);
+  // console.log(descP.style.display);
+  if (window.getComputedStyle(descP).getPropertyValue('display') === 'none') {
+    // console.log('not shown');
+    descP.style.display = 'block';
+    dateP.style.display = 'block';
+  } else {
+    descP.style.display = 'none';
+    dateP.style.display = 'none';
+  }
+};
+
 const activateTodoEvent = () => {
   todoUl.addEventListener('click', (e) => {
     // console.log('click');
@@ -201,20 +218,7 @@ const activateTodoEvent = () => {
     const todoTitle = target.closest('.todo-title');
     if (todo || todoTitle) {
       let todoLi = todo || todoTitle.parentNode;
-      const descP = todoLi.querySelector('.todo-desc');
-      const dateP = todoLi.querySelector('.todo-date');
-      // console.log(descP, dateP);
-      // console.log(descP.style.display);
-      if (
-        window.getComputedStyle(descP).getPropertyValue('display') === 'none'
-      ) {
-        // console.log('not shown');
-        descP.style.display = 'block';
-        dateP.style.display = 'block';
-      } else {
-        descP.style.display = 'none';
-        dateP.style.display = 'none';
-      }
+      showTodoDetail(todoLi);
     }
   });
 };
@@ -332,6 +336,56 @@ const activateShowCompleted = () => {
   });
 };
 
+const activateSearchBar = () => {
+  searchField.addEventListener('input', () => {
+    // console.log('Searching');
+    dropdownMenu.textContent = '';
+    const searchStr = searchField.value;
+    if (searchStr) {
+      let matches = pm.searchTodoByTitle(searchStr);
+      for (let match of matches) {
+        createDomElem.createOption(dropdownMenu, match);
+      }
+      dropdownMenu.style.display = 'block';
+    } else dropdownMenu.style.display = 'none';
+  });
+};
+
+const activateDropdownMenu = () => {
+  dropdownMenu.addEventListener('click', (e) => {
+    const target = e.target;
+    if (target.classList.contains('search-result')) {
+      console.log('click');
+      let projId = target.value.split(':')[0];
+      let todoId = target.value.split(':')[1];
+      currProjectId = projId;
+      pm.setCurrProject(currProjectId);
+      currProject = pm.getCurrProject();
+      refreshProjects();
+      refreshTodos();
+      // console.log(todoId);
+      const todoLi = document.querySelector(`#${todoId}`);
+      // console.log(todoLi);
+      showTodoDetail(todoLi);
+    }
+    dropdownMenu.style.display = 'none';
+    searchField.value = '';
+  });
+};
+
+const hideDropDownMenu = () => {
+  document.addEventListener('click', (e) => {
+    const target = e.target;
+    if (
+      !target.classList.contains('search-result') &&
+      target.id !== 'search-bar' &&
+      target.id !== 'dropdown-menu'
+    )
+      dropdownMenu.style.display = 'none';
+    searchField.value = '';
+  });
+};
+
 const activateUI = () => {
   activateAddProj();
   activateCancelProjForm();
@@ -350,6 +404,9 @@ const activateUI = () => {
   activateClearAllTodos();
   activateSidebarBtn();
   activateShowCompleted();
+  activateSearchBar();
+  activateDropdownMenu();
+  hideDropDownMenu();
 };
 
 export default {

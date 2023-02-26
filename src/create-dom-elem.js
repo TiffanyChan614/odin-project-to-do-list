@@ -74,6 +74,14 @@ const addTodoDetails = (todoLi, todo) => {
   // console.log('details added');
 };
 
+const createOption = (dropdownMenu, match) => {
+  let option = document.createElement('option');
+  option.classList.add('search-result');
+  option.value = `${match.matchedProj.getId()}:${match.matchedTodo.getId()}`;
+  option.textContent = `${match.matchedTodo.getTitle()}\t\t${match.matchedProj.getName()}`;
+  dropdownMenu.appendChild(option);
+};
+
 export default {
   createProjectList,
   addProjectBtns,
@@ -83,4 +91,5 @@ export default {
   addTodoTitle,
   addTodoBtns,
   addTodoDetails,
+  createOption,
 };

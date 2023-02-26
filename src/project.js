@@ -32,6 +32,8 @@ class Project {
 
   getCheckedTodos = () => this.checkedTodos;
 
+  getAllTodos = () => [...this.uncheckedTodos, ...this.checkedTodos];
+
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;
     let matches = [];

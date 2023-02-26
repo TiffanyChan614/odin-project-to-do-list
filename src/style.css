@@ -63,9 +63,13 @@ input[type='checkbox'] {
 }
 
 #project-container {
-  display: none;
+  display: block;
 }
 
 .todo.checked {
   color: gray;
+}
+
+#dopdown-menu {
+  display: none;
 }
