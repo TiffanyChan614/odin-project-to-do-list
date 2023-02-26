@@ -218,7 +218,10 @@ const activateTodoEvent = () => {
     const target = e.target;
     const todo = target.closest('.todo');
     const todoTitle = target.closest('.todo-title');
-    if (todo || todoTitle) {
+    const isCheckbox = target.type === 'checkbox';
+    const isButton = target.tagName === 'BUTTON';
+
+    if ((todo || todoTitle) && !isCheckbox && !isButton) {
       let todoLi = todo || todoTitle.parentNode;
       showTodoDetail(todoLi);
     }
