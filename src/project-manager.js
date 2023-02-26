@@ -63,6 +63,8 @@ class ProjectManager {
 
   getCurrProject = () => this.currProject;
 
+  clearCurrentProject = () => this.currProject.clearAllTodos();
+
   getAllProjects = () => this.projects;
 
   searchTodoByTitle = (searchStr) => {

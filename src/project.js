@@ -86,7 +86,7 @@ class Project {
 
   equals = (project) => this.id === project.id;
 
-  clearAllTodo = () => (this.uncheckedTodos = []);
+  clearAllTodos = () => (this.uncheckedTodos = []);
 
   clearHistory = () => (this.checkedTodos = []);
 

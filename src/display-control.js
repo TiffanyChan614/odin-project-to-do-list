@@ -10,6 +10,7 @@ const projForm = document.querySelector('#project-form');
 const projNameField = document.querySelector('#project-name');
 const clearProjBtn = document.querySelector('#clear-all-projects');
 const addTodoBtn = document.querySelector('#add-todo');
+const clearTodoBtn = document.querySelector('#clear-all-todos');
 const todoForm = document.querySelector('#todo-form');
 const todoTitleField = document.querySelector('#todo-title');
 const todoDescField = document.querySelector('#todo-desc');
@@ -276,7 +277,14 @@ const activateTodoForm = () => {
     }
     refreshTodos();
     todoForm.style.display = 'none';
-    console.log(pm.toString());
+    // console.log(pm.toString());
+  });
+};
+
+const activateClearAllTodos = () => {
+  clearTodoBtn.addEventListener('click', () => {
+    pm.clearCurrentProject();
+    refreshTodos();
   });
 };
 
@@ -293,6 +301,7 @@ const activateUI = () => {
   activateAddTodo();
   activateEditTodo();
   activateTodoForm();
+  activateClearAllTodos();
 };
 
 export default {
