@@ -111,26 +111,35 @@ const activateAddProj = () => {
   });
 };
 
+const handleProjFormSubmit = () => {
+  let projName = projNameField.value;
+  if (projectMode === ADD) {
+    let proj = new Project(projName);
+    if (projName) pm.addProject(proj);
+    else pm.addProject();
+    currProject = pm.getCurrProject();
+    currProjectId = currProject.getId();
+  } else if (projectMode === EDIT) {
+    if (projToEdit) {
+      pm.editProject(projToEditId, projName);
+    }
+  }
+  projForm.style.display = 'none';
+  refreshProjects();
+  refreshTodos();
+};
+
 const activateProjForm = () => {
   projForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    //   console.log('submit');
-    let projName = projNameField.value;
-    if (projectMode === ADD) {
-      let proj = new Project(projName);
-      if (projName) pm.addProject(proj);
-      else pm.addProject();
-      currProject = pm.getCurrProject();
-      currProjectId = currProject.getId();
-    } else if (projectMode === EDIT) {
-      if (projToEdit) {
-        pm.editProject(projToEditId, projName);
-      }
+    handleProjFormSubmit();
+  });
+
+  projForm.addEventListener('keydown', (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      handleProjFormSubmit();
     }
-    projForm.style.display = 'none';
-    refreshProjects();
-    refreshTodos();
-    //   console.log(pm.toString());
   });
 };
 
@@ -283,26 +292,36 @@ const activateEditTodo = () => {
   });
 };
 
+const handleTodoFormSubmit = () => {
+  let title = todoTitleField.value;
+  let desc = todoDescField.value;
+  let date = todoDateField.value;
+  let priority = todoPriorityField.value;
+  if (todoMode === ADD) {
+    // console.log(todoPriorityField);
+    let newTodo = new Todo(title, desc, date, priority);
+    console.log(newTodo.toString());
+    pm.addTodo(newTodo);
+  } else if (todoMode === EDIT) {
+    if (selectedTodo) {
+      pm.editTodo(selectedTodoId, title, desc, date, priority);
+    }
+  }
+  refreshTodos();
+  todoForm.style.display = 'none';
+};
+
 const activateTodoForm = () => {
   todoForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    let title = todoTitleField.value;
-    let desc = todoDescField.value;
-    let date = todoDateField.value;
-    let priority = todoPriorityField.value;
-    if (todoMode === ADD) {
-      // console.log(todoPriorityField);
-      let newTodo = new Todo(title, desc, date, priority);
-      console.log(newTodo.toString());
-      pm.addTodo(newTodo);
-    } else if (todoMode === EDIT) {
-      if (selectedTodo) {
-        pm.editTodo(selectedTodoId, title, desc, date, priority);
-      }
-    }
-    refreshTodos();
-    todoForm.style.display = 'none';
+    handleTodoFormSubmit();
     // console.log(pm.toString());
+  });
+  todoForm.addEventListener('keydown', (e) => {
+    if (e.keyCode === 13) {
+      e.preventDefault();
+      handleTodoFormSubmit();
+    }
   });
 };
 
