@@ -28,7 +28,9 @@ class Project {
 
   getNumChecked = () => this.checkedTodos.length;
 
-  getAllTodos = () => this.uncheckedTodos;
+  getUncheckedTodos = () => this.uncheckedTodos;
+
+  getCheckedTodos = () => this.checkedTodos;
 
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;

@@ -71,7 +71,7 @@ const addTodoDetails = (todoLi, todo) => {
   date.classList.add('todo-date');
   todoLi.appendChild(desc);
   todoLi.appendChild(date);
-  console.log('details added');
+  // console.log('details added');
 };
 
 export default {

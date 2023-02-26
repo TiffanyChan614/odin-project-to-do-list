@@ -41,6 +41,7 @@ let projectMode = ADD;
 let selectedTodo = null;
 let selectedTodoId = null;
 let todoMode = ADD;
+let showCompleted = false;
 
 const clearProjects = () => {
   if (projUl) {
@@ -55,29 +56,27 @@ const clearTodos = () => {
 };
 
 const showProjects = () => {
-  if (!pm.isEmpty()) {
-    createDomElem.createProjectList(projUl, pm.getAllProjects());
-    // console.log(pm.getAllProjects());
-    const projectLi = document.querySelectorAll('#project-list .project');
-    for (let p of projectLi) {
-      createDomElem.addProjectBtns(p);
-      if (currProjectId && p.id === currProjectId) {
-        console.log('Current project: ' + p.id);
-        p.classList.add('selected');
-      }
+  if (pm.isEmpty()) return;
+  createDomElem.createProjectList(projUl, pm.getAllProjects());
+  // console.log(pm.getAllProjects());
+  const projectLi = document.querySelectorAll('#project-list .project');
+  for (let p of projectLi) {
+    createDomElem.addProjectBtns(p);
+    if (currProjectId && p.id === currProjectId) {
+      console.log('Current project: ' + p.id);
+      p.classList.add('selected');
     }
-    // console.log(currProjName);
-    currProjName.textContent = currProject.getName();
   }
+  // console.log(currProjName);
+  currProjName.textContent = currProject.getName();
 };
 
-const showTodos = (project) => {
-  if (!project || !todoUl) return;
-  if (project.isEmpty()) return;
-  const todos = project.getAllTodos();
+const showTodos = (todos) => {
+  if (!todoUl) return;
   createDomElem.createTodoList(todoUl, todos);
   for (let todo of todos) {
     const todoLi = document.querySelector(`#${todo.getId()}`);
+    if (todo.getCheck()) todoLi.classList.add('checked');
     createDomElem.addTodoCheck(todoLi, todo);
     createDomElem.addTodoPriority(todoLi, todo);
     createDomElem.addTodoTitle(todoLi, todo);
@@ -93,8 +92,11 @@ const refreshProjects = () => {
 
 const refreshTodos = () => {
   if (currProject) {
+    let checkedTodos = pm.getCurrProject().getCheckedTodos();
+    let uncheckedTodos = pm.getCurrProject().getUncheckedTodos();
     clearTodos();
-    showTodos(currProject);
+    if (showCompleted) showTodos([...uncheckedTodos, ...checkedTodos]);
+    else showTodos(uncheckedTodos);
   }
 };
 
@@ -319,7 +321,15 @@ const activateSidebarBtn = () => {
 };
 
 const activateShowCompleted = () => {
-  showCompletedBtn.addEventListener('click', (e) => {});
+  showCompletedBtn.addEventListener('click', (e) => {
+    showCompleted = !showCompleted;
+    if (showCompleted) {
+      showCompletedBtn.textContent = 'Hide Completed';
+    } else {
+      showCompletedBtn.textContent = 'Show Completed';
+    }
+    refreshTodos();
+  });
 };
 
 const activateUI = () => {
@@ -339,6 +349,7 @@ const activateUI = () => {
   activateCancelTodoForm();
   activateClearAllTodos();
   activateSidebarBtn();
+  activateShowCompleted();
 };
 
 export default {

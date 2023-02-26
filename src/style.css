@@ -65,3 +65,7 @@ input[type='checkbox'] {
 #project-container {
   display: none;
 }
+
+.todo.checked {
+  color: gray;
+}
