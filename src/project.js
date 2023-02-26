@@ -56,6 +56,11 @@ class Project {
         return td;
       }
     }
+    for (let td of this.checkedTodos) {
+      if (td.getId() === id) {
+        return td;
+      }
+    }
     return null;
   };
 

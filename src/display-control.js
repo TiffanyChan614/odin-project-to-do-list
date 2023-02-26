@@ -374,6 +374,9 @@ const activateSearchBar = () => {
   });
 };
 
+// TODO: handle checkedTodo
+// if the matched todo is checked
+// set showCompleted to true
 const activateDropdownMenu = () => {
   dropdownMenu.addEventListener('click', (e) => {
     const target = e.target;
@@ -384,6 +387,7 @@ const activateDropdownMenu = () => {
       currProjectId = projId;
       pm.setCurrProject(currProjectId);
       currProject = pm.getCurrProject();
+      if (pm.getTodo(todoId).getCheck()) showCompleted = true;
       refreshProjects();
       refreshTodos();
       // console.log(todoId);
