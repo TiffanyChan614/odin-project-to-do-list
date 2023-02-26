@@ -20,6 +20,8 @@ const cancelProjForm = document.querySelector('#cancel-proj-btn');
 const cancelTodoForm = document.querySelector('#cancel-todo-btn');
 const sidebarBtn = document.querySelector('#sidebar-btn');
 const sidebar = document.querySelector('#project-container');
+const showCompletedBtn = document.querySelector('#show-completed');
+const currProjName = document.querySelector('#current-project-name');
 
 // console.log(pm.getCurrProjectId());
 // console.log(currProjectId);
@@ -64,6 +66,8 @@ const showProjects = () => {
         p.classList.add('selected');
       }
     }
+    // console.log(currProjName);
+    currProjName.textContent = currProject.getName();
   }
 };
 
@@ -312,6 +316,10 @@ const activateSidebarBtn = () => {
       sidebar.style.display = 'block';
     else sidebar.style.display = 'none';
   });
+};
+
+const activateShowCompleted = () => {
+  showCompletedBtn.addEventListener('click', (e) => {});
 };
 
 const activateUI = () => {
