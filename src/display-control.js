@@ -31,8 +31,8 @@ if (currProject) currProjectId = currProject.getId();
 let projToEdit = null;
 let projToEditId = null;
 let projectMode = ADD;
-let todoToModify = null;
-let todoToModifyId = null;
+let selectedTodo = null;
+let selectedTodoId = null;
 let todoMode = ADD;
 
 const clearProjects = () => {
@@ -73,6 +73,7 @@ const showTodos = (project) => {
     createDomElem.addTodoPriority(todoLi, todo);
     createDomElem.addTodoTitle(todoLi, todo);
     createDomElem.addTodoBtns(todoLi);
+    createDomElem.addTodoDetails(todoLi, todo);
   }
 };
 
@@ -174,16 +175,42 @@ const activateEditProj = () => {
   });
 };
 
+const activateTodoEvent = () => {
+  todoUl.addEventListener('click', (e) => {
+    // console.log('click');
+    const target = e.target;
+    const todo = target.closest('.todo');
+    const todoTitle = target.closest('.todo-title');
+    if (todo || todoTitle) {
+      let todoLi = todo || todoTitle.parentNode;
+      const descP = todoLi.querySelector('.todo-desc');
+      const dateP = todoLi.querySelector('.todo-date');
+      // console.log(descP, dateP);
+      // console.log(descP.style.display);
+      if (
+        window.getComputedStyle(descP).getPropertyValue('display') === 'none'
+      ) {
+        // console.log('not shown');
+        descP.style.display = 'block';
+        dateP.style.display = 'block';
+      } else {
+        descP.style.display = 'none';
+        dateP.style.display = 'none';
+      }
+    }
+  });
+};
+
 const activateCheckTodo = () => {
   todoUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('check-todo')) {
-      todoToModifyId = target.parentNode.id;
-      pm.checkTodo(todoToModifyId);
-      pm.removeTodo(todoToModifyId);
+      selectedTodoId = target.parentNode.id;
+      pm.checkTodo(selectedTodoId);
+      pm.removeTodo(selectedTodoId);
+      refreshTodos();
     }
   });
-  refreshTodos();
 };
 
 const activateClearTodo = () => {
@@ -191,8 +218,8 @@ const activateClearTodo = () => {
     const target = e.target;
     if (target.classList.contains('clear-todo')) {
       pm.removeTodo(target.parentNode.id);
+      refreshTodos();
     }
-    refreshTodos();
   });
 };
 
@@ -213,15 +240,15 @@ const activateEditTodo = () => {
     if (target.classList.contains('edit-todo')) {
       todoMode = EDIT;
       todoForm.style.display = 'block';
-      todoToModifyId = target.parentNode.id;
+      selectedTodoId = target.parentNode.id;
       // console.log(todoToEditId);
-      todoToModify = pm.getTodo(todoToModifyId);
+      selectedTodo = pm.getTodo(selectedTodoId);
       // console.log(pm.toString());
       // console.log('Todo to edit: ', todoToEdit);
-      let oldTitle = todoToModify.getTitle();
-      let oldDesc = todoToModify.getDesc();
-      let oldDate = todoToModify.getDate();
-      let oldPriority = todoToModify.getPriority();
+      let oldTitle = selectedTodo.getTitle();
+      let oldDesc = selectedTodo.getDesc();
+      let oldDate = selectedTodo.getDate();
+      let oldPriority = selectedTodo.getPriority();
       todoTitleField.value = oldTitle;
       todoDescField.value = oldDesc;
       todoDateField.value = oldDate;
@@ -243,8 +270,8 @@ const activateTodoForm = () => {
       console.log(newTodo.toString());
       pm.addTodo(newTodo);
     } else if (todoMode === EDIT) {
-      if (todoToModify) {
-        pm.editTodo(todoToModifyId, title, desc, date, priority);
+      if (selectedTodo) {
+        pm.editTodo(selectedTodoId, title, desc, date, priority);
       }
     }
     refreshTodos();
@@ -260,6 +287,7 @@ const activateUI = () => {
   activateClearAllProj();
   activateClearProj();
   activateEditProj();
+  activateTodoEvent();
   activateCheckTodo();
   activateClearTodo();
   activateAddTodo();

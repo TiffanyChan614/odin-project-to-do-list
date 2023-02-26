@@ -53,13 +53,25 @@ const addTodoTitle = (todoLi, todo) => {
 
 const addTodoBtns = (todoLi) => {
   let editBtn = document.createElement('button');
-  editBtn.className = 'edit-todo';
+  editBtn.classList.add('edit-todo');
   editBtn.textContent = 'Edit';
   let clearBtn = document.createElement('button');
-  clearBtn.className = 'clear-todo';
+  clearBtn.classList.add('clear-todo');
   clearBtn.textContent = 'Clear';
   todoLi.appendChild(editBtn);
   todoLi.appendChild(clearBtn);
+};
+
+const addTodoDetails = (todoLi, todo) => {
+  let desc = document.createElement('p');
+  desc.textContent = `Description: ${todo.getDesc()}`;
+  desc.classList.add('todo-desc');
+  let date = document.createElement('p');
+  date.textContent = `Date: ${todo.getDate()}`;
+  date.classList.add('todo-date');
+  todoLi.appendChild(desc);
+  todoLi.appendChild(date);
+  console.log('details added');
 };
 
 export default {
@@ -70,4 +82,5 @@ export default {
   addTodoPriority,
   addTodoTitle,
   addTodoBtns,
+  addTodoDetails,
 };

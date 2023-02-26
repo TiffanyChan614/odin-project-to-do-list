@@ -56,3 +56,8 @@ input {
 input[type='checkbox'] {
   display: inline-block;
 }
+
+.todo-desc,
+.todo-date {
+  display: none;
+}
