@@ -61,3 +61,7 @@ input[type='checkbox'] {
 .todo-date {
   display: none;
 }
+
+#project-container {
+  display: none;
+}
