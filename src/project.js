@@ -77,13 +77,13 @@ class Project {
 
   checkTodo = (id) => {
     if (this.isEmpty()) return;
-    for (let td of this.uncheckedTodos) {
+    for (let i = 0; i < this.uncheckedTodos.length; i++) {
+      const td = this.uncheckedTodos[i];
       if (td.getId() === id) {
         td.toggleCheck();
-        this.uncheckedTodos = this.uncheckedTodos.filter(
-          (td) => td.getId() === id
-        );
+        this.uncheckedTodos.splice(i, 1);
         this.checkedTodos.push(td);
+        break;
       }
     }
   };

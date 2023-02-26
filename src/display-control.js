@@ -96,6 +96,8 @@ const refreshProjects = () => {
 const refreshTodos = () => {
   if (currProject) {
     clearTodos();
+    console.log(showCompleted);
+    console.log(pm.getCurrProject().getUncheckedTodos());
     if (showCompleted) showTodos(pm.getCurrProject().getAllTodos());
     else showTodos(pm.getCurrProject().getUncheckedTodos());
   }
@@ -229,7 +231,6 @@ const activateCheckTodo = () => {
     if (target.classList.contains('check-todo')) {
       selectedTodoId = target.parentNode.id;
       pm.checkTodo(selectedTodoId);
-      pm.removeTodo(selectedTodoId);
       refreshTodos();
     }
   });
