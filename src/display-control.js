@@ -16,6 +16,8 @@ const todoTitleField = document.querySelector('#todo-title');
 const todoDescField = document.querySelector('#todo-desc');
 const todoDateField = document.querySelector('#todo-date');
 const todoPriorityField = document.querySelector('#todo-priority');
+const cancelProjForm = document.querySelector('#cancel-proj-btn');
+const cancelTodoForm = document.querySelector('#cancel-todo-btn');
 
 // console.log(pm.getCurrProjectId());
 // console.log(currProjectId);
@@ -118,6 +120,13 @@ const activateProjForm = () => {
     refreshProjects();
     refreshTodos();
     //   console.log(pm.toString());
+  });
+};
+
+const activateCancelProjForm = () => {
+  cancelProjForm.addEventListener('click', (e) => {
+    e.preventDefault();
+    projForm.style.display = 'none';
   });
 };
 
@@ -281,6 +290,13 @@ const activateTodoForm = () => {
   });
 };
 
+const activateCancelTodoForm = () => {
+  cancelTodoForm.addEventListener('click', (e) => {
+    e.preventDefault();
+    todoForm.style.display = 'none';
+  });
+};
+
 const activateClearAllTodos = () => {
   clearTodoBtn.addEventListener('click', () => {
     pm.clearCurrentProject();
@@ -290,6 +306,7 @@ const activateClearAllTodos = () => {
 
 const activateUI = () => {
   activateAddProj();
+  activateCancelProjForm();
   activateProjForm();
   activateProjEvent();
   activateClearAllProj();
@@ -301,6 +318,7 @@ const activateUI = () => {
   activateAddTodo();
   activateEditTodo();
   activateTodoForm();
+  activateCancelTodoForm();
   activateClearAllTodos();
 };
 

@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>To Do List</title>
+    <title>TODOs</title>
   </head>
   <body>
     <header>
       <button type="button">sidebar</button>
-      <h1>To-Dos</h1>
+      <h1>TODOs</h1>
       <input type="text" id="search-bar" placeholder="Search Todo..." />
     </header>
     <main>
@@ -24,7 +24,10 @@
           <h2>Project</h2>
           <label for="project-name">Project name: </label>
           <input type="text" id="project-name" />
-          <button type="submit" id="submit-proj-btn">Confirm</button>
+          <div id="project-form-btns">
+            <button type="cancel" id="cancel-proj-btn">Cancel</button>
+            <button type="submit" id="submit-proj-btn">Confirm</button>
+          </div>
         </form>
       </aside>
       <section id="todo-container">
@@ -49,7 +52,10 @@
             <option value="!!">!!</option>
             <option value="!!!">!!!</option>
           </select>
-          <button type="submit" id="submit-todo-btn">Confirm</button>
+          <div id="todo-form-btns">
+            <button type="cancel" id="cancel-todo-btn">Cancel</button>
+            <button type="submit" id="submit-todo-btn">Confirm</button>
+          </div>
         </form>
       </section>
     </main>
