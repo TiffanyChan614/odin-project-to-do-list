@@ -1,5 +1,3 @@
-import Todo from './todo';
-
 const uuid = require('uuid');
 class Project {
   constructor(...args) {
@@ -22,7 +20,10 @@ class Project {
 
   getName = () => this.name;
 
-  isEmpty = () => (this.uncheckedTodos.length === 0 ? true : false);
+  isEmpty = () =>
+    this.uncheckedTodos.length === 0 && this.checkedTodos.length === 0
+      ? true
+      : false;
 
   getNumTodo = () => this.uncheckedTodos.length;
 
@@ -74,6 +75,7 @@ class Project {
       return;
     }
     this.uncheckedTodos = this.uncheckedTodos.filter((td) => td.getId() !== id);
+    this.checkedTodos = this.uncheckedTodos.filter((td) => td.getiD() !== id);
   };
 
   editTodo = (id, newTitle, newDesc, newDate, newPriority) => {
@@ -91,6 +93,25 @@ class Project {
         break;
       }
     }
+  };
+
+  uncheckTodo = (id) => {
+    if (this.isEmpty()) return;
+    for (let i = 0; i < this.checkedTodos.length; i++) {
+      const td = this.checkedTodos[i];
+      if (td.getId() === id) {
+        td.toggleCheck();
+        this.checkedTodos.splice(i, 1);
+        this.uncheckedTodos.push(td);
+      }
+    }
+  };
+
+  toggleCheckTodo = (id) => {
+    if (this.isEmpty()) return;
+    const td = this.getTodo(id);
+    if (td.getCheck()) this.uncheckTodo(id);
+    else this.checkTodo(id);
   };
 
   equals = (project) => this.id === project.id;

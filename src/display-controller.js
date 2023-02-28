@@ -1,6 +1,6 @@
-import createDomElem from './create-dom-elem';
+import domCreator from './dom-creator';
 import Todo from './todo';
-import pm from './app';
+import pm from './initialPM';
 import Project from './project';
 
 const projUl = document.querySelector('#project-list');
@@ -60,11 +60,11 @@ const clearTodos = () => {
 
 const showProjects = () => {
   if (pm.isEmpty()) return;
-  createDomElem.createProjectList(projUl, pm.getAllProjects());
+  domCreator.createProjectList(projUl, pm.getAllProjects());
   // console.log(pm.getAllProjects());
   const projectLi = document.querySelectorAll('#project-list .project');
   for (let p of projectLi) {
-    createDomElem.addProjectBtns(p);
+    domCreator.addProjectBtns(p);
     if (currProjectId && p.id === currProjectId) {
       console.log('Current project: ' + p.id);
       p.classList.add('selected');
@@ -76,15 +76,15 @@ const showProjects = () => {
 
 const showTodos = (todos) => {
   if (!todoUl) return;
-  createDomElem.createTodoList(todoUl, todos);
+  domCreator.createTodoList(todoUl, todos);
   for (let todo of todos) {
     const todoLi = document.querySelector(`#${todo.getId()}`);
     if (todo.getCheck()) todoLi.classList.add('checked');
-    createDomElem.addTodoCheck(todoLi, todo);
-    createDomElem.addTodoPriority(todoLi, todo);
-    createDomElem.addTodoTitle(todoLi, todo);
-    createDomElem.addTodoBtns(todoLi);
-    createDomElem.addTodoDetails(todoLi, todo);
+    domCreator.addTodoCheck(todoLi, todo);
+    domCreator.addTodoPriority(todoLi, todo);
+    domCreator.addTodoTitle(todoLi, todo);
+    domCreator.addTodoBtns(todoLi);
+    domCreator.addTodoDetails(todoLi, todo);
   }
 };
 
@@ -242,7 +242,7 @@ const activateCheckTodo = () => {
     const target = e.target;
     if (target.classList.contains('check-todo')) {
       selectedTodoId = target.parentNode.id;
-      pm.checkTodo(selectedTodoId);
+      pm.toggleCheckTodo(selectedTodoId);
       refreshTodos();
     }
   });
@@ -347,14 +347,18 @@ const activateSidebarBtn = () => {
   });
 };
 
+const toggleShowCompletedbtn = () => {
+  if (showCompleted) {
+    showCompletedBtn.textContent = 'Hide Completed';
+  } else {
+    showCompletedBtn.textContent = 'Show Completed';
+  }
+};
+
 const activateShowCompleted = () => {
   showCompletedBtn.addEventListener('click', (e) => {
     showCompleted = !showCompleted;
-    if (showCompleted) {
-      showCompletedBtn.textContent = 'Hide Completed';
-    } else {
-      showCompletedBtn.textContent = 'Show Completed';
-    }
+    toggleShowCompletedbtn();
     refreshTodos();
   });
 };
@@ -367,27 +371,32 @@ const activateSearchBar = () => {
     if (searchStr) {
       let matches = pm.searchTodoByTitle(searchStr);
       for (let match of matches) {
-        createDomElem.createOption(dropdownMenu, match);
+        domCreator.createOption(dropdownMenu, match);
       }
       dropdownMenu.style.display = 'block';
     } else dropdownMenu.style.display = 'none';
   });
 };
 
-// TODO: handle checkedTodo
-// if the matched todo is checked
-// set showCompleted to true
 const activateDropdownMenu = () => {
   dropdownMenu.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('search-result')) {
-      console.log('click');
+      // console.log('click');
+      // console.log(target.value);
       let projId = target.value.split(':')[0];
+      // console.log('Project id: ', projId);
       let todoId = target.value.split(':')[1];
+      // console.log('Todo ID: ', todoId);
       currProjectId = projId;
-      pm.setCurrProject(currProjectId);
-      currProject = pm.getCurrProject();
+      // console.log('currProjectId: ', currProjectId);
+      // console.log('currProject: ', currProject.toString());
+      currProject = pm.getProject(projId);
+      pm.setCurrProject(currProject);
+      // console.log('Search project: ', currProject.toString());
+      // console.log('Search todo: ', pm.getTodo(todoId));
       if (pm.getTodo(todoId).getCheck()) showCompleted = true;
+      toggleShowCompletedbtn();
       refreshProjects();
       refreshTodos();
       // console.log(todoId);

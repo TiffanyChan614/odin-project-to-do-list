@@ -53,7 +53,7 @@ class ProjectManager {
   editTodo = (id, title, desc, date, priority) =>
     this.currProject.editTodo(id, title, desc, date, priority);
 
-  checkTodo = (id) => this.currProject.checkTodo(id);
+  toggleCheckTodo = (id) => this.currProject.toggleCheckTodo(id);
 
   editProject = (id, newName) => this.getProject(id).setName(newName);
 
