@@ -46,8 +46,10 @@ class ProjectManager {
     this.#projects = this.#projects.filter((p) => p.id !== id);
     if (this.#currProject.id === id) {
       // console.log('Selected is removed');
-      this.#currProject = this.#projects[0];
-      // console.log(this.currProject.getName());
+      if (!this.isEmpty()) {
+        this.#currProject = this.#projects[0];
+        console.log(this.#currProject.name);
+      } else this.#currProject = null;
     }
   };
 

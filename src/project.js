@@ -43,6 +43,10 @@ class Project {
     return this.#checkedTodos;
   }
 
+  get allTodos() {
+    return [...this.#uncheckedTodos, ...this.#checkedTodos];
+  }
+
   isEmpty = () =>
     this.#uncheckedTodos.length === 0 && this.#checkedTodos.length === 0
       ? true
@@ -51,8 +55,6 @@ class Project {
   getNumTodo = () => this.#uncheckedTodos.length;
 
   getNumChecked = () => this.#checkedTodos.length;
-
-  getAllTodos = () => [...this.#uncheckedTodos, ...this.#checkedTodos];
 
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;
