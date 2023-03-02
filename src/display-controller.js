@@ -33,10 +33,8 @@ const EDIT = 0,
 
 // console.log('Current project: ' + currProjectId);
 let projToEdit = null;
-let projToEditId = null;
 let projectMode = ADD;
 let selectedTodo = null;
-let selectedTodoId = null;
 let todoMode = ADD;
 let showCompleted = false;
 
@@ -116,7 +114,8 @@ const handleProjFormSubmit = () => {
     else pm.addProject();
   } else if (projectMode === EDIT) {
     if (projToEdit) {
-      pm.editProject(projToEditId, projName);
+      pm.editProject(projToEdit.id, projName);
+      projToEdit = NULL;
     }
   }
   projForm.style.display = 'none';
@@ -181,8 +180,7 @@ const activateEditProj = () => {
     if (target.classList.contains('edit-project')) {
       projectMode = EDIT;
       projForm.style.display = 'block';
-      projToEditId = target.parentNode.id;
-      projToEdit = pm.getProject(projToEditId);
+      projToEdit = pm.getProject(target.parentNode.id);
       let oldName = projToEdit.name;
       projNameField.value = oldName;
     }
@@ -225,8 +223,7 @@ const activateCheckTodo = () => {
   todoUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('check-todo')) {
-      selectedTodoId = target.parentNode.id;
-      pm.toggleCheckTodo(selectedTodoId);
+      pm.toggleCheckTodo(target.parentNode.id);
       refreshTodos();
     }
   });
@@ -259,9 +256,8 @@ const activateEditTodo = () => {
     if (target.classList.contains('edit-todo')) {
       todoMode = EDIT;
       todoForm.style.display = 'block';
-      selectedTodoId = target.parentNode.id;
       // console.log(todoToEditId);
-      selectedTodo = pm.getTodo(selectedTodoId);
+      selectedTodo = pm.getTodo(target.parentNode.id);
       // console.log(pm.toString());
       // console.log('Todo to edit: ', todoToEdit);
       let oldTitle = selectedTodo.title;
@@ -288,7 +284,8 @@ const handleTodoFormSubmit = () => {
     pm.addTodo(newTodo);
   } else if (todoMode === EDIT) {
     if (selectedTodo) {
-      pm.editTodo(selectedTodoId, title, desc, date, priority);
+      pm.editTodo(selectedTodo.id, title, desc, date, priority);
+      selectedTodo = NULL;
     }
   }
   refreshTodos();
