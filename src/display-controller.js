@@ -22,7 +22,6 @@ const sidebarBtn = document.querySelector('#sidebar-btn');
 const sidebar = document.querySelector('#project-container');
 const showCompletedBtn = document.querySelector('#show-completed');
 const currProjName = document.querySelector('#current-project-name');
-const searchContainer = document.querySelector('#search-container');
 const searchField = document.querySelector('#search-bar');
 const dropdownMenu = document.querySelector('#dropdown-menu');
 
@@ -32,11 +31,11 @@ const dropdownMenu = document.querySelector('#dropdown-menu');
 const EDIT = 0,
   ADD = 1;
 
-let currProject = pm.getCurrProject();
+let currProject = pm.currProject;
 // console.log(currProject instanceof Project);
 // console.log(typeof currProject);
 let currProjectId;
-if (currProject) currProjectId = currProject.getId();
+if (currProject) currProjectId = currProject.id;
 // console.log('Current project: ' + currProjectId);
 let projToEdit = null;
 let projToEditId = null;
@@ -60,8 +59,8 @@ const clearTodos = () => {
 
 const showProjects = () => {
   if (pm.isEmpty()) return;
-  domCreator.createProjectList(projUl, pm.getAllProjects());
-  // console.log(pm.getAllProjects());
+  domCreator.createProjectList(projUl, pm.projects);
+  // console.log(pm.projects);
   const projectLi = document.querySelectorAll('#project-list .project');
   for (let p of projectLi) {
     domCreator.addProjectBtns(p);
@@ -71,15 +70,15 @@ const showProjects = () => {
     }
   }
   // console.log(currProjName);
-  currProjName.textContent = currProject.getName();
+  currProjName.textContent = currProject.name;
 };
 
 const showTodos = (todos) => {
   if (!todoUl) return;
   domCreator.createTodoList(todoUl, todos);
   for (let todo of todos) {
-    const todoLi = document.querySelector(`#${todo.getId()}`);
-    if (todo.getCheck()) todoLi.classList.add('checked');
+    const todoLi = document.querySelector(`#${todo.id}`);
+    if (todo.check) todoLi.classList.add('checked');
     domCreator.addTodoCheck(todoLi, todo);
     domCreator.addTodoPriority(todoLi, todo);
     domCreator.addTodoTitle(todoLi, todo);
@@ -96,10 +95,10 @@ const refreshProjects = () => {
 const refreshTodos = () => {
   if (currProject) {
     clearTodos();
-    console.log(showCompleted);
-    console.log(pm.getCurrProject().getUncheckedTodos());
-    if (showCompleted) showTodos(pm.getCurrProject().getAllTodos());
-    else showTodos(pm.getCurrProject().getUncheckedTodos());
+    // console.log(showCompleted);
+    // console.log(pm.currProject.uncheckedTodos);
+    if (showCompleted) showTodos(pm.currProject.getAllTodos());
+    else showTodos(pm.currProject.uncheckedTodos);
   }
 };
 
@@ -117,8 +116,8 @@ const handleProjFormSubmit = () => {
     let proj = new Project(projName);
     if (projName) pm.addProject(proj);
     else pm.addProject();
-    currProject = pm.getCurrProject();
-    currProjectId = currProject.getId();
+    currProject = pm.currProject;
+    currProjectId = currProject.id;
   } else if (projectMode === EDIT) {
     if (projToEdit) {
       pm.editProject(projToEditId, projName);
@@ -158,7 +157,7 @@ const activateProjEvent = () => {
       currProjectId = target.id;
       currProject = pm.getProject(currProjectId);
       // console.log('new currentProjectId = ' + currProjectId);
-      pm.setCurrProject(currProject);
+      pm.currProject = currProject;
       refreshProjects();
       refreshTodos();
     }
@@ -183,7 +182,7 @@ const activateClearProj = () => {
         currProject = null;
       } else {
         currProject = pm.getCurrProject();
-        currProjectId = currProject.getId();
+        currProjectId = currProject.id;
       }
       refreshProjects();
       refreshTodos();
@@ -199,7 +198,7 @@ const activateEditProj = () => {
       projForm.style.display = 'block';
       projToEditId = target.parentNode.id;
       projToEdit = pm.getProject(projToEditId);
-      let oldName = projToEdit.getName();
+      let oldName = projToEdit.name;
       projNameField.value = oldName;
     }
   });
@@ -280,10 +279,10 @@ const activateEditTodo = () => {
       selectedTodo = pm.getTodo(selectedTodoId);
       // console.log(pm.toString());
       // console.log('Todo to edit: ', todoToEdit);
-      let oldTitle = selectedTodo.getTitle();
-      let oldDesc = selectedTodo.getDesc();
-      let oldDate = selectedTodo.getDate();
-      let oldPriority = selectedTodo.getPriority();
+      let oldTitle = selectedTodo.title;
+      let oldDesc = selectedTodo.desc;
+      let oldDate = selectedTodo.date;
+      let oldPriority = selectedTodo.priority;
       todoTitleField.value = oldTitle;
       todoDescField.value = oldDesc;
       todoDateField.value = oldDate;
@@ -391,11 +390,11 @@ const activateDropdownMenu = () => {
       currProjectId = projId;
       // console.log('currProjectId: ', currProjectId);
       // console.log('currProject: ', currProject.toString());
-      currProject = pm.getProject(projId);
-      pm.setCurrProject(currProject);
+      pm.currProject = pm.getProject(projId);
+      currProject = pm.currProject;
       // console.log('Search project: ', currProject.toString());
       // console.log('Search todo: ', pm.getTodo(todoId));
-      if (pm.getTodo(todoId).getCheck()) showCompleted = true;
+      if (pm.getTodo(todoId).check) showCompleted = true;
       toggleShowCompletedbtn();
       refreshProjects();
       refreshTodos();

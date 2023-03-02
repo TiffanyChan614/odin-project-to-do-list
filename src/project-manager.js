@@ -1,19 +1,32 @@
-import Project from './project';
-
 class ProjectManager {
+  #projects;
+  #currProject;
+
   constructor(...projects) {
-    this.projects = projects.length === 0 ? [] : projects;
-    this.currProject = this.projects.length > 0 ? this.projects[0] : null;
+    this.#projects = projects.length === 0 ? [] : projects;
+    this.#currProject = this.#projects.length > 0 ? this.#projects[0] : null;
   }
 
-  isEmpty = () => this.projects.length === 0;
+  get projects() {
+    return this.#projects;
+  }
+
+  set currProject(currProject) {
+    this.#currProject = currProject;
+  }
+
+  get currProject() {
+    return this.#currProject;
+  }
+
+  isEmpty = () => this.#projects.length === 0;
 
   getProject = (id) => {
     if (this.isEmpty()) {
       console.log(`Project with ID ${id} is not found`);
     }
-    for (let p of this.projects) {
-      if (p.getId() === id) {
+    for (let p of this.#projects) {
+      if (p.id === id) {
         return p;
       }
     }
@@ -21,8 +34,8 @@ class ProjectManager {
   };
 
   addProject = (project) => {
-    this.projects.push(project);
-    this.currProject = project;
+    this.#projects.push(project);
+    this.#currProject = project;
   };
 
   removeProject = (id) => {
@@ -30,46 +43,38 @@ class ProjectManager {
       console.log(`Project with ID ${id} is not found`);
       return;
     }
-    this.projects = this.projects.filter((p) => p.getId() !== id);
-    if (this.getCurrProjectId() === id) {
+    this.#projects = this.#projects.filter((p) => p.id !== id);
+    if (this.#currProject.id === id) {
       // console.log('Selected is removed');
-      this.currProject = this.projects[0];
+      this.#currProject = this.#projects[0];
       // console.log(this.currProject.getName());
     }
   };
 
   addTodo = (todo) => {
-    if (this.currProject) this.currProject.addTodo(todo);
+    if (this.#currProject) this.#currProject.addTodo(todo);
   };
 
   removeTodo = (id) => {
-    if (this.currProject) this.currProject.removeTodo(id);
+    if (this.#currProject) this.#currProject.removeTodo(id);
   };
 
   getTodo = (id) => {
-    if (this.currProject) return this.currProject.getTodo(id);
+    if (this.#currProject) return this.#currProject.getTodo(id);
   };
 
   editTodo = (id, title, desc, date, priority) =>
-    this.currProject.editTodo(id, title, desc, date, priority);
+    this.#currProject.editTodo(id, title, desc, date, priority);
 
-  toggleCheckTodo = (id) => this.currProject.toggleCheckTodo(id);
+  toggleCheckTodo = (id) => this.#currProject.toggleCheckTodo(id);
 
-  editProject = (id, newName) => this.getProject(id).setName(newName);
+  editProject = (id, newName) => (this.getProject(id).name = newName);
 
-  setCurrProject = (project) => {
-    if (project instanceof Project) this.currProject = project;
-  };
-
-  getCurrProject = () => this.currProject;
-
-  clearCurrentProject = () => this.currProject.clearAllTodos();
-
-  getAllProjects = () => this.projects;
+  clearCurrentProject = () => this.#currProject.clearAllTodos();
 
   searchTodoByTitle = (searchStr) => {
     let matches = [];
-    for (let project of this.projects) {
+    for (let project of this.#projects) {
       for (let todo of project.getAllTodos()) {
         if (todo.title.toLowerCase().includes(searchStr.toLowerCase())) {
           let match = { matchedProj: project, matchedTodo: todo };
@@ -80,11 +85,11 @@ class ProjectManager {
     return matches;
   };
 
-  clearAllProjects = () => (this.projects = []);
+  clearAllProjects = () => (this.#projects = []);
 
   toString = () => {
     let out = '';
-    for (let project of this.projects) {
+    for (let project of this.#projects) {
       out += project.toString() + '\n';
     }
     return out;

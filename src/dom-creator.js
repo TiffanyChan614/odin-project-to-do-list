@@ -1,9 +1,9 @@
 const createProjectList = (projectList, projects) => {
   for (let project of projects) {
     let li = document.createElement('li');
-    li.textContent = project.getName();
+    li.textContent = project.name;
     li.classList.add('project');
-    li.id = `${project.getId()}`;
+    li.id = `${project.id}`;
     projectList.appendChild(li);
   }
 };
@@ -23,7 +23,7 @@ const createTodoList = (todoList, todos) => {
   for (let todo of todos) {
     let li = document.createElement('li');
     li.classList.add('todo');
-    li.id = `${todo.getId()}`;
+    li.id = `${todo.id}`;
     todoList.appendChild(li);
   }
 };
@@ -32,21 +32,21 @@ const addTodoCheck = (todoLi, todo) => {
   let check = document.createElement('input');
   check.type = 'checkbox';
   check.classList.add('check-todo');
-  check.checked = todo.getCheck();
+  check.checked = todo.check;
   todoLi.appendChild(check);
 };
 
 const addTodoPriority = (todoLi, todo) => {
   let priority = document.createElement('span');
-  if (todo.getPriority() === 'None') priority.textContent = '';
-  else priority.textContent = todo.getPriority();
+  if (todo.priority === 'None') priority.textContent = '';
+  else priority.textContent = todo.priority;
   priority.classList.add('todo-priority');
   todoLi.appendChild(priority);
 };
 
 const addTodoTitle = (todoLi, todo) => {
   let title = document.createElement('span');
-  title.textContent = todo.getTitle();
+  title.textContent = todo.title;
   title.classList.add('todo-title');
   todoLi.appendChild(title);
 };
@@ -64,10 +64,10 @@ const addTodoBtns = (todoLi) => {
 
 const addTodoDetails = (todoLi, todo) => {
   let desc = document.createElement('p');
-  desc.textContent = `Description: ${todo.getDesc()}`;
+  desc.textContent = `Description: ${todo.desc}`;
   desc.classList.add('todo-desc');
   let date = document.createElement('p');
-  date.textContent = `Date: ${todo.getDate()}`;
+  date.textContent = `Date: ${todo.date}`;
   date.classList.add('todo-date');
   todoLi.appendChild(desc);
   todoLi.appendChild(date);
@@ -77,8 +77,8 @@ const addTodoDetails = (todoLi, todo) => {
 const createOption = (dropdownMenu, match) => {
   let option = document.createElement('option');
   option.classList.add('search-result');
-  option.value = `${match.matchedProj.getId()}:${match.matchedTodo.getId()}`;
-  option.textContent = `${match.matchedTodo.getTitle()}\t\t${match.matchedProj.getName()}`;
+  option.value = `${match.matchedProj.id}:${match.matchedTodo.id}`;
+  option.textContent = `${match.matchedTodo.title}\t\t${match.matchedProj.name}`;
   dropdownMenu.appendChild(option);
 };
 

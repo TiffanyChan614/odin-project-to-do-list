@@ -1,45 +1,64 @@
 const uuid = require('uuid');
 class Project {
+  #id;
+  #uncheckedTodos;
+  #checkedTodos;
+  #name;
+
   constructor(...args) {
-    this.id = `project-${uuid.v4()}`;
-    this.uncheckedTodos = [];
-    this.checkedTodos = [];
+    this.#id = `project-${uuid.v4()}`;
+    this.#uncheckedTodos = [];
+    this.#checkedTodos = [];
     if (args.length === 0) {
-      this.name = 'Project';
+      this.#name = 'Project';
     } else if (args.length === 1) {
-      this.name = args[0];
+      this.#name = args[0];
     } else {
-      this.name = args[0];
-      this.uncheckedTodos = args[1];
+      this.#name = args[0];
+      this.#uncheckedTodos = args[1];
     }
   }
 
-  setName = (projName) => (this.name = projName);
+  set id(id) {
+    this.#id = id;
+  }
 
-  getId = () => this.id;
+  get id() {
+    return this.#id;
+  }
 
-  getName = () => this.name;
+  set name(name) {
+    this.#name = name;
+  }
+
+  get name() {
+    return this.#name;
+  }
+
+  get uncheckedTodos() {
+    return this.#uncheckedTodos;
+  }
+
+  get checkedTodos() {
+    return this.#checkedTodos;
+  }
 
   isEmpty = () =>
-    this.uncheckedTodos.length === 0 && this.checkedTodos.length === 0
+    this.#uncheckedTodos.length === 0 && this.#checkedTodos.length === 0
       ? true
       : false;
 
-  getNumTodo = () => this.uncheckedTodos.length;
+  getNumTodo = () => this.#uncheckedTodos.length;
 
-  getNumChecked = () => this.checkedTodos.length;
+  getNumChecked = () => this.#checkedTodos.length;
 
-  getUncheckedTodos = () => this.uncheckedTodos;
-
-  getCheckedTodos = () => this.checkedTodos;
-
-  getAllTodos = () => [...this.uncheckedTodos, ...this.checkedTodos];
+  getAllTodos = () => [...this.#uncheckedTodos, ...this.#checkedTodos];
 
   getTodoByTitle = (title) => {
     if (this.isEmpty()) return;
     let matches = [];
-    for (let todo of this.uncheckedTodos) {
-      if (todo.getTitle() === title) {
+    for (let todo of this.#uncheckedTodos) {
+      if (todo.title === title) {
         matches.push(todo);
       }
     }
@@ -52,13 +71,13 @@ class Project {
       console.log(`Todo with ID ${id} cannot be found`);
       return null;
     }
-    for (let td of this.uncheckedTodos) {
-      if (td.getId() === id) {
+    for (let td of this.#uncheckedTodos) {
+      if (td.id === id) {
         return td;
       }
     }
-    for (let td of this.checkedTodos) {
-      if (td.getId() === id) {
+    for (let td of this.#checkedTodos) {
+      if (td.id === id) {
         return td;
       }
     }
@@ -66,7 +85,7 @@ class Project {
   };
 
   addTodo = (todo) => {
-    this.uncheckedTodos.push(todo);
+    this.#uncheckedTodos.push(todo);
   };
 
   removeTodo = (id) => {
@@ -74,8 +93,8 @@ class Project {
       console.log(`Todo with ID ${id} cannot be found`);
       return;
     }
-    this.uncheckedTodos = this.uncheckedTodos.filter((td) => td.getId() !== id);
-    this.checkedTodos = this.uncheckedTodos.filter((td) => td.getiD() !== id);
+    this.#uncheckedTodos = this.#uncheckedTodos.filter((td) => td.id !== id);
+    this.#checkedTodos = this.#uncheckedTodos.filter((td) => td.id !== id);
   };
 
   editTodo = (id, newTitle, newDesc, newDate, newPriority) => {
@@ -84,12 +103,12 @@ class Project {
 
   checkTodo = (id) => {
     if (this.isEmpty()) return;
-    for (let i = 0; i < this.uncheckedTodos.length; i++) {
-      const td = this.uncheckedTodos[i];
-      if (td.getId() === id) {
+    for (let i = 0; i < this.#uncheckedTodos.length; i++) {
+      const td = this.#uncheckedTodos[i];
+      if (td.id === id) {
         td.toggleCheck();
-        this.uncheckedTodos.splice(i, 1);
-        this.checkedTodos.push(td);
+        this.#uncheckedTodos.splice(i, 1);
+        this.#checkedTodos.push(td);
         break;
       }
     }
@@ -97,12 +116,12 @@ class Project {
 
   uncheckTodo = (id) => {
     if (this.isEmpty()) return;
-    for (let i = 0; i < this.checkedTodos.length; i++) {
-      const td = this.checkedTodos[i];
-      if (td.getId() === id) {
+    for (let i = 0; i < this.#checkedTodos.length; i++) {
+      const td = this.#checkedTodos[i];
+      if (td.id === id) {
         td.toggleCheck();
-        this.checkedTodos.splice(i, 1);
-        this.uncheckedTodos.push(td);
+        this.#checkedTodos.splice(i, 1);
+        this.#uncheckedTodos.push(td);
       }
     }
   };
@@ -110,22 +129,22 @@ class Project {
   toggleCheckTodo = (id) => {
     if (this.isEmpty()) return;
     const td = this.getTodo(id);
-    if (td.getCheck()) this.uncheckTodo(id);
+    if (td.check) this.uncheckTodo(id);
     else this.checkTodo(id);
   };
 
   equals = (project) => this.id === project.id;
 
-  clearAllTodos = () => (this.uncheckedTodos = []);
+  clearAllTodos = () => (this.#uncheckedTodos = []);
 
-  clearHistory = () => (this.checkedTodos = []);
+  clearHistory = () => (this.#checkedTodos = []);
 
   toString = () => {
     let msg = `Project Name: ${this.name}\nProject ID: ${this.id}\n`;
-    if (this.uncheckedTodos.length > 0) {
-      for (let i = 0; i < this.uncheckedTodos.length; i++) {
+    if (this.#uncheckedTodos.length > 0) {
+      for (let i = 0; i < this.#uncheckedTodos.length; i++) {
         msg += `To-do ${i + 1}:\n`;
-        msg += this.uncheckedTodos[i].toString() + '\n';
+        msg += this.#uncheckedTodos[i].toString() + '\n';
       }
     }
     return msg;
