@@ -107,7 +107,8 @@ const activateAddProj = () => {
       sidebarBtn.click();
     }
     projectMode = ADD;
-    projForm.style.display = 'block';
+    projForm.style.display = 'flex';
+    projForm.style.flexDirection = 'column';
     projNameField.value = '';
   });
 };
@@ -120,7 +121,7 @@ const handleProjFormSubmit = () => {
   } else if (projectMode === EDIT) {
     if (projToEdit) {
       pm.editProject(projToEdit.id, projName);
-      projToEdit = NULL;
+      projToEdit = null;
     }
   }
   projForm.style.display = 'none';
@@ -185,7 +186,8 @@ const activateEditProj = () => {
     if (target.classList.contains('edit-project')) {
       projectMode = EDIT;
       projForm.style.display = 'flex';
-      projToEdit = pm.getProject(target.parentNode.id);
+      projForm.style.flexDirection = 'column';
+      projToEdit = pm.getProject(target.parentNode.parentNode.id);
       let oldName = projToEdit.name;
       projNameField.value = oldName;
     }
@@ -290,7 +292,7 @@ const handleTodoFormSubmit = () => {
   } else if (todoMode === EDIT) {
     if (selectedTodo) {
       pm.editTodo(selectedTodo.id, title, desc, date, priority);
-      selectedTodo = NULL;
+      selectedTodo = null;
     }
   }
   refreshTodos();
@@ -332,13 +334,12 @@ const activateSidebarBtn = () => {
       'none'
     ) {
       projectContainer.style.display = 'flex';
-      if (!sidebar.classList.contains('open')) sidebar.classList.add('open');
-      if (sidebar.classList.contains('close'))
-        sidebar.classList.remove('close');
+      sidebar.classList.toggle('open');
+      sidebar.classList.toggle('close');
     } else {
       projectContainer.style.display = 'none';
-      if (!sidebar.classList.contains('close')) sidebar.classList.add('close');
-      if (sidebar.classList.contains('open')) sidebar.classList.remove('open');
+      sidebar.classList.toggle('open');
+      sidebar.classList.toggle('close');
     }
   });
 };
