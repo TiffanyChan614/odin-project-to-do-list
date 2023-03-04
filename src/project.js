@@ -10,7 +10,7 @@ class Project {
     this.#uncheckedTodos = [];
     this.#checkedTodos = [];
     if (args.length === 0) {
-      this.#name = 'Project';
+      this.#name = 'New Project';
     } else if (args.length === 1) {
       this.#name = args[0];
     } else {

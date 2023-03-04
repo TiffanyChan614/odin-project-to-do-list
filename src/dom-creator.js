@@ -1,5 +1,6 @@
 const createProjectList = (projectList, projects) => {
   for (let project of projects) {
+    console.log(project.toString());
     let li = document.createElement('li');
     li.textContent = project.name;
     li.classList.add('project');
@@ -8,15 +9,21 @@ const createProjectList = (projectList, projects) => {
   }
 };
 
-const addProjectBtns = (projectLi) => {
+const createProjectBtnsDiv = (projectLi) => {
+  let div = document.createElement('div');
+  div.classList.add('project-btns');
+  projectLi.appendChild(div);
+};
+
+const addProjectBtns = (projectBtn) => {
   let editBtn = document.createElement('button');
-  editBtn.className = 'edit-project';
+  editBtn.classList.add('edit-project');
   editBtn.textContent = 'Edit';
   let clearBtn = document.createElement('button');
   clearBtn.className = 'clear-project';
   clearBtn.textContent = 'Clear';
-  projectLi.appendChild(editBtn);
-  projectLi.appendChild(clearBtn);
+  projectBtn.appendChild(editBtn);
+  projectBtn.appendChild(clearBtn);
 };
 
 const createTodoList = (todoList, todos) => {
@@ -85,6 +92,7 @@ const createOption = (dropdownMenu, match) => {
 export default {
   createProjectList,
   addProjectBtns,
+  createProjectBtnsDiv,
   createTodoList,
   addTodoCheck,
   addTodoPriority,

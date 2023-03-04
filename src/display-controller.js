@@ -18,8 +18,9 @@ const todoDateField = document.querySelector('#todo-date');
 const todoPriorityField = document.querySelector('#todo-priority');
 const cancelProjForm = document.querySelector('#cancel-proj-btn');
 const cancelTodoForm = document.querySelector('#cancel-todo-btn');
+const sidebar = document.querySelector('#sidebar');
 const sidebarBtn = document.querySelector('#sidebar-btn');
-const sidebar = document.querySelector('#project-container');
+const projectContainer = document.querySelector('#project-container');
 const showCompletedBtn = document.querySelector('#show-completed');
 const currProjName = document.querySelector('#current-project-name');
 const searchField = document.querySelector('#search-bar');
@@ -58,11 +59,13 @@ const showProjects = () => {
   domCreator.createProjectList(projUl, pm.projects);
   // console.log(pm.projects);
   const projectLi = document.querySelectorAll('#project-list .project');
-  for (let p of projectLi) {
-    domCreator.addProjectBtns(p);
-    if (pm.currProject && p.id === pm.currProject.id) {
-      console.log('Current project: ' + p.name);
-      p.classList.add('selected');
+  for (let li of projectLi) {
+    domCreator.createProjectBtnsDiv(li);
+    const projectBtns = li.querySelector('.project-btns');
+    domCreator.addProjectBtns(projectBtns);
+    if (pm.currProject && li.id === pm.currProject.id) {
+      console.log('Current project: ' + li.name);
+      li.classList.add('selected');
     }
   }
   // console.log(currProjName);
@@ -100,6 +103,9 @@ const refreshTodos = () => {
 
 const activateAddProj = () => {
   addProjBtn.addEventListener('click', (e) => {
+    if (sidebar.classList.contains('close')) {
+      sidebarBtn.click();
+    }
     projectMode = ADD;
     projForm.style.display = 'block';
     projNameField.value = '';
@@ -109,9 +115,8 @@ const activateAddProj = () => {
 const handleProjFormSubmit = () => {
   let projName = projNameField.value;
   if (projectMode === ADD) {
-    let proj = new Project(projName);
-    if (projName) pm.addProject(proj);
-    else pm.addProject();
+    if (projName !== '') pm.addProject(new Project(projName));
+    else pm.addProject(new Project());
   } else if (projectMode === EDIT) {
     if (projToEdit) {
       pm.editProject(projToEdit.id, projName);
@@ -179,7 +184,7 @@ const activateEditProj = () => {
     const target = e.target;
     if (target.classList.contains('edit-project')) {
       projectMode = EDIT;
-      projForm.style.display = 'block';
+      projForm.style.display = 'flex';
       projToEdit = pm.getProject(target.parentNode.id);
       let oldName = projToEdit.name;
       projNameField.value = oldName;
@@ -195,8 +200,8 @@ const showTodoDetail = (todoLi) => {
   // console.log(descP.style.display);
   if (window.getComputedStyle(descP).getPropertyValue('display') === 'none') {
     // console.log('not shown');
-    descP.style.display = 'block';
-    dateP.style.display = 'block';
+    descP.style.display = 'flex';
+    dateP.style.display = 'flex';
   } else {
     descP.style.display = 'none';
     dateP.style.display = 'none';
@@ -242,7 +247,7 @@ const activateClearTodo = () => {
 const activateAddTodo = () => {
   addTodoBtn.addEventListener('click', (e) => {
     todoMode = ADD;
-    todoForm.style.display = 'block';
+    todoForm.style.display = 'flex';
     todoTitleField.value = '';
     todoDescField.value = '';
     todoDateField.value = new Date().toISOString().split('T')[0];
@@ -255,7 +260,7 @@ const activateEditTodo = () => {
     const target = e.target;
     if (target.classList.contains('edit-todo')) {
       todoMode = EDIT;
-      todoForm.style.display = 'block';
+      todoForm.style.display = 'flex';
       // console.log(todoToEditId);
       selectedTodo = pm.getTodo(target.parentNode.id);
       // console.log(pm.toString());
@@ -322,9 +327,19 @@ const activateClearAllTodos = () => {
 
 const activateSidebarBtn = () => {
   sidebarBtn.addEventListener('click', (e) => {
-    if (window.getComputedStyle(sidebar).getPropertyValue('display') === 'none')
-      sidebar.style.display = 'block';
-    else sidebar.style.display = 'none';
+    if (
+      window.getComputedStyle(projectContainer).getPropertyValue('display') ===
+      'none'
+    ) {
+      projectContainer.style.display = 'flex';
+      if (!sidebar.classList.contains('open')) sidebar.classList.add('open');
+      if (sidebar.classList.contains('close'))
+        sidebar.classList.remove('close');
+    } else {
+      projectContainer.style.display = 'none';
+      if (!sidebar.classList.contains('close')) sidebar.classList.add('close');
+      if (sidebar.classList.contains('open')) sidebar.classList.remove('open');
+    }
   });
 };
 

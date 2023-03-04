@@ -1,3 +1,11 @@
+:root {
+  --light-grey: #dbe0e7;
+  --dark: #2d3436;
+  --sky-blue: #4ea3f8;
+  --blue: #0984e3;
+  --dark-blue: #006fc4;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -26,18 +34,94 @@ footer {
 main {
   display: flex;
   flex: 1;
+  height: 100%;
 }
 
-/* #sidebar {
-  display: none;
-} */
+#sidebar.open #project-btns-container,
+#sidebar.close #project-btns-container button,
+#content header {
+  height: 7vh;
+}
 
-#project-container {
-  border: 1px solid black;
+#sidebar {
+  background-color: var(--blue);
+}
+
+#sidebar.open {
+  width: 33.3%;
+  height: 98vh;
+}
+
+#sidebar.close {
+  width: auto;
+}
+
+#project-btns-container {
+  display: flex;
+}
+
+#sidebar.open #project-btns-container {
+  flex-direction: row;
+}
+
+#sidebar.close #project-btns-container {
+  flex-direction: column;
+}
+
+#sidebar.close #clear-all-projects {
+  display: none;
+}
+
+#project-btns-container button {
+  height: 100%;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  padding: 0.3rem;
+  border-radius: 0.5rem;
+}
+
+#project-btns-container button:hover {
+  background-color: var(--dark-blue);
 }
 
 .project.selected {
-  background-color: aquamarine;
+  background-color: var(--dark-blue);
+}
+
+#project-container {
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.project-btns {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.project {
+  height: 6vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.project button {
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  border: none;
+  background-color: inherit;
+  color: white;
+}
+
+.project.selected button:hover {
+  background-color: var(--blue);
+}
+
+.project button:hover {
+  background-color: var(--sky-blue);
 }
 
 #project-form,
@@ -62,14 +146,28 @@ input[type='checkbox'] {
   display: none;
 }
 
-#project-container {
-  display: block;
-}
-
 .todo.checked {
   color: gray;
 }
 
 #dopdown-menu {
   display: none;
+}
+
+#content header {
+  display: flex;
+  gap: 1rem;
+}
+
+.line {
+  height: 0.1rem;
+  width: 95%;
+  background-color: white;
+  margin: 0 auto;
+}
+
+footer {
+  padding: 0.2rem;
+  background-color: var(--light-grey);
+  color: var(--dark);
 }
