@@ -9,11 +9,11 @@ class Todo {
 
   constructor(...args) {
     this.#id = `todo-${uuid.v4()}`;
-    if (!args[0]) this.#title = 'New Todo';
+    if (!args[0] || args[0] === '') this.#title = 'New Todo';
     else this.#title = args[0];
-    if (!args[1]) this.#desc = '';
+    if (!args[1] || args[1] === '') this.#desc = 'None';
     else this.#desc = args[1];
-    if (!args[2]) this.#date = new Date().toISOString().split('T')[0];
+    if (!args[2]) this.#date = this.#setTimeZone();
     else this.#date = args[2];
     if (!args[3]) this.#priority = 'None';
     else this.#priority = args[3];
@@ -65,6 +65,13 @@ class Todo {
 
   get check() {
     return this.#check;
+  }
+
+  #setTimeZone() {
+    const now = new Date();
+    const timezoneOffset = now.getTimezoneOffset() * 60000;
+    const localTime = new Date(now.getTime() - timezoneOffset);
+    return localTime.toISOString().slice(0, 10);
   }
 
   toggleCheck = () => (this.#check = !this.#check);

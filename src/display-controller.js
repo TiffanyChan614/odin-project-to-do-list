@@ -6,11 +6,13 @@ import Project from './project';
 const projUl = document.querySelector('#project-list');
 const todoUl = document.querySelector('#todo-list');
 const addProjBtn = document.querySelector('#add-project');
+const projFormOverlay = document.querySelector('#project-form-overlay');
 const projForm = document.querySelector('#project-form');
 const projNameField = document.querySelector('#project-name');
 const clearProjBtn = document.querySelector('#clear-all-projects');
 const addTodoBtn = document.querySelector('#add-todo');
 const clearTodosBtn = document.querySelector('#clear-all-todos');
+const todoFormOverlay = document.querySelector('#todo-form-overlay');
 const todoForm = document.querySelector('#todo-form');
 const todoTitleField = document.querySelector('#todo-title');
 const todoDescField = document.querySelector('#todo-desc');
@@ -60,7 +62,7 @@ const showProjects = () => {
   // console.log(pm.projects);
   const projectLi = document.querySelectorAll('#project-list .project');
   for (let li of projectLi) {
-    domCreator.createProjectBtnsDiv(li);
+    domCreator.addProjectBtnsDiv(li);
     const projectBtns = li.querySelector('.project-btns');
     domCreator.addProjectBtns(projectBtns);
     if (pm.currProject && li.id === pm.currProject.id) {
@@ -78,11 +80,27 @@ const showTodos = (todos) => {
   for (let todo of todos) {
     const todoLi = document.querySelector(`#${todo.id}`);
     if (todo.check) todoLi.classList.add('checked');
-    domCreator.addTodoCheck(todoLi, todo);
-    domCreator.addTodoPriority(todoLi, todo);
-    domCreator.addTodoTitle(todoLi, todo);
-    domCreator.addTodoBtns(todoLi);
-    domCreator.addTodoDetails(todoLi, todo);
+
+    domCreator.addTodoUpperDiv(todoLi);
+    const todoUpperDiv = todoLi.querySelector('.todo-upper');
+
+    domCreator.addTodoInfoDiv(todoUpperDiv);
+    const todoInfoDiv = todoLi.querySelector('.todo-info');
+
+    domCreator.addTodoCheck(todoInfoDiv, todo);
+    domCreator.addTodoPriority(todoInfoDiv, todo);
+    domCreator.addTodoTitle(todoInfoDiv, todo);
+
+    domCreator.addTodoBtnsDiv(todoUpperDiv);
+    const todoBtnsDiv = todoLi.querySelector('.todo-btns');
+
+    domCreator.addTodoBtns(todoBtnsDiv);
+    domCreator.addTodoLowerDiv(todoLi);
+    const todoLowerDiv = todoLi.querySelector('.todo-lower');
+
+    domCreator.addTodoDetailsDiv(todoLowerDiv);
+    const todoDetailsDiv = todoLi.querySelector('.todo-details');
+    domCreator.addTodoDetails(todoDetailsDiv, todo);
   }
 };
 
@@ -107,8 +125,7 @@ const activateAddProj = () => {
       sidebarBtn.click();
     }
     projectMode = ADD;
-    projForm.style.display = 'flex';
-    projForm.style.flexDirection = 'column';
+    projFormOverlay.style.display = 'flex';
     projNameField.value = '';
   });
 };
@@ -124,7 +141,7 @@ const handleProjFormSubmit = () => {
       projToEdit = null;
     }
   }
-  projForm.style.display = 'none';
+  projFormOverlay.style.display = 'none';
   refreshProjects();
   refreshTodos();
 };
@@ -146,7 +163,7 @@ const activateProjForm = () => {
 const activateCancelProjForm = () => {
   cancelProjForm.addEventListener('click', (e) => {
     e.preventDefault();
-    projForm.style.display = 'none';
+    projFormOverlay.style.display = 'none';
   });
 };
 
@@ -172,8 +189,15 @@ const activateClearAllProj = () => {
 const activateClearProj = () => {
   projUl.addEventListener('click', (e) => {
     const target = e.target;
-    if (target.classList.contains('clear-project')) {
-      pm.removeProject(target.parentNode.id);
+    console.log(target);
+    if (
+      target.classList.contains('clear-project') ||
+      target.parentNode.classList.contains('clear-project')
+    ) {
+      console.log('click');
+      if (target.classList.contains('clear-project'))
+        pm.removeProject(target.parentNode.parentNode.id);
+      else pm.removeProject(target.parentNode.parentNode.parentNode.id);
       refreshProjects();
       refreshTodos();
     }
@@ -183,11 +207,19 @@ const activateClearProj = () => {
 const activateEditProj = () => {
   projUl.addEventListener('click', (e) => {
     const target = e.target;
-    if (target.classList.contains('edit-project')) {
+    if (
+      target.classList.contains('edit-project') ||
+      target.parentNode.classList.contains('edit-project')
+    ) {
+      if (target.classList.contains('edit-project')) {
+        projToEdit = pm.getProject(target.parentNode.parentNode.id);
+      } else {
+        projToEdit = pm.getProject(target.parentNode.parentNode.parentNode.id);
+      }
+      // console.log(projToEdit);
+      // console.log('show todo form');
       projectMode = EDIT;
-      projForm.style.display = 'flex';
-      projForm.style.flexDirection = 'column';
-      projToEdit = pm.getProject(target.parentNode.parentNode.id);
+      projFormOverlay.style.display = 'flex';
       let oldName = projToEdit.name;
       projNameField.value = oldName;
     }
@@ -214,13 +246,18 @@ const activateTodoEvent = () => {
   todoUl.addEventListener('click', (e) => {
     // console.log('click');
     const target = e.target;
+    console.log(
+      target,
+      target.classList.contains('.material-symbols.outlined')
+    );
     const todo = target.closest('.todo');
-    const todoTitle = target.closest('.todo-title');
+    const todoTitle = target.classList.contains('.todo-title');
     const isCheckbox = target.type === 'checkbox';
     const isButton = target.tagName === 'BUTTON';
+    const isSVG = target.classList.contains('material-symbols-outlined');
 
-    if ((todo || todoTitle) && !isCheckbox && !isButton) {
-      let todoLi = todo || todoTitle.parentNode;
+    if ((todo || todoTitle) && !isCheckbox && !isButton && !isSVG) {
+      let todoLi = todo || todoTitle.parentNode.parentNode.parentNode;
       showTodoDetail(todoLi);
     }
   });
@@ -230,7 +267,7 @@ const activateCheckTodo = () => {
   todoUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('check-todo')) {
-      pm.toggleCheckTodo(target.parentNode.id);
+      pm.toggleCheckTodo(target.parentNode.parentNode.parentNode.id);
       refreshTodos();
     }
   });
@@ -240,7 +277,10 @@ const activateClearTodo = () => {
   todoUl.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('clear-todo')) {
-      pm.removeTodo(target.parentNode.id);
+      pm.removeTodo(target.parentNode.parentNode.parentNode.id);
+      refreshTodos();
+    } else if (target.parentNode.classList.contains('clear-todo')) {
+      pm.removeTodo(target.parentNode.parentNode.parentNode.parentNode.id);
       refreshTodos();
     }
   });
@@ -249,7 +289,7 @@ const activateClearTodo = () => {
 const activateAddTodo = () => {
   addTodoBtn.addEventListener('click', (e) => {
     todoMode = ADD;
-    todoForm.style.display = 'flex';
+    todoFormOverlay.style.display = 'flex';
     todoTitleField.value = '';
     todoDescField.value = '';
     todoDateField.value = new Date().toISOString().split('T')[0];
@@ -260,19 +300,29 @@ const activateAddTodo = () => {
 const activateEditTodo = () => {
   todoUl.addEventListener('click', (e) => {
     const target = e.target;
-    if (target.classList.contains('edit-todo')) {
+    if (
+      target.classList.contains('edit-todo') ||
+      target.parentNode.classList.contains('edit-todo')
+    ) {
       todoMode = EDIT;
-      todoForm.style.display = 'flex';
+      todoFormOverlay.style.display = 'flex';
       // console.log(todoToEditId);
-      selectedTodo = pm.getTodo(target.parentNode.id);
+      if (target.classList.contains('edit-todo'))
+        selectedTodo = pm.getTodo(target.parentNode.parentNode.parentNode.id);
+      else {
+        selectedTodo = pm.getTodo(
+          target.parentNode.parentNode.parentNode.parentNode.id
+        );
+      }
       // console.log(pm.toString());
       // console.log('Todo to edit: ', todoToEdit);
-      let oldTitle = selectedTodo.title;
-      let oldDesc = selectedTodo.desc;
-      let oldDate = selectedTodo.date;
-      let oldPriority = selectedTodo.priority;
+      const oldTitle = selectedTodo.title;
+      const oldDesc = selectedTodo.desc;
+      const oldDate = selectedTodo.date;
+      const oldPriority = selectedTodo.priority;
       todoTitleField.value = oldTitle;
-      todoDescField.value = oldDesc;
+      if (oldDesc !== 'None') todoDescField.value = oldDesc;
+      else todoDescField.value = '';
       todoDateField.value = oldDate;
       todoPriorityField.value = oldPriority;
     }
@@ -291,12 +341,13 @@ const handleTodoFormSubmit = () => {
     pm.addTodo(newTodo);
   } else if (todoMode === EDIT) {
     if (selectedTodo) {
+      desc = desc === '' ? 'None' : desc;
       pm.editTodo(selectedTodo.id, title, desc, date, priority);
       selectedTodo = null;
     }
   }
   refreshTodos();
-  todoForm.style.display = 'none';
+  todoFormOverlay.style.display = 'none';
 };
 
 const activateTodoForm = () => {
@@ -306,8 +357,7 @@ const activateTodoForm = () => {
     // console.log(pm.toString());
   });
   todoForm.addEventListener('keydown', (e) => {
-    if (e.keyCode === 13) {
-      e.preventDefault();
+    if (!e.shiftKey && e.keyCode === 13) {
       handleTodoFormSubmit();
     }
   });
@@ -316,7 +366,25 @@ const activateTodoForm = () => {
 const activateCancelTodoForm = () => {
   cancelTodoForm.addEventListener('click', (e) => {
     e.preventDefault();
-    todoForm.style.display = 'none';
+    todoFormOverlay.style.display = 'none';
+  });
+};
+
+const activateTodoFormTextbox = () => {
+  todoDescField.addEventListener('keydown', function (e) {
+    if (e.shiftKey && e.keyCode === 13) {
+      // If Shift + Enter are pressed, insert a new line
+      const currentVal = this.value;
+      const cursorPos = this.selectionStart;
+      const newVal =
+        currentVal.substring(0, cursorPos) +
+        '\n' +
+        currentVal.substring(cursorPos);
+      this.value = newVal;
+      this.selectionStart = this.selectionEnd = cursorPos + 1;
+
+      e.preventDefault();
+    }
   });
 };
 
@@ -367,10 +435,12 @@ const activateSearchBar = () => {
     const searchStr = searchField.value;
     if (searchStr) {
       let matches = pm.searchTodoByTitle(searchStr);
-      for (let match of matches) {
-        domCreator.createOption(dropdownMenu, match);
-      }
-      dropdownMenu.style.display = 'block';
+      if (matches.length !== 0) {
+        for (let match of matches) {
+          domCreator.createResultDiv(dropdownMenu, match);
+        }
+        dropdownMenu.style.display = 'flex';
+      } else dropdownMenu.style.display = 'none';
     } else dropdownMenu.style.display = 'none';
   });
 };
@@ -438,6 +508,7 @@ const activateUI = () => {
   activateSearchBar();
   activateDropdownMenu();
   hideDropDownMenu();
+  activateTodoFormTextbox();
 };
 
 export default {
