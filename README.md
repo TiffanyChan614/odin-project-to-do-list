@@ -1,1 +1,1 @@
-# odin-project-to-do-list
+# odin-to-do-list
