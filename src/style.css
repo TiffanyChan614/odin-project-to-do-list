@@ -305,7 +305,7 @@ textarea::placeholder {
 
 #dropdown-menu .search-result {
   margin: 0 0.5rem;
-  color: var(--medium-grey);
+  color: var(--medium-light-grey);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -315,6 +315,11 @@ textarea::placeholder {
 #dropdown-menu .search-result .matched-project {
   color: var(--medium-light-grey);
   font-size: 0.9rem;
+}
+
+#dropdown-menu .search-result:hover {
+  color: var(--medium-grey);
+  font-weight: 450;
 }
 
 #dropdown-menu > .search-result:not(:last-of-type) {
@@ -439,6 +444,10 @@ textarea::placeholder {
 
 .todo.checked .todo-title {
   text-decoration: line-through;
+}
+
+.todo .todo-title {
+  font-weight: 450;
 }
 
 footer {
