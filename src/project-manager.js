@@ -70,7 +70,10 @@ class ProjectManager {
 
   toggleCheckTodo = (id) => this.#currProject.toggleCheckTodo(id);
 
-  editProject = (id, newName) => (this.getProject(id).name = newName);
+  editProject = (id, newName) => {
+    this.getProject(id).name = newName;
+    this.#currProject = this.getProject(id);
+  };
 
   clearCurrentProject = () => this.#currProject.clearAllTodos();
 

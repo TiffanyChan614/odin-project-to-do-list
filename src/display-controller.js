@@ -142,7 +142,7 @@ const handleProjFormSubmit = () => {
     }
   }
   projFormOverlay.style.display = 'none';
-  refreshProjects();
+  pm.currProject = refreshProjects();
   refreshTodos();
 };
 
