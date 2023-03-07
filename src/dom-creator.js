@@ -1,143 +1,87 @@
-const createProjectList = (projectList, projects) => {
-  for (let project of projects) {
-    // console.log(project.toString());
-    let li = document.createElement('li');
-    li.textContent = project.name;
-    li.classList.add('project');
-    li.id = `${project.id}`;
-    projectList.appendChild(li);
+const SVG_DEFAULT_CLASS = 'material-symbols-outlined';
+const createProject = (project, pm) => {
+  // console.log(project.toString());
+  let li = document.createElement('li');
+  li.textContent = project.name;
+  li.classList.add('project');
+  li.id = `${project.id}`;
+  li.appendChild(createProjectBtnsDiv());
+  if (pm.currProject && li.id === pm.currProject.id) {
+    // console.log('Current project: ' + li.name);
+    li.classList.add('selected');
   }
+  return li;
 };
 
-const addProjectBtnsDiv = (projectLi) => {
-  let div = document.createElement('div');
-  div.classList.add('project-btns');
-  projectLi.appendChild(div);
+const createProjectBtnsDiv = () => {
+  const div = createDivTag('project-btns');
+  const editBtn = createBtnTag('edit-project', 'edit_note', 'proj-icons');
+  const clearBtn = createBtnTag('clear-project', 'close', 'proj-icons');
+  div.appendChild(editBtn, clearBtn);
+  return div;
 };
 
-const addProjectBtns = (projectBtn) => {
-  let editBtn = document.createElement('button');
-  editBtn.classList.add('edit-project');
-  const editIcon = createSVGSpanTag(
-    'edit_note',
-    'material-symbols-outlined',
-    'proj-icons'
-  );
-  editBtn.appendChild(editIcon);
-
-  let clearBtn = document.createElement('button');
-  clearBtn.className = 'clear-project';
-  const clearIcon = createSVGSpanTag(
-    'close',
-    'material-symbols-outlined',
-    'proj-icons'
-  );
-  clearBtn.appendChild(clearIcon);
-  projectBtn.appendChild(editBtn);
-  projectBtn.appendChild(clearBtn);
+const createTodo = (todo) => {
+  let li = document.createElement('li');
+  li.classList.add('todo');
+  li.id = `${todo.id}`;
+  const upperDiv = createDivTag('todo-upper');
+  upperDiv.appendChild(createInfoDiv(todo));
+  upperDiv.appendChild(createTodoBtnsDiv());
+  li.appendChild(upperDiv);
+  const lowerDiv = createDivTag('todo-lower');
+  lowerDiv.appendChild(createTodoDetailsDiv(todo));
+  li.appendChild(lowerDiv);
+  if (todo.check) li.classList.add('checked');
+  return li;
 };
 
-const createTodoList = (todoList, todos) => {
-  for (let todo of todos) {
-    let li = document.createElement('li');
-    li.classList.add('todo');
-    li.id = `${todo.id}`;
-    todoList.appendChild(li);
-  }
+const createInfoDiv = (todo) => {
+  const div = createDivTag('todo-info');
+  div.appendChild(createTodoCheck(todo));
+  div.appendChild(createTodoPriority(todo));
+  div.appendChild(createSpanTag(todo.title, 'todo-title'));
+  return div;
 };
 
-const addTodoUpperDiv = (todoLi) => {
-  let div = document.createElement('div');
-  div.classList.add('todo-upper');
-  todoLi.appendChild(div);
+const createTodoBtnsDiv = () => {
+  const div = createDivTag('todo-btns');
+  const editBtn = createBtnTag('edit-todo', 'edit_note', 'todo-icons');
+  const closeBtn = createBtnTag('clear-todo', 'close', 'todo-icons');
+  div.appendChild(editBtn);
+  div.appendChild(closeBtn);
+  return div;
 };
 
-const addTodoLowerDiv = (todoLi) => {
-  let div = document.createElement('div');
-  div.classList.add('todo-lower');
-  todoLi.appendChild(div);
+const createTodoDetailsDiv = (todo) => {
+  const div = createDivTag('todo-details');
+  const desc = createPTag(`Description:\t${todo.desc}`, 'todo-desc');
+  const date = createPTag(`Due date:\t${todo.date}`, 'todo-date');
+  div.appendChild(desc);
+  div.appendChild(date);
+  return div;
 };
 
-const addTodoInfoDiv = (todoUpper) => {
-  let div = document.createElement('div');
-  div.classList.add('todo-info');
-  todoUpper.appendChild(div);
-};
-
-const addTodoBtnsDiv = (todoUpper) => {
-  let div = document.createElement('div');
-  div.classList.add('todo-btns');
-  todoUpper.appendChild(div);
-};
-
-const addTodoDetailsDiv = (todoLower) => {
-  let div = document.createElement('div');
-  div.classList.add('todo-details');
-  todoLower.appendChild(div);
-};
-
-const addTodoCheck = (todoInfo, todo) => {
+const createTodoCheck = (todo) => {
   let check = document.createElement('input');
   check.type = 'checkbox';
   check.classList.add('check-todo');
   check.checked = todo.check;
-  todoInfo.appendChild(check);
+  return check;
 };
 
-const addTodoPriority = (infoDiv, todo) => {
-  let priority = document.createElement('span');
-  if (todo.priority === 'None') priority.textContent = '';
-  else priority.textContent = todo.priority;
-  priority.classList.add('todo-priority');
-  infoDiv.appendChild(priority);
+const createTodoPriority = (todo) => {
+  let priority;
+  if (todo.priority === 'None') priority = createSpanTag('', 'todo-priority');
+  else priority = createSpanTag(todo.priority, 'todo-priority');
+  return priority;
 };
 
-const addTodoTitle = (infoDiv, todo) => {
-  let title = document.createElement('span');
-  title.textContent = todo.title;
-  title.classList.add('todo-title');
-  infoDiv.appendChild(title);
-};
-
-const addTodoBtns = (btnDiv) => {
-  let editBtn = document.createElement('button');
-  editBtn.classList.add('edit-todo');
-  const editIcon = createSVGSpanTag(
-    'edit_note',
-    'material-symbols-outlined',
-    'todo-icons'
+const createResultDiv = (match) => {
+  const option = createDivTag(
+    'search-result',
+    `${match.matchedProj.id}:${match.matchedTodo.id}`
   );
-  editBtn.appendChild(editIcon);
-
-  let clearBtn = document.createElement('button');
-  clearBtn.classList.add('clear-todo');
-  const clearIcon = createSVGSpanTag(
-    'close',
-    'material-symbols-outlined',
-    'todo-icons'
-  );
-  clearBtn.appendChild(clearIcon);
-
-  btnDiv.appendChild(editBtn);
-  btnDiv.appendChild(clearBtn);
-};
-
-const addTodoDetails = (detailsDiv, todo) => {
-  let desc = document.createElement('p');
-  desc.textContent = `Description:\t${todo.desc}`;
-  desc.classList.add('todo-desc');
-  let date = document.createElement('p');
-  date.textContent = `Due date:\t${todo.date}`;
-  date.classList.add('todo-date');
-  detailsDiv.appendChild(desc);
-  detailsDiv.appendChild(date);
-  // console.log('details added');
-};
-
-const createResultDiv = (dropdownMenu, match) => {
-  let option = document.createElement('div');
-  option.classList.add('search-result');
-  option.value = `${match.matchedProj.id}:${match.matchedTodo.id}`;
 
   const todoTitle = createPTag(match.matchedTodo.title, 'matched-todo');
   const projectName = createPTag(match.matchedProj.name, 'matched-project');
@@ -145,7 +89,7 @@ const createResultDiv = (dropdownMenu, match) => {
   option.appendChild(todoTitle);
   option.appendChild(projectName);
 
-  dropdownMenu.appendChild(option);
+  return option;
 };
 
 const createSVGSpanTag = (text, defaultClass, customClass) => {
@@ -162,20 +106,30 @@ const createPTag = (text, className) => {
   return p;
 };
 
+const createSpanTag = (text, className) => {
+  const span = document.createElement('span');
+  span.classList.add(className);
+  span.textContent = text;
+  return span;
+};
+
+const createBtnTag = (className, iconName, svgClassName) => {
+  const button = document.createElement('button');
+  button.classList.add(className);
+  const icon = createSVGSpanTag(iconName, SVG_DEFAULT_CLASS, svgClassName);
+  button.appendChild(icon);
+  return button;
+};
+
+const createDivTag = (className, val) => {
+  const div = document.createElement('p');
+  div.classList.add(className);
+  div.value = val ? val : '';
+  return div;
+};
+
 export default {
-  createProjectList,
-  addProjectBtns,
-  addProjectBtnsDiv,
-  createTodoList,
-  addTodoUpperDiv,
-  addTodoLowerDiv,
-  addTodoInfoDiv,
-  addTodoDetailsDiv,
-  addTodoCheck,
-  addTodoPriority,
-  addTodoTitle,
-  addTodoBtnsDiv,
-  addTodoBtns,
-  addTodoDetails,
+  createProject,
+  createTodo,
   createResultDiv,
 };

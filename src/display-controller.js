@@ -58,17 +58,10 @@ const showProjects = () => {
     currProjName.textContent = '';
     return;
   }
-  domCreator.createProjectList(projUl, pm.projects);
+
   // console.log(pm.projects);
-  const projectLi = document.querySelectorAll('#project-list .project');
-  for (let li of projectLi) {
-    domCreator.addProjectBtnsDiv(li);
-    const projectBtns = li.querySelector('.project-btns');
-    domCreator.addProjectBtns(projectBtns);
-    if (pm.currProject && li.id === pm.currProject.id) {
-      // console.log('Current project: ' + li.name);
-      li.classList.add('selected');
-    }
+  for (let project of pm.projects) {
+    projUl.appendChild(domCreator.createProject(project, pm));
   }
   // console.log(currProjName);
   if (pm.currProject) currProjName.textContent = pm.currProject.name;
@@ -76,31 +69,8 @@ const showProjects = () => {
 
 const showTodos = (todos) => {
   if (!todoUl) return;
-  domCreator.createTodoList(todoUl, todos);
   for (let todo of todos) {
-    const todoLi = document.querySelector(`#${todo.id}`);
-    if (todo.check) todoLi.classList.add('checked');
-
-    domCreator.addTodoUpperDiv(todoLi);
-    const todoUpperDiv = todoLi.querySelector('.todo-upper');
-
-    domCreator.addTodoInfoDiv(todoUpperDiv);
-    const todoInfoDiv = todoLi.querySelector('.todo-info');
-
-    domCreator.addTodoCheck(todoInfoDiv, todo);
-    domCreator.addTodoPriority(todoInfoDiv, todo);
-    domCreator.addTodoTitle(todoInfoDiv, todo);
-
-    domCreator.addTodoBtnsDiv(todoUpperDiv);
-    const todoBtnsDiv = todoLi.querySelector('.todo-btns');
-
-    domCreator.addTodoBtns(todoBtnsDiv);
-    domCreator.addTodoLowerDiv(todoLi);
-    const todoLowerDiv = todoLi.querySelector('.todo-lower');
-
-    domCreator.addTodoDetailsDiv(todoLowerDiv);
-    const todoDetailsDiv = todoLi.querySelector('.todo-details');
-    domCreator.addTodoDetails(todoDetailsDiv, todo);
+    todoUl.appendChild(domCreator.createTodo(todo));
   }
 };
 
@@ -436,7 +406,7 @@ const activateSearchBar = () => {
       let matches = pm.searchTodoByTitle(searchStr);
       if (matches.length !== 0) {
         for (let match of matches) {
-          domCreator.createResultDiv(dropdownMenu, match);
+          dropdownMenu.appendChild(domCreator.createResultDiv(match));
         }
         dropdownMenu.style.display = 'flex';
       } else dropdownMenu.style.display = 'none';
