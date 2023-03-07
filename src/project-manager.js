@@ -1,6 +1,5 @@
 import { loadLocalStorage, saveLocalStorage } from './local-storage';
 import Project from './project';
-import Todo from './todo';
 
 class ProjectManager {
   #projects;
@@ -12,9 +11,10 @@ class ProjectManager {
       if (storedData.projects)
         this.#projects = storedData.projects.map((p) => Project.fromJSON(p));
       else this.#projects = [];
-      if (storedData.currProject) {
-        const dataCurrProject = storedData.currProject;
-        this.#currProject = Project.fromJSON(dataCurrProject);
+      if (this.#projects && storedData.currProjectId) {
+        const tempProj = this.getProject(storedData.currProjectId);
+        if (tempProj) this.#currProject = tempProj;
+        else this.#currProject = null;
       } else {
         this.#currProject = null;
       }
@@ -42,7 +42,7 @@ class ProjectManager {
     for (const p of this.#projects) console.log(p.toString());
     const projectsJSON = this.#projects.map((p) => p.toJSON());
     const currProject = this.#currProject ? this.#currProject.toJSON() : null;
-    return { projects: projectsJSON, currProject: currProject };
+    return { projects: projectsJSON, currProjectId: currProject.id };
   };
 
   static fromJSON(json) {
@@ -53,7 +53,7 @@ class ProjectManager {
     json.projects.forEach((projectJSON) => {
       const project = Project.fromJSON(projectJSON);
       projectManager.addProject(project);
-      if (json.currProject && json.currProject.id === project.id) {
+      if (json.currProjectId === project.id) {
         projectManager.setCurrentProject(project);
       }
     });
@@ -105,7 +105,9 @@ class ProjectManager {
   addTodo = (todo) => {
     if (this.#currProject) {
       this.#currProject.addTodo(todo);
+      console.log(this.toString());
       console.log(this.#currProject.toString());
+      // console.log(this.#currProject.toString());
       this.save();
     }
   };

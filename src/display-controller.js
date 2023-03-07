@@ -404,6 +404,8 @@ const activateSearchBar = () => {
     const searchStr = searchField.value;
     if (searchStr) {
       let matches = pm.searchTodoByTitle(searchStr);
+      console.log(pm.toString());
+      console.log(matches);
       if (matches.length !== 0) {
         for (let match of matches) {
           dropdownMenu.appendChild(domCreator.createResultDiv(match));
