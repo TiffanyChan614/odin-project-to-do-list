@@ -45,6 +45,7 @@ main {
 #sidebar {
   background-color: var(--blue);
   height: 100vh;
+  overflow-y: auto;
 }
 
 #sidebar.open {
@@ -107,9 +108,8 @@ main {
   display: flex;
   flex-direction: column;
   color: white;
-  overflow: auto;
-  overflow-y: auto;
   background-color: var(--blue);
+  padding-bottom: 2rem;
 }
 
 .project-btns {
@@ -124,6 +124,10 @@ main {
   align-items: center;
   justify-content: space-between;
   padding: 0.5rem 0.7rem;
+}
+
+.project-btns {
+  margin-left: 0.5em;
 }
 
 .project button {
@@ -272,8 +276,9 @@ textarea::placeholder {
 
 #content {
   color: var(--medium-grey);
-  padding: 0 1rem;
   width: 100%;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 #search-container {
@@ -327,19 +332,28 @@ textarea::placeholder {
 }
 
 #todo-container {
-  margin-right: 0.5rem;
+  padding: 0.2rem 1.2rem 2rem 1.2rem;
 }
 
-#todo-container header {
+#content > header {
+  position: sticky;
+  top: 0;
+  height: max-content;
+  background-color: white;
+  padding: 0 1.5rem;
+}
+
+#todo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem 0;
+  margin: 1.5rem 0 1rem;
 }
 
 #todo-container header h1 {
   font-size: 1.5rem;
   color: var(--medium-grey);
+  margin-right: 0.5rem;
 }
 
 #todo-main-btns {
@@ -373,6 +387,10 @@ textarea::placeholder {
   padding: 0.8rem 1rem;
   background-color: var(--pale-grey);
   border-radius: 0.4rem;
+}
+
+.todo:hover {
+  box-shadow: 0 0 0.2rem var(--medium-light-grey);
 }
 
 .todo-upper {

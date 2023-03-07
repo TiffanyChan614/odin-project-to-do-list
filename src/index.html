@@ -41,19 +41,21 @@
           </div>
       </aside>
       <section id="content">
-        <header id="search-container">
+        <header>
+          <div id="search-container">
             <input type="text" id="search-bar" placeholder="Search Todo..." />
             <div id="dropdown-menu"></div>
-        </header>
-        <section id="todo-container">
-          <header id="todo-header">
+          </div>
+          <div id="todo-header">
             <h1 id="current-project-name"></h1>
             <div id="todo-main-btns">
               <button type="button" id="add-todo">Add</button>
               <button type="button" id="clear-all-todos">Clear All</button>
               <button type="button" id="show-completed">Show Completed</button>
             </div>
-          </header>
+          </div>
+        </header>
+        <section id="todo-container">
           <ul id="todo-list"></ul>
           <div id="todo-form-overlay">
             <form id="todo-form">
