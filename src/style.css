@@ -51,6 +51,7 @@ main {
 #sidebar.open {
   width: 25%;
   min-width: max-content;
+  max-width: 40rem;
 }
 
 #sidebar.close {
