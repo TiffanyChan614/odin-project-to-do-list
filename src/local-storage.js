@@ -33,9 +33,7 @@ const loadLocalStorage = (key) => {
 const saveLocalStorage = (key, data) => {
   if (storageAvailable('localStorage')) {
     try {
-      //   console.log('original data', data);
       const serializedData = JSON.stringify(data);
-      //   console.log('serializedData', serializedData);
       localStorage.setItem(key, serializedData);
     } catch (err) {
       console.log(`Error saving to local storage: ${err}`);

@@ -28,13 +28,9 @@ const currProjName = document.querySelector('#current-project-name');
 const searchField = document.querySelector('#search-bar');
 const dropdownMenu = document.querySelector('#dropdown-menu');
 
-// console.log(pm.getCurrProjectId());
-// console.log(currProjectId);
-
 const EDIT = 0,
   ADD = 1;
 
-// console.log('Current project: ' + currProjectId);
 let projToEdit = null;
 let projectMode = ADD;
 let selectedTodo = null;
@@ -58,12 +54,9 @@ const showProjects = () => {
     currProjName.textContent = '';
     return;
   }
-
-  // console.log(pm.projects);
   for (let project of pm.projects) {
     projUl.appendChild(domCreator.createProject(project, pm));
   }
-  // console.log(currProjName);
   if (pm.currProject) currProjName.textContent = pm.currProject.name;
 };
 
@@ -82,8 +75,6 @@ const refreshProjects = () => {
 const refreshTodos = () => {
   clearTodos();
   if (pm.currProject) {
-    // console.log(showCompleted);
-    // console.log(pm.currProject.uncheckedTodos);
     if (showCompleted) showTodos(pm.currProject.allTodos);
     else showTodos(pm.currProject.uncheckedTodos);
   }
@@ -159,14 +150,11 @@ const activateClearAllProj = () => {
 const activateClearProj = () => {
   projUl.addEventListener('click', (e) => {
     const target = e.target;
-    // console.log(target);
-    // console.log(target.parentNode);
     if (
       target.classList.contains('clear-project') ||
       (target.parentNode !== null &&
         target.parentNode.classList.contains('clear-project'))
     ) {
-      // console.log('click');
       if (target.classList.contains('clear-project'))
         pm.removeProject(target.parentNode.parentNode.id);
       else pm.removeProject(target.parentNode.parentNode.parentNode.id);
@@ -203,10 +191,7 @@ const showTodoDetail = (todoLi) => {
   todoLi.style.backgroundColor = 'light pink';
   const descP = todoLi.querySelector('.todo-desc');
   const dateP = todoLi.querySelector('.todo-date');
-  // console.log(descP, dateP);
-  // console.log(descP.style.display);
   if (window.getComputedStyle(descP).getPropertyValue('display') === 'none') {
-    // console.log('not shown');
     descP.style.display = 'flex';
     dateP.style.display = 'flex';
   } else {
@@ -217,7 +202,6 @@ const showTodoDetail = (todoLi) => {
 
 const activateTodoEvent = () => {
   todoUl.addEventListener('click', (e) => {
-    // console.log('click');
     const target = e.target;
     const todo = target.closest('.todo');
     const todoTitle = target.classList.contains('.todo-title');
@@ -275,7 +259,6 @@ const activateEditTodo = () => {
     ) {
       todoMode = EDIT;
       todoFormOverlay.style.display = 'flex';
-      // console.log(todoToEditId);
       if (target.classList.contains('edit-todo'))
         selectedTodo = pm.getTodo(target.parentNode.parentNode.parentNode.id);
       else {
@@ -283,9 +266,6 @@ const activateEditTodo = () => {
           target.parentNode.parentNode.parentNode.parentNode.id
         );
       }
-      console.log(selectedTodo);
-      // console.log(pm.toString());
-      // console.log('Todo to edit: ', todoToEdit);
       const oldTitle = selectedTodo.title;
       const oldDesc = selectedTodo.desc;
       const oldDate = selectedTodo.date;
@@ -305,7 +285,6 @@ const handleTodoFormSubmit = () => {
   let date = todoDateField.value;
   let priority = todoPriorityField.value;
   if (todoMode === ADD) {
-    // console.log(todoPriorityField);
     let newTodo = new Todo(null, title, desc, date, priority);
     pm.addTodo(newTodo);
   } else if (todoMode === EDIT) {
@@ -323,7 +302,6 @@ const activateTodoForm = () => {
   todoForm.addEventListener('submit', (e) => {
     e.preventDefault();
     handleTodoFormSubmit();
-    // console.log(pm.toString());
   });
   todoForm.addEventListener('keydown', (e) => {
     if (!e.shiftKey && e.keyCode === 13) {
@@ -342,7 +320,6 @@ const activateCancelTodoForm = () => {
 const activateTodoFormTextbox = () => {
   todoDescField.addEventListener('keydown', function (e) {
     if (e.shiftKey && e.keyCode === 13) {
-      // If Shift + Enter are pressed, insert a new line
       const currentVal = this.value;
       const cursorPos = this.selectionStart;
       const newVal =
@@ -399,7 +376,6 @@ const activateShowCompleted = () => {
 
 const activateSearchBar = () => {
   searchField.addEventListener('input', () => {
-    // console.log('Searching');
     dropdownMenu.textContent = '';
     const searchStr = searchField.value;
     if (searchStr) {
@@ -420,24 +396,14 @@ const activateDropdownMenu = () => {
   dropdownMenu.addEventListener('click', (e) => {
     const target = e.target;
     if (target.classList.contains('search-result')) {
-      // console.log('click');
-      // console.log(target.value);
       let projId = target.value.split(':')[0];
-      // console.log('Project id: ', projId);
       let todoId = target.value.split(':')[1];
-      // console.log('Todo ID: ', todoId);
-      // console.log('currProjectId: ', currProjectId);
-      // console.log('currProject: ', currProject.toString());
       pm.currProject = pm.getProject(projId);
-      // console.log('Search project: ', currProject.toString());
-      // console.log('Search todo: ', pm.getTodo(todoId));
       if (pm.getTodo(todoId).check) showCompleted = true;
       toggleShowCompletedbtn();
       refreshProjects();
       refreshTodos();
-      // console.log(todoId);
       const todoLi = document.querySelector(`#${todoId}`);
-      // console.log(todoLi);
       showTodoDetail(todoLi);
     }
     dropdownMenu.style.display = 'none';

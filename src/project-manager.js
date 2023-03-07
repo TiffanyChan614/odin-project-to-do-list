@@ -39,10 +39,9 @@ class ProjectManager {
   }
 
   toJSON = () => {
-    for (const p of this.#projects) console.log(p.toString());
     const projectsJSON = this.#projects.map((p) => p.toJSON());
-    const currProject = this.#currProject ? this.#currProject.toJSON() : null;
-    return { projects: projectsJSON, currProjectId: currProject.id };
+    const currProjectId = this.#currProject ? this.#currProject.id : null;
+    return { projects: projectsJSON, currProjectId: currProjectId };
   };
 
   static fromJSON(json) {
@@ -81,8 +80,6 @@ class ProjectManager {
   addProject = (project) => {
     this.#projects.push(project);
     this.#currProject = project;
-    // console.log('Inside addProject');
-    // console.log(this.#projects, this.#currProject);
     this.save();
   };
 
@@ -93,10 +90,8 @@ class ProjectManager {
     }
     this.#projects = this.#projects.filter((p) => p.id !== id);
     if (this.#currProject.id === id) {
-      // console.log('Selected is removed');
       if (!this.isEmpty()) {
         this.#currProject = this.#projects[0];
-        // console.log(this.#currProject.name);
       } else this.#currProject = null;
     }
     this.save();
@@ -105,9 +100,6 @@ class ProjectManager {
   addTodo = (todo) => {
     if (this.#currProject) {
       this.#currProject.addTodo(todo);
-      console.log(this.toString());
-      console.log(this.#currProject.toString());
-      // console.log(this.#currProject.toString());
       this.save();
     }
   };
@@ -129,9 +121,6 @@ class ProjectManager {
   };
 
   toggleCheckTodo = (id) => {
-    console.log(this.#currProject.toString());
-    console.log('id =', id);
-    console.log(this.#currProject.getTodo(id));
     this.#currProject.toggleCheckTodo(id);
     this.save();
   };
