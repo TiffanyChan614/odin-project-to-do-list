@@ -442,7 +442,7 @@ textarea::placeholder {
 }
 
 .todo-icons {
-  color: var(--blue);
+  color: var(--medium-grey);
 }
 
 .todo button:hover {

@@ -303,7 +303,8 @@ const activateTodoForm = () => {
   });
   todoForm.addEventListener('keydown', (e) => {
     if (!e.shiftKey && e.keyCode === 13) {
-      todoForm.submit();
+      e.preventDefault();
+      handleTodoFormSubmit();
     }
   });
 };
