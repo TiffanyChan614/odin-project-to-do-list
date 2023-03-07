@@ -1,0 +1,493 @@
+:root {
+  --white-grey: #ebebeb;
+  --pale-grey: #e3e9eb;
+  --light-grey: #d6d9da;
+  --grey: #b2bec3;
+  --neutral-grey: #a7a7a7;
+  --medium-light-grey: #646a6c;
+  --medium-grey: #444b4d;
+  --dark: #2d3436;
+  --sky-blue: #55a2f0;
+  --light-blue: #3e92e6;
+  --blue: #0984e3;
+  --dark-blue: #006fc4;
+  --pink: #ff4646;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  font-family: -apple-system, 'system-ui';
+}
+
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+#sidebar.open #project-btns-container,
+#content > header {
+  height: 7vh;
+  min-height: 3rem;
+}
+
+#sidebar {
+  background-color: var(--blue);
+  height: 100vh;
+  overflow-y: auto;
+}
+
+#sidebar.open {
+  width: 25%;
+  min-width: max-content;
+  max-width: 40rem;
+}
+
+#sidebar.close {
+  width: auto;
+}
+
+#project-btns-container {
+  position: sticky;
+  top: 0;
+  display: flex;
+  align-items: center;
+  color: white;
+  gap: 0.5rem;
+  background-color: var(--blue);
+}
+
+#sidebar.open #project-btns-container {
+  flex-direction: row;
+  padding: 0 0.2rem;
+  margin: 0 0.7rem 0 0.7rem;
+  border-bottom: 0.1rem solid white;
+}
+
+#sidebar.close #project-btns-container {
+  flex-direction: column;
+  padding: 1rem 0.5rem;
+}
+
+#sidebar.close #clear-all-projects {
+  display: none;
+}
+
+#project-btns-container button {
+  background-color: inherit;
+  border: none;
+  padding: 0.3rem;
+  border-radius: 5rem;
+  color: white;
+}
+
+#project-btns-container button:hover {
+  background-color: var(--sky-blue);
+}
+
+#sidebar.close #project-btns-container button {
+  width: 100%;
+}
+
+.project.selected,
+.project.selected:hover {
+  background-color: var(--sky-blue);
+}
+
+#project-container {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  background-color: var(--blue);
+  padding-bottom: 2rem;
+}
+
+.project-btns {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.project {
+  height: 6vh;
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.7rem;
+}
+
+.project-btns {
+  margin-left: 0.5em;
+}
+
+.project button {
+  border: none;
+  background-color: inherit;
+  color: white;
+}
+
+.project:hover {
+  background-color: var(--light-blue);
+}
+
+.project button:hover {
+  transform: scale(1.1);
+}
+
+#project-form-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  text-align: center;
+}
+
+#project-form-overlay input {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid var(--grey);
+}
+
+#project-form-overlay input::placeholder {
+  color: var(--neutral-grey);
+}
+
+#project-form-btns,
+#todo-form-btns {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+#project-form-btns button,
+#todo-form-btns button {
+  padding: 0.7rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--medium-grey);
+  background-color: var(--white-grey);
+}
+
+#cancel-proj-btn:hover,
+#cancel-todo-btn:hover {
+  background-color: var(--light-grey);
+}
+
+#submit-proj-btn:hover,
+#submit-todo-btn:hover {
+  background-color: var(--blue);
+  color: white;
+}
+
+#todo-form-btns {
+  margin-top: 0.8rem;
+}
+
+#project-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  color: var(--medium-grey);
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  width: 25rem;
+}
+
+#todo-form-overlay {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  text-align: center;
+}
+
+#todo-form {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  color: var(--medium-grey);
+  display: flex;
+  flex-direction: column;
+  width: 25rem;
+  gap: 1rem;
+}
+
+#todo-form h2 {
+  text-align: center;
+}
+
+#todo-form input,
+select,
+textarea {
+  padding: 0.4rem;
+  border-radius: 0.5rem;
+  border: 0.1rem solid var(--grey);
+  font-family: -apple-system, 'system-ui';
+  color: var(--medium-grey);
+}
+
+#todo-form > div:not(:last-of-type) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--medium-light-grey);
+}
+
+#todo-form > div label {
+  margin-left: 0.2rem;
+}
+
+#todo-form input::placeholder,
+textarea::placeholder {
+  color: var(--neutral-grey);
+}
+
+#todo-form #todo-desc {
+  height: 3rem;
+  overflow: auto;
+  resize: vertical;
+  word-wrap: break-word;
+}
+
+#content {
+  color: var(--medium-grey);
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+#search-container {
+  position: sticky;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+#search-bar {
+  flex-shrink: 0;
+  height: 2rem;
+  width: 66%;
+  border: 0.15rem solid var(--light-grey);
+  border-radius: 1rem;
+  padding: 0 0.5rem;
+  color: var(--medium-grey);
+  margin-top: 1rem;
+}
+
+#dropdown-menu {
+  display: none;
+  width: 66%;
+  border: 0.07rem solid var(--pale-grey);
+  border-radius: 0.5rem;
+  background-color: white;
+  flex-direction: column;
+}
+
+#dropdown-menu .search-result {
+  margin: 0 0.5rem;
+  color: var(--medium-light-grey);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+#dropdown-menu .search-result .matched-project {
+  color: var(--medium-light-grey);
+  font-size: 0.9rem;
+}
+
+#dropdown-menu .search-result:hover {
+  color: var(--medium-grey);
+  font-weight: 450;
+}
+
+#dropdown-menu > .search-result:not(:last-of-type) {
+  border-bottom: 0.07rem solid var(--pale-grey);
+}
+
+#todo-container {
+  padding: 0.2rem 1.2rem 2rem 1.2rem;
+}
+
+#content > header {
+  position: sticky;
+  top: 0;
+  height: max-content;
+  background-color: white;
+  padding: 0 1.5rem;
+}
+
+#todo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1.5rem 0 1rem;
+}
+
+#todo-container header h1 {
+  font-size: 1.5rem;
+  color: var(--medium-grey);
+  margin-right: 0.5rem;
+}
+
+#todo-main-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#todo-main-btns button {
+  padding: 0.5rem;
+  background-color: var(--light-blue);
+  border: none;
+  border-radius: 0.4rem;
+  color: white;
+}
+
+#todo-main-btns button:hover {
+  background-color: var(--blue);
+  color: white;
+}
+
+#todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.todo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background-color: var(--pale-grey);
+  border-radius: 0.4rem;
+}
+
+.todo:hover {
+  box-shadow: 0 0 0.2rem var(--medium-light-grey);
+}
+
+.todo-upper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.todo-info {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.todo-priority {
+  color: var(--pink);
+  font-weight: bold;
+}
+
+.todo input[type='checkbox'] {
+  appearance: none;
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  background-color: white;
+  border: 0.1rem solid var(--neutral-grey);
+  border-radius: 2rem;
+  cursor: pointer;
+}
+
+.todo input[type='checkbox']:checked {
+  background-color: var(--sky-blue);
+}
+
+.todo-btns {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.todo button {
+  padding: 0.2rem;
+  background-color: var(--pale-grey);
+  border: none;
+  border-radius: 2rem;
+}
+
+.todo button:hover {
+  transform: scale(1.1);
+}
+
+.todo-details {
+  font-size: 0.9rem;
+  color: var(--medium-light-grey);
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-left: 2rem;
+  white-space: pre;
+}
+
+.todo-desc,
+.todo-date {
+  display: none;
+}
+
+.todo.checked span {
+  color: var(--medium-light-grey);
+}
+
+.todo.checked .todo-title {
+  text-decoration: line-through;
+}
+
+.todo .todo-title {
+  font-weight: 450;
+}
+
+footer {
+  padding: 0.2rem;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  opacity: 0.8;
+  z-index: 2;
+  background-color: var(--pale-grey);
+  color: var(--dark);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 200, 'GRAD' 0, 'opsz' 50;
+}
+
+.material-symbols-outlined .proj-icons {
+  width: 1.5rem;
+}
+
+.material-symbols-outlined .todo-icons {
+  width: 1rem;
+}
