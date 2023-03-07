@@ -190,9 +190,11 @@ const activateClearProj = () => {
   projUl.addEventListener('click', (e) => {
     const target = e.target;
     // console.log(target);
+    // console.log(target.parentNode);
     if (
       target.classList.contains('clear-project') ||
-      target.parentNode.classList.contains('clear-project')
+      (target.parentNode !== null &&
+        target.parentNode.classList.contains('clear-project'))
     ) {
       // console.log('click');
       if (target.classList.contains('clear-project'))
@@ -209,7 +211,8 @@ const activateEditProj = () => {
     const target = e.target;
     if (
       target.classList.contains('edit-project') ||
-      target.parentNode.classList.contains('edit-project')
+      (target.parentNode !== null &&
+        target.parentNode.classList.contains('edit-project'))
     ) {
       if (target.classList.contains('edit-project')) {
         projToEdit = pm.getProject(target.parentNode.parentNode.id);
@@ -334,7 +337,6 @@ const handleTodoFormSubmit = () => {
   if (todoMode === ADD) {
     // console.log(todoPriorityField);
     let newTodo = new Todo(null, title, desc, date, priority);
-    // console.log(newTodo.toString());
     pm.addTodo(newTodo);
   } else if (todoMode === EDIT) {
     if (selectedTodo) {

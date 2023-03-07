@@ -9,7 +9,9 @@ class ProjectManager {
   constructor(...projects) {
     const storedData = loadLocalStorage('projectManager');
     if (storedData) {
-      this.#projects = storedData.projects.map((p) => Project.fromJSON(p));
+      if (storedData.projects)
+        this.#projects = storedData.projects.map((p) => Project.fromJSON(p));
+      else this.#projects = [];
       if (storedData.currProject) {
         const dataCurrProject = storedData.currProject;
         this.#currProject = Project.fromJSON(dataCurrProject);

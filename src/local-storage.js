@@ -20,10 +20,6 @@ const loadLocalStorage = (key) => {
         return undefined;
       }
       const parsedData = JSON.parse(serializedData);
-      //   console.log('parsedData', parsedData);
-      if (!parsedData.projects) {
-        parsedData.projects = [];
-      }
       return parsedData;
     } catch (err) {
       console.log(`Error loading from local storage: ${err}`);
