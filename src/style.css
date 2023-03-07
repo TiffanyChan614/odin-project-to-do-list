@@ -127,14 +127,11 @@ main {
   padding: 0.5rem 0.7rem;
 }
 
-.project-btns {
-  margin-left: 0.5em;
-}
-
 .project button {
   border: none;
   background-color: inherit;
   color: white;
+  margin-left: 0.5em;
 }
 
 .project:hover {
@@ -360,6 +357,7 @@ textarea::placeholder {
 #todo-main-btns {
   display: flex;
   gap: 0.5rem;
+  margin-left: 0.5rem;
 }
 
 #todo-main-btns button {
@@ -385,6 +383,7 @@ textarea::placeholder {
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: max-content;
   padding: 0.8rem 1rem;
   background-color: var(--pale-grey);
   border-radius: 0.4rem;
@@ -436,6 +435,10 @@ textarea::placeholder {
   background-color: var(--pale-grey);
   border: none;
   border-radius: 2rem;
+}
+
+.todo-icons {
+  color: var(--blue);
 }
 
 .todo button:hover {
