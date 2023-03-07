@@ -1,5 +1,5 @@
 import domCreator from './dom-creator';
-import Todo from './todo';
+import Todo, { setTimeZone } from './todo';
 import pm from './initialPM';
 import Project from './project';
 
@@ -66,7 +66,7 @@ const showProjects = () => {
     const projectBtns = li.querySelector('.project-btns');
     domCreator.addProjectBtns(projectBtns);
     if (pm.currProject && li.id === pm.currProject.id) {
-      console.log('Current project: ' + li.name);
+      // console.log('Current project: ' + li.name);
       li.classList.add('selected');
     }
   }
@@ -133,7 +133,7 @@ const activateAddProj = () => {
 const handleProjFormSubmit = () => {
   let projName = projNameField.value;
   if (projectMode === ADD) {
-    if (projName !== '') pm.addProject(new Project(projName));
+    if (projName !== '') pm.addProject(new Project(null, projName));
     else pm.addProject(new Project());
   } else if (projectMode === EDIT) {
     if (projToEdit) {
@@ -189,12 +189,12 @@ const activateClearAllProj = () => {
 const activateClearProj = () => {
   projUl.addEventListener('click', (e) => {
     const target = e.target;
-    console.log(target);
+    // console.log(target);
     if (
       target.classList.contains('clear-project') ||
       target.parentNode.classList.contains('clear-project')
     ) {
-      console.log('click');
+      // console.log('click');
       if (target.classList.contains('clear-project'))
         pm.removeProject(target.parentNode.parentNode.id);
       else pm.removeProject(target.parentNode.parentNode.parentNode.id);
@@ -246,10 +246,6 @@ const activateTodoEvent = () => {
   todoUl.addEventListener('click', (e) => {
     // console.log('click');
     const target = e.target;
-    console.log(
-      target,
-      target.classList.contains('.material-symbols.outlined')
-    );
     const todo = target.closest('.todo');
     const todoTitle = target.classList.contains('.todo-title');
     const isCheckbox = target.type === 'checkbox';
@@ -292,7 +288,7 @@ const activateAddTodo = () => {
     todoFormOverlay.style.display = 'flex';
     todoTitleField.value = '';
     todoDescField.value = '';
-    todoDateField.value = new Date().toISOString().split('T')[0];
+    todoDateField.value = setTimeZone();
     todoPriorityField.value = 'None';
   });
 };
@@ -314,6 +310,7 @@ const activateEditTodo = () => {
           target.parentNode.parentNode.parentNode.parentNode.id
         );
       }
+      console.log(selectedTodo);
       // console.log(pm.toString());
       // console.log('Todo to edit: ', todoToEdit);
       const oldTitle = selectedTodo.title;
@@ -336,7 +333,7 @@ const handleTodoFormSubmit = () => {
   let priority = todoPriorityField.value;
   if (todoMode === ADD) {
     // console.log(todoPriorityField);
-    let newTodo = new Todo(title, desc, date, priority);
+    let newTodo = new Todo(null, title, desc, date, priority);
     // console.log(newTodo.toString());
     pm.addTodo(newTodo);
   } else if (todoMode === EDIT) {

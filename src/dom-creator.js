@@ -1,6 +1,6 @@
 const createProjectList = (projectList, projects) => {
   for (let project of projects) {
-    console.log(project.toString());
+    // console.log(project.toString());
     let li = document.createElement('li');
     li.textContent = project.name;
     li.classList.add('project');

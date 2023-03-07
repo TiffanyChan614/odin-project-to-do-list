@@ -1,4 +1,12 @@
 const uuid = require('uuid');
+
+export const setTimeZone = () => {
+  const now = new Date();
+  const timezoneOffset = now.getTimezoneOffset() * 60000;
+  const localTime = new Date(now.getTime() - timezoneOffset);
+  return localTime.toISOString().slice(0, 10);
+};
+
 class Todo {
   #id;
   #title;
@@ -7,17 +15,26 @@ class Todo {
   #priority;
   #check;
 
-  constructor(...args) {
-    this.#id = `todo-${uuid.v4()}`;
-    if (!args[0] || args[0] === '') this.#title = 'New Todo';
-    else this.#title = args[0];
-    if (!args[1] || args[1] === '') this.#desc = 'None';
-    else this.#desc = args[1];
-    if (!args[2]) this.#date = this.#setTimeZone();
-    else this.#date = args[2];
-    if (!args[3]) this.#priority = 'None';
-    else this.#priority = args[3];
-    this.#check = false;
+  constructor(
+    id = null,
+    title = 'New Todo',
+    desc = 'None',
+    date = setTimeZone(),
+    priority = 'None',
+    check = false
+  ) {
+    if (id !== null) this.#id = id;
+    else this.#id = `todo-${uuid.v4()}`;
+
+    if (title !== '') this.#title = title;
+    else this.#title = 'New Todo';
+
+    if (desc !== '') this.#desc = desc;
+    else this.#desc = 'None';
+
+    this.#date = date;
+    this.#priority = priority;
+    this.#check = check;
   }
 
   set id(id) {
@@ -67,13 +84,6 @@ class Todo {
     return this.#check;
   }
 
-  #setTimeZone() {
-    const now = new Date();
-    const timezoneOffset = now.getTimezoneOffset() * 60000;
-    const localTime = new Date(now.getTime() - timezoneOffset);
-    return localTime.toISOString().slice(0, 10);
-  }
-
   toggleCheck = () => (this.#check = !this.#check);
 
   edit = (newTitle, newDesc, newDate, newPriority) => {
@@ -93,6 +103,28 @@ class Todo {
       `Due Date: ${this.#date}\n` +
       `Priority: ${this.#priority}\n` +
       `Check: ${this.#check}\n`
+    );
+  };
+
+  toJSON = () => {
+    return {
+      id: this.#id,
+      title: this.#title,
+      desc: this.#desc,
+      date: this.#date,
+      priority: this.#priority,
+      check: this.#check,
+    };
+  };
+
+  static fromJSON = (json) => {
+    return new Todo(
+      json.id,
+      json.title,
+      json.desc,
+      json.date,
+      json.priority,
+      json.check
     );
   };
 }

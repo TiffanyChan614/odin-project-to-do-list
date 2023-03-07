@@ -1,22 +1,23 @@
+import Todo from './todo';
+
 const uuid = require('uuid');
 class Project {
   #id;
+  #name;
   #uncheckedTodos;
   #checkedTodos;
-  #name;
 
-  constructor(...args) {
-    this.#id = `project-${uuid.v4()}`;
-    this.#uncheckedTodos = [];
-    this.#checkedTodos = [];
-    if (args.length === 0) {
-      this.#name = 'New Project';
-    } else if (args.length === 1) {
-      this.#name = args[0];
-    } else {
-      this.#name = args[0];
-      this.#uncheckedTodos = args[1];
-    }
+  constructor(
+    id = null,
+    name = 'New Project',
+    uncheckedTodos = [],
+    checkedTodos = []
+  ) {
+    if (!id) this.#id = `project-${uuid.v4()}`;
+    else this.#id = id;
+    this.#name = name;
+    this.#uncheckedTodos = uncheckedTodos;
+    this.#checkedTodos = checkedTodos;
   }
 
   set id(id) {
@@ -154,6 +155,30 @@ class Project {
     }
     return msg;
   };
+
+  toJSON = () => {
+    return {
+      id: this.#id,
+      uncheckedTodos: this.#uncheckedTodos.length
+        ? this.#uncheckedTodos.map((todo) => todo.toJSON())
+        : [],
+      checkedTodos: this.#checkedTodos.length
+        ? this.#checkedTodos.map((todo) => todo.toJSON())
+        : [],
+      name: this.#name,
+    };
+  };
+
+  static fromJSON(json) {
+    const project = new Project(json.id, json.name);
+    project.#uncheckedTodos = json.uncheckedTodos.map((todoJSON) =>
+      Todo.fromJSON(todoJSON)
+    );
+    project.#checkedTodos = json.checkedTodos.map((todoJSON) =>
+      Todo.fromJSON(todoJSON)
+    );
+    return project;
+  }
 }
 
 export default Project;

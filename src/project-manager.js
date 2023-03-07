@@ -1,10 +1,27 @@
+import { loadLocalStorage, saveLocalStorage } from './local-storage';
+import Project from './project';
+import Todo from './todo';
+
 class ProjectManager {
   #projects;
   #currProject;
 
   constructor(...projects) {
-    this.#projects = projects.length === 0 ? [] : projects;
-    this.#currProject = this.#projects.length > 0 ? this.#projects[0] : null;
+    const storedData = loadLocalStorage('projectManager');
+    if (storedData) {
+      this.#projects = storedData.projects.map((p) => Project.fromJSON(p));
+      if (storedData.currProject) {
+        const dataCurrProject = storedData.currProject;
+        this.#currProject = Project.fromJSON(dataCurrProject);
+      } else {
+        this.#currProject = null;
+      }
+    } else {
+      this.#projects =
+        projects.length > 0 ? projects.map((p) => new Project(p)) : [];
+      this.#currProject = this.#projects.length > 0 ? this.#projects[0] : null;
+      this.save();
+    }
   }
 
   get projects() {
@@ -18,6 +35,32 @@ class ProjectManager {
   get currProject() {
     return this.#currProject;
   }
+
+  toJSON = () => {
+    for (const p of this.#projects) console.log(p.toString());
+    const projectsJSON = this.#projects.map((p) => p.toJSON());
+    const currProject = this.#currProject ? this.#currProject.toJSON() : null;
+    return { projects: projectsJSON, currProject: currProject };
+  };
+
+  static fromJSON(json) {
+    const projectManager = new ProjectManager();
+    if (!json || !json.projects) {
+      return projectManager;
+    }
+    json.projects.forEach((projectJSON) => {
+      const project = Project.fromJSON(projectJSON);
+      projectManager.addProject(project);
+      if (json.currProject && json.currProject.id === project.id) {
+        projectManager.setCurrentProject(project);
+      }
+    });
+    return projectManager;
+  }
+
+  save = () => {
+    saveLocalStorage('projectManager', this.toJSON());
+  };
 
   isEmpty = () => this.#projects.length === 0;
 
@@ -36,6 +79,9 @@ class ProjectManager {
   addProject = (project) => {
     this.#projects.push(project);
     this.#currProject = project;
+    // console.log('Inside addProject');
+    // console.log(this.#projects, this.#currProject);
+    this.save();
   };
 
   removeProject = (id) => {
@@ -48,34 +94,56 @@ class ProjectManager {
       // console.log('Selected is removed');
       if (!this.isEmpty()) {
         this.#currProject = this.#projects[0];
-        console.log(this.#currProject.name);
+        // console.log(this.#currProject.name);
       } else this.#currProject = null;
     }
+    this.save();
   };
 
   addTodo = (todo) => {
-    if (this.#currProject) this.#currProject.addTodo(todo);
+    if (this.#currProject) {
+      this.#currProject.addTodo(todo);
+      console.log(this.#currProject.toString());
+      this.save();
+    }
   };
 
   removeTodo = (id) => {
-    if (this.#currProject) this.#currProject.removeTodo(id);
+    if (this.#currProject) {
+      this.#currProject.removeTodo(id);
+      this.save();
+    }
   };
 
   getTodo = (id) => {
     if (this.#currProject) return this.#currProject.getTodo(id);
   };
 
-  editTodo = (id, title, desc, date, priority) =>
+  editTodo = (id, title, desc, date, priority) => {
     this.#currProject.editTodo(id, title, desc, date, priority);
+    this.save();
+  };
 
-  toggleCheckTodo = (id) => this.#currProject.toggleCheckTodo(id);
+  toggleCheckTodo = (id) => {
+    console.log(this.#currProject.toString());
+    console.log('id =', id);
+    console.log(this.#currProject.getTodo(id));
+    this.#currProject.toggleCheckTodo(id);
+    this.save();
+  };
 
   editProject = (id, newName) => {
     this.getProject(id).name = newName;
     this.#currProject = this.getProject(id);
+    this.save();
   };
 
-  clearCurrentProject = () => this.#currProject.clearAllTodos();
+  clearCurrentProject = () => {
+    if (this.#currProject) {
+      this.#currProject.clearAllTodos();
+      this.save();
+    }
+  };
 
   searchTodoByTitle = (searchStr) => {
     let matches = [];
@@ -90,7 +158,11 @@ class ProjectManager {
     return matches;
   };
 
-  clearAllProjects = () => (this.#projects = []);
+  clearAllProjects = () => {
+    this.#projects = [];
+    this.#currProject = null;
+    this.save();
+  };
 
   toString = () => {
     let out = '';
