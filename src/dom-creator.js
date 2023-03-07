@@ -1,13 +1,11 @@
 const SVG_DEFAULT_CLASS = 'material-symbols-outlined';
 const createProject = (project, pm) => {
-  // console.log(project.toString());
   let li = document.createElement('li');
   li.textContent = project.name;
   li.classList.add('project');
   li.id = `${project.id}`;
   li.appendChild(createProjectBtnsDiv());
   if (pm.currProject && li.id === pm.currProject.id) {
-    // console.log('Current project: ' + li.name);
     li.classList.add('selected');
   }
   return li;
@@ -17,7 +15,8 @@ const createProjectBtnsDiv = () => {
   const div = createDivTag('project-btns');
   const editBtn = createBtnTag('edit-project', 'edit_note', 'proj-icons');
   const clearBtn = createBtnTag('clear-project', 'close', 'proj-icons');
-  div.appendChild(editBtn, clearBtn);
+  div.appendChild(editBtn);
+  div.appendChild(clearBtn);
   return div;
 };
 

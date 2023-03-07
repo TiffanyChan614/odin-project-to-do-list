@@ -5,4 +5,5 @@ if (pm.isEmpty()) {
   let proj1 = new Project('To do list');
   pm.addProject(proj1);
 }
+pm.currProject = pm.projects[0];
 export default pm;

@@ -103,7 +103,7 @@ const handleProjFormSubmit = () => {
     }
   }
   projFormOverlay.style.display = 'none';
-  pm.currProject = refreshProjects();
+  refreshProjects();
   refreshTodos();
 };
 
@@ -177,8 +177,6 @@ const activateEditProj = () => {
       } else {
         projToEdit = pm.getProject(target.parentNode.parentNode.parentNode.id);
       }
-      // console.log(projToEdit);
-      // console.log('show todo form');
       projectMode = EDIT;
       projFormOverlay.style.display = 'flex';
       let oldName = projToEdit.name;
@@ -380,8 +378,6 @@ const activateSearchBar = () => {
     const searchStr = searchField.value;
     if (searchStr) {
       let matches = pm.searchTodoByTitle(searchStr);
-      console.log(pm.toString());
-      console.log(matches);
       if (matches.length !== 0) {
         for (let match of matches) {
           dropdownMenu.appendChild(domCreator.createResultDiv(match));

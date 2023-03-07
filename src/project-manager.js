@@ -30,8 +30,16 @@ class ProjectManager {
     return this.#projects;
   }
 
-  set currProject(currProject) {
-    this.#currProject = currProject;
+  set currProject(currProj) {
+    for (const proj of this.#projects) {
+      if (proj.id === currProj.id) {
+        this.#currProject = currProj;
+        this.save();
+        return;
+      }
+    }
+    this.#currProject = null;
+    this.save();
   }
 
   get currProject() {
