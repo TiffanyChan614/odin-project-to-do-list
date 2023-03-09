@@ -271,6 +271,7 @@ textarea::placeholder {
 
 #todo-form #todo-desc {
   height: 3rem;
+  max-height: 20rem;
   overflow: auto;
   resize: vertical;
   word-wrap: break-word;
