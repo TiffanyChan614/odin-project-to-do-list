@@ -4,9 +4,21 @@ import Project from './project';
 class ProjectManager {
   #projects;
   #currProject;
+  #storageKey;
 
-  constructor(...projects) {
-    const storedData = loadLocalStorage('projectManager');
+  constructor(storageKey = 'projectManager', ...projects) {
+    this.#storageKey = storageKey;
+    let storedData;
+    try {
+      storedData = loadLocalStorage(this.#storageKey);
+    } catch {
+      console.error(
+        `Error loading data from local storage for key "${
+          this.#storageKey
+        }": ${err}`
+      );
+      storedData = null;
+    }
     if (storedData) {
       if (storedData.projects)
         this.#projects = storedData.projects.map((p) => Project.fromJSON(p));
@@ -63,14 +75,14 @@ class ProjectManager {
   }
 
   save = () => {
-    saveLocalStorage('projectManager', this.toJSON());
+    saveLocalStorage(this.#storageKey, this.toJSON());
   };
 
   isEmpty = () => this.#projects.length === 0;
 
   getProject = (id) => {
     if (this.isEmpty()) {
-      console.log(`Project with ID ${id} is not found`);
+      console.error(`Project with ID ${id} is not found`);
     }
     for (let p of this.#projects) {
       if (p.id === id) {
@@ -88,7 +100,7 @@ class ProjectManager {
 
   removeProject = (id) => {
     if (this.isEmpty()) {
-      console.log(`Project with ID ${id} is not found`);
+      console.error(`Project with ID ${id} is not found`);
       return;
     }
     this.#projects = this.#projects.filter((p) => p.id !== id);

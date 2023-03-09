@@ -71,7 +71,7 @@ class Project {
 
   getTodo = (id) => {
     if (this.isEmpty()) {
-      console.log(`Todo with ID ${id} cannot be found`);
+      console.error(`Todo with ID ${id} cannot be found`);
       return null;
     }
     for (let td of this.#uncheckedTodos) {
@@ -93,7 +93,7 @@ class Project {
 
   removeTodo = (id) => {
     if (this.isEmpty()) {
-      console.log(`Todo with ID ${id} cannot be found`);
+      console.error(`Todo with ID ${id} cannot be found`);
       return;
     }
     this.#uncheckedTodos = this.#uncheckedTodos.filter((td) => td.id !== id);
