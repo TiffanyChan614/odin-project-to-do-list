@@ -12,9 +12,10 @@ class ProjectManager {
         this.#projects = storedData.projects.map((p) => Project.fromJSON(p));
       else this.#projects = [];
       if (this.#projects && storedData.currProjectId) {
-        const tempProj = this.getProject(storedData.currProjectId);
-        if (tempProj) this.#currProject = tempProj;
-        else this.#currProject = null;
+        const tempProj = this.#projects.find(
+          (p) => p.id === storedData.currProjectId
+        );
+        this.#currProject = tempProj || null;
       } else {
         this.#currProject = null;
       }
@@ -31,14 +32,8 @@ class ProjectManager {
   }
 
   set currProject(currProj) {
-    for (const proj of this.#projects) {
-      if (proj.id === currProj.id) {
-        this.#currProject = currProj;
-        this.save();
-        return;
-      }
-    }
-    this.#currProject = null;
+    this.#currProject =
+      this.#projects.find((proj) => proj.id === currProj.id) || null;
     this.save();
   }
 

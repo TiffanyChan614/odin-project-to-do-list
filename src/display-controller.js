@@ -54,7 +54,7 @@ const showProjects = () => {
     currProjName.textContent = '';
     return;
   }
-  for (let project of pm.projects) {
+  for (const project of pm.projects) {
     projUl.appendChild(domCreator.createProject(project, pm));
   }
   if (pm.currProject) currProjName.textContent = pm.currProject.name;
