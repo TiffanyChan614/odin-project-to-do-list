@@ -1,5 +1,5 @@
 import { loadLocalStorage, saveLocalStorage } from './local-storage';
-import Project from './project';
+import Project from '../models/project';
 
 class ProjectManager {
   #projects;
