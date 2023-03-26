@@ -135,19 +135,19 @@ class Project {
   };
 
   sortByAddDateAsc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       return Date.parse(a.addDate) - Date.parse(b.addDate);
     });
   };
 
   sortByAddDateDesc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       return Date.parse(b.addDate) - Date.parse(a.addDate);
     });
   };
 
   sortByPriorityAsc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       const priorityA = Project.PRIORITY_ORDER.indexOf(
         a.priority.toLowerCase()
       );
@@ -159,7 +159,7 @@ class Project {
   };
 
   sortByPriorityDesc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       const priorityA = Project.PRIORITY_ORDER.indexOf(
         a.priority.toLowerCase()
       );
@@ -171,25 +171,25 @@ class Project {
   };
 
   sortByDateAsc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       return Date.parse(a.date) - Date.parse(b.date);
     });
   };
 
   sortByDateDesc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       return Date.parse(b.date) - Date.parse(a.date);
     });
   };
 
   sortByTitleAsc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
   };
 
   sortByTitleDesc = () => {
-    this.#allTodos = this.#allTodos.sort((a, b) => {
+    this.#allTodos.sort((a, b) => {
       return b.title.localeCompare(a.title);
     });
   };
