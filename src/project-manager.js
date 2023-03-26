@@ -166,6 +166,38 @@ class ProjectManager {
     return matches;
   };
 
+  sortByAddDateAsc = () => {
+    this.#currProject.sortByAddDateAsc();
+  };
+
+  sortByAddDateDesc = () => {
+    this.#currProject.sortByAddDateDesc();
+  };
+
+  sortByPriorityAsc = () => {
+    this.#currProject.sortByPriorityAsc();
+  };
+
+  sortByPriorityDesc = () => {
+    this.#currProject.sortByPriorityDesc();
+  };
+
+  sortByDateAsc = () => {
+    this.#currProject.sortByDateAsc();
+  };
+
+  sortByDateDesc = () => {
+    this.#currProject.sortByDateDesc();
+  };
+
+  sortByTitleAsc = () => {
+    this.#currProject.sortByTitleAsc();
+  };
+
+  sortByTitleDesc = () => {
+    this.#currProject.sortByTitleDesc();
+  };
+
   clearAllProjects = () => {
     this.#projects = [];
     this.#currProject = null;

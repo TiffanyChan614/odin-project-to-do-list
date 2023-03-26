@@ -51,7 +51,18 @@
           <div id="todo-header">
             <h1 id="current-project-name"></h1>
             <div id="todo-main-btns">
-              <button type="button" id="add-todo">Add</button>
+              <button type="button" id="add-todo">Add +</button>
+              <select id="sort-menu">
+                <option value="Due Date - Closest First">Due Date - Closest First</option>
+                <option value="Due Date - Furthest First">Due Date - Furthest First</option>
+                <option value="Priority - Lowest First">Priority - Lowest First</option>
+                <option value="Priority - Highest First">Priority - Highest First</option>
+                <option value="Title - A to Z">Title - A to Z</option>
+                <option value="Title - Z to A">Title - Z to A</option>
+                <option value="Date Created - Oldest First" selected>Date Created - Oldest First</option>
+                <option value="Date Created - Newest First">Date Created - Newest First</option>
+              </select>
+              <button type="button" id="sort-todo">Sort</button>
               <button type="button" id="clear-all-todos">Clear All</button>
               <button type="button" id="show-completed">Show Completed</button>
             </div>

@@ -4,7 +4,7 @@ export const setTimeZone = () => {
   const now = new Date();
   const timezoneOffset = now.getTimezoneOffset() * 60000;
   const localTime = new Date(now.getTime() - timezoneOffset);
-  return localTime.toISOString().slice(0, 10);
+  return localTime.toISOString();
 };
 
 class Todo {
@@ -14,14 +14,16 @@ class Todo {
   #date;
   #priority;
   #check;
+  #addDate;
 
   constructor(
     id = null,
     title = 'New Todo',
     desc = 'None',
-    date = setTimeZone(),
+    date = setTimeZone().slice(0, 10),
     priority = 'None',
-    check = false
+    check = false,
+    addDate = setTimeZone()
   ) {
     if (id !== null) this.#id = id;
     else this.#id = `todo-${uuid.v4()}`;
@@ -35,6 +37,7 @@ class Todo {
     this.#date = date;
     this.#priority = priority;
     this.#check = check;
+    this.#addDate = addDate;
   }
 
   set id(id) {
@@ -84,6 +87,14 @@ class Todo {
     return this.#check;
   }
 
+  set addDate(date) {
+    this.#addDate = date;
+  }
+
+  get addDate() {
+    return this.#addDate;
+  }
+
   toggleCheck = () => (this.#check = !this.#check);
 
   edit = (newTitle, newDesc, newDate, newPriority) => {
@@ -114,6 +125,7 @@ class Todo {
       date: this.#date,
       priority: this.#priority,
       check: this.#check,
+      addDate: this.#addDate,
     };
   };
 
@@ -124,7 +136,8 @@ class Todo {
       json.desc,
       json.date,
       json.priority,
-      json.check
+      json.check,
+      json.addDate
     );
   };
 }

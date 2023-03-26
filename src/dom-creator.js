@@ -83,6 +83,9 @@ const createResultDiv = (match) => {
   );
 
   const todoTitle = createPTag(match.matchedTodo.title, 'matched-todo');
+  if (match.matchedTodo.check) {
+    todoTitle.classList.add('checked');
+  }
   const projectName = createPTag(match.matchedProj.name, 'matched-project');
 
   option.appendChild(todoTitle);

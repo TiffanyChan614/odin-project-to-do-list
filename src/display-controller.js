@@ -27,6 +27,19 @@ const showCompletedBtn = document.querySelector('#show-completed');
 const currProjName = document.querySelector('#current-project-name');
 const searchField = document.querySelector('#search-bar');
 const dropdownMenu = document.querySelector('#dropdown-menu');
+const sortMenu = document.querySelector('#sort-menu');
+const sortBtn = document.querySelector('#sort-todo');
+
+const sortFunctions = new Map([
+  ['Due Date - Closest First', () => pm.sortByDateAsc()],
+  ['Due Date - Furthest First', () => pm.sortByDateDesc()],
+  ['Priority - Lowest First', () => pm.sortByPriorityAsc()],
+  ['Priority - Highest First', () => pm.sortByPriorityDesc()],
+  ['Title - A to Z', () => pm.sortByTitleAsc()],
+  ['Title - Z to A', () => pm.sortByTitleDesc()],
+  ['Date Created - Oldest First', () => pm.sortByAddDateAsc()],
+  ['Date Created - Newest First', () => pm.sortByAddDateDesc()],
+]);
 
 const EDIT = 0,
   ADD = 1;
@@ -36,6 +49,7 @@ let projectMode = ADD;
 let selectedTodo = null;
 let todoMode = ADD;
 let showCompleted = false;
+let sortMode = 'Date Created - Oldest First';
 
 const clearProjects = () => {
   if (projUl) {
@@ -243,7 +257,7 @@ const activateAddTodo = () => {
     todoFormOverlay.style.display = 'flex';
     todoTitleField.value = '';
     todoDescField.value = '';
-    todoDateField.value = setTimeZone();
+    todoDateField.value = setTimeZone().slice(0, 10);
     todoPriorityField.value = 'None';
   });
 };
@@ -421,6 +435,19 @@ const hideDropDownMenu = () => {
   });
 };
 
+const activateSortMenu = () => {
+  sortMenu.addEventListener('change', (e) => {
+    sortMode = e.target.value;
+  });
+};
+
+const activateSortBtn = () => {
+  sortBtn.addEventListener('click', (e) => {
+    sortFunctions.get(sortMode)();
+    refreshTodos();
+  });
+};
+
 const activateUI = () => {
   activateAddProj();
   activateCancelProjForm();
@@ -443,6 +470,8 @@ const activateUI = () => {
   activateDropdownMenu();
   hideDropDownMenu();
   activateTodoFormTextbox();
+  activateSortMenu();
+  activateSortBtn();
 };
 
 export default {

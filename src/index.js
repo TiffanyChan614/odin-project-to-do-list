@@ -1,4 +1,3 @@
-// import Project from './project';
 import pm from './initialPM.js';
 import displayController from './display-controller';
 import './style.css';

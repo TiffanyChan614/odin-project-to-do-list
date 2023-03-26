@@ -38,8 +38,7 @@ main {
 
 #sidebar.open #project-btns-container,
 #content > header {
-  height: 7vh;
-  min-height: 3rem;
+  height: 3rem;
 }
 
 #sidebar {
@@ -289,6 +288,7 @@ textarea::placeholder {
   display: flex;
   flex-direction: column;
   gap: 0;
+  height: 3rem;
 }
 
 #search-bar {
@@ -309,6 +309,8 @@ textarea::placeholder {
   border-radius: 0.5rem;
   background-color: white;
   flex-direction: column;
+  position: fixed;
+  top: 3rem;
 }
 
 #dropdown-menu .search-result {
@@ -323,6 +325,10 @@ textarea::placeholder {
 #dropdown-menu .search-result .matched-project {
   color: var(--medium-light-grey);
   font-size: 0.9rem;
+}
+
+#dropdown-menu .search-result .matched-todo.checked {
+  text-decoration: line-through;
 }
 
 #dropdown-menu .search-result:hover {
