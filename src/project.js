@@ -47,15 +47,23 @@ class Project {
     return this.#allTodos;
   }
 
-  isEmpty = () => (this.#allTodos === 0 ? true : false);
+  isEmpty() {
+    this.#allTodos === 0 ? true : false;
+  }
 
-  getNumTodo = () => this.#allTodos.length;
+  getNumTodo() {
+    this.#allTodos.length;
+  }
 
-  getNumChecked = () => this.checkedTodos.length;
+  getNumChecked() {
+    this.checkedTodos.length;
+  }
 
-  getNumUnchecked = () => this.uncheckedTodos.length;
+  getNumUnchecked() {
+    this.uncheckedTodos.length;
+  }
 
-  getTodoByTitle = (title) => {
+  getTodoByTitle(title) {
     if (this.isEmpty()) return;
     let matches = [];
     for (let todo of this.#allTodos) {
@@ -65,9 +73,9 @@ class Project {
     }
     if (matches.length > 0) return matches;
     else return null;
-  };
+  }
 
-  getTodo = (id) => {
+  getTodo(id) {
     if (this.isEmpty()) {
       console.error(`Todo with ID ${id} cannot be found`);
       return null;
@@ -78,25 +86,25 @@ class Project {
       }
     }
     return null;
-  };
+  }
 
-  addTodo = (todo) => {
+  addTodo(todo) {
     this.#allTodos.push(todo);
-  };
+  }
 
-  removeTodo = (id) => {
+  removeTodo(id) {
     if (this.isEmpty()) {
       console.error(`Todo with ID ${id} cannot be found`);
       return;
     }
     this.#allTodos = this.#allTodos.filter((td) => td.id !== id);
-  };
+  }
 
-  editTodo = (id, newTitle, newDesc, newDate, newPriority) => {
+  editTodo(id, newTitle, newDesc, newDate, newPriority) {
     this.getTodo(id).edit(newTitle, newDesc, newDate, newPriority);
-  };
+  }
 
-  checkTodo = (id) => {
+  checkTodo(id) {
     if (this.isEmpty()) return;
     for (let i = 0; i < this.uncheckedTodos.length; i++) {
       const td = this.uncheckedTodos[i];
@@ -105,9 +113,9 @@ class Project {
         break;
       }
     }
-  };
+  }
 
-  uncheckTodo = (id) => {
+  uncheckTodo(id) {
     if (this.isEmpty()) return;
     for (let i = 0; i < this.checkedTodos.length; i++) {
       const td = this.checkedTodos[i];
@@ -115,38 +123,40 @@ class Project {
         td.toggleCheck();
       }
     }
-  };
+  }
 
-  toggleCheckTodo = (id) => {
+  toggleCheckTodo(id) {
     if (this.isEmpty()) return;
     const td = this.getTodo(id);
     if (td.check) this.uncheckTodo(id);
     else this.checkTodo(id);
-  };
+  }
 
-  equals = (project) => this.id === project.id;
+  equals(project) {
+    this.id === project.id;
+  }
 
-  clearAllTodos = () => {
+  clearAllTodos() {
     this.#allTodos = [];
-  };
+  }
 
-  clearHistory = () => {
+  clearHistory() {
     this.#allTodos = [...this.uncheckedTodos];
-  };
+  }
 
-  sortByAddDateAsc = () => {
+  sortByAddDateAsc() {
     this.#allTodos.sort((a, b) => {
       return Date.parse(a.addDate) - Date.parse(b.addDate);
     });
-  };
+  }
 
-  sortByAddDateDesc = () => {
+  sortByAddDateDesc() {
     this.#allTodos.sort((a, b) => {
       return Date.parse(b.addDate) - Date.parse(a.addDate);
     });
-  };
+  }
 
-  sortByPriorityAsc = () => {
+  sortByPriorityAsc() {
     this.#allTodos.sort((a, b) => {
       const priorityA = Project.PRIORITY_ORDER.indexOf(
         a.priority.toLowerCase()
@@ -156,9 +166,9 @@ class Project {
       );
       return priorityA - priorityB;
     });
-  };
+  }
 
-  sortByPriorityDesc = () => {
+  sortByPriorityDesc() {
     this.#allTodos.sort((a, b) => {
       const priorityA = Project.PRIORITY_ORDER.indexOf(
         a.priority.toLowerCase()
@@ -168,25 +178,25 @@ class Project {
       );
       return priorityB - priorityA;
     });
-  };
+  }
 
-  sortByDateAsc = () => {
+  sortByDateAsc() {
     this.#allTodos.sort((a, b) => {
       return Date.parse(a.date) - Date.parse(b.date);
     });
-  };
+  }
 
-  sortByDateDesc = () => {
+  sortByDateDesc() {
     this.#allTodos.sort((a, b) => {
       return Date.parse(b.date) - Date.parse(a.date);
     });
-  };
+  }
 
-  sortByTitleAsc = () => {
+  sortByTitleAsc() {
     this.#allTodos.sort((a, b) => {
       return a.title.localeCompare(b.title);
     });
-  };
+  }
 
   sortByTitleDesc = () => {
     this.#allTodos.sort((a, b) => {
@@ -194,7 +204,7 @@ class Project {
     });
   };
 
-  toString = () => {
+  toString() {
     let msg = `Project Name: ${this.name}\nProject ID: ${this.id}\n`;
     if (this.#allTodos.length > 0) {
       for (let i = 0; i < this.#allTodos.length; i++) {
@@ -203,9 +213,9 @@ class Project {
       }
     }
     return msg;
-  };
+  }
 
-  toJSON = () => {
+  toJSON() {
     return {
       id: this.#id,
       allTodos: this.#allTodos.length
@@ -213,7 +223,7 @@ class Project {
         : [],
       name: this.#name,
     };
-  };
+  }
 
   static fromJSON(json) {
     const project = new Project(json.id, json.name);

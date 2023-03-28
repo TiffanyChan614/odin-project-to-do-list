@@ -53,11 +53,11 @@ class ProjectManager {
     return this.#currProject;
   }
 
-  toJSON = () => {
+  toJSON() {
     const projectsJSON = this.#projects.map((p) => p.toJSON());
     const currProjectId = this.#currProject ? this.#currProject.id : null;
     return { projects: projectsJSON, currProjectId: currProjectId };
-  };
+  }
 
   static fromJSON(json) {
     const projectManager = new ProjectManager();
@@ -74,13 +74,15 @@ class ProjectManager {
     return projectManager;
   }
 
-  save = () => {
+  save() {
     saveLocalStorage(this.#storageKey, this.toJSON());
-  };
+  }
 
-  isEmpty = () => this.#projects.length === 0;
+  isEmpty() {
+    this.#projects.length === 0;
+  }
 
-  getProject = (id) => {
+  getProject(id) {
     if (this.isEmpty()) {
       console.error(`Project with ID ${id} is not found`);
     }
@@ -90,15 +92,15 @@ class ProjectManager {
       }
     }
     return null;
-  };
+  }
 
-  addProject = (project) => {
+  addProject(project) {
     this.#projects.push(project);
     this.#currProject = project;
     this.save();
-  };
+  }
 
-  removeProject = (id) => {
+  removeProject(id) {
     if (this.isEmpty()) {
       console.error(`Project with ID ${id} is not found`);
       return;
@@ -110,50 +112,50 @@ class ProjectManager {
       } else this.#currProject = null;
     }
     this.save();
-  };
+  }
 
-  addTodo = (todo) => {
+  addTodo(todo) {
     if (this.#currProject) {
       this.#currProject.addTodo(todo);
       this.save();
     }
-  };
+  }
 
-  removeTodo = (id) => {
+  removeTodo(id) {
     if (this.#currProject) {
       this.#currProject.removeTodo(id);
       this.save();
     }
-  };
+  }
 
-  getTodo = (id) => {
+  getTodo(id) {
     if (this.#currProject) return this.#currProject.getTodo(id);
-  };
+  }
 
-  editTodo = (id, title, desc, date, priority) => {
+  editTodo(id, title, desc, date, priority) {
     this.#currProject.editTodo(id, title, desc, date, priority);
     this.save();
-  };
+  }
 
-  toggleCheckTodo = (id) => {
+  toggleCheckTodo(id) {
     this.#currProject.toggleCheckTodo(id);
     this.save();
-  };
+  }
 
-  editProject = (id, newName) => {
+  editProject(id, newName) {
     this.getProject(id).name = newName;
     this.#currProject = this.getProject(id);
     this.save();
-  };
+  }
 
-  clearCurrentProject = () => {
+  clearCurrentProject() {
     if (this.#currProject) {
       this.#currProject.clearAllTodos();
       this.save();
     }
-  };
+  }
 
-  searchTodoByTitle = (searchStr) => {
+  searchTodoByTitle(searchStr) {
     let matches = [];
     for (let project of this.#projects) {
       for (let todo of project.allTodos) {
@@ -164,53 +166,53 @@ class ProjectManager {
       }
     }
     return matches;
-  };
+  }
 
-  sortByAddDateAsc = () => {
+  sortByAddDateAsc() {
     this.#currProject.sortByAddDateAsc();
-  };
+  }
 
-  sortByAddDateDesc = () => {
+  sortByAddDateDesc() {
     this.#currProject.sortByAddDateDesc();
-  };
+  }
 
-  sortByPriorityAsc = () => {
+  sortByPriorityAsc() {
     this.#currProject.sortByPriorityAsc();
-  };
+  }
 
-  sortByPriorityDesc = () => {
+  sortByPriorityDesc() {
     this.#currProject.sortByPriorityDesc();
-  };
+  }
 
-  sortByDateAsc = () => {
+  sortByDateAsc() {
     this.#currProject.sortByDateAsc();
-  };
+  }
 
-  sortByDateDesc = () => {
+  sortByDateDesc() {
     this.#currProject.sortByDateDesc();
-  };
+  }
 
-  sortByTitleAsc = () => {
+  sortByTitleAsc() {
     this.#currProject.sortByTitleAsc();
-  };
+  }
 
-  sortByTitleDesc = () => {
+  sortByTitleDesc() {
     this.#currProject.sortByTitleDesc();
-  };
+  }
 
-  clearAllProjects = () => {
+  clearAllProjects() {
     this.#projects = [];
     this.#currProject = null;
     this.save();
-  };
+  }
 
-  toString = () => {
+  toString() {
     let out = '';
     for (let project of this.#projects) {
       out += project.toString() + '\n';
     }
     return out;
-  };
+  }
 }
 
 export default ProjectManager;

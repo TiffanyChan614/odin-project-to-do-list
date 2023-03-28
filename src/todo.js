@@ -95,18 +95,22 @@ class Todo {
     return this.#addDate;
   }
 
-  toggleCheck = () => (this.#check = !this.#check);
+  toggleCheck() {
+    this.#check = !this.#check;
+  }
 
-  edit = (newTitle, newDesc, newDate, newPriority) => {
+  edit(newTitle, newDesc, newDate, newPriority) {
     this.#title = newTitle;
     this.#desc = newDesc;
     this.#date = newDate;
     this.#priority = newPriority;
-  };
+  }
 
-  equals = (todo) => this.#id === todo.id;
+  equals(todo) {
+    this.#id === todo.id;
+  }
 
-  toString = () => {
+  toString() {
     return (
       `ID: ${this.#id}\n` +
       `Title: ${this.#title}\n` +
@@ -115,9 +119,9 @@ class Todo {
       `Priority: ${this.#priority}\n` +
       `Check: ${this.#check}\n`
     );
-  };
+  }
 
-  toJSON = () => {
+  toJSON() {
     return {
       id: this.#id,
       title: this.#title,
@@ -127,9 +131,9 @@ class Todo {
       check: this.#check,
       addDate: this.#addDate,
     };
-  };
+  }
 
-  static fromJSON = (json) => {
+  static fromJSON(json) {
     return new Todo(
       json.id,
       json.title,
@@ -139,7 +143,7 @@ class Todo {
       json.check,
       json.addDate
     );
-  };
+  }
 }
 
 export default Todo;
