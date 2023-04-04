@@ -1,5 +1,6 @@
 const uuid = require('uuid');
 
+// CR: This method does not belong to Todo class. It is a utility function. Move it to a separate file
 export const setTimeZone = () => {
   const now = new Date();
   const timezoneOffset = now.getTimezoneOffset() * 60000;
@@ -25,6 +26,7 @@ class Todo {
     check = false,
     addDate = setTimeZone()
   ) {
+    // Always use {} bracket around if else statements. It makes reading code easy and less error prone.
     if (id !== null) this.#id = id;
     else this.#id = `todo-${uuid.v4()}`;
 
@@ -106,10 +108,12 @@ class Todo {
     this.#priority = newPriority;
   }
 
+  // CR: Not returning anything
   equals(todo) {
     this.#id === todo.id;
   }
 
+  // CR: toString is Javascript provided, I will try to not override it. Use something like getAsString
   toString() {
     return (
       `ID: ${this.#id}\n` +
@@ -146,4 +150,5 @@ class Todo {
   }
 }
 
+// CR: Either export everything here or export at the start of component. Don't mix both
 export default Todo;

@@ -1,7 +1,7 @@
 import domCreator from './dom-creator';
-import Todo, { setTimeZone } from './todo';
+import Todo, { setTimeZone } from '../models/todo';
 import pm from './initialPM';
-import Project from './project';
+import Project from '../models/project';
 
 const projUl = document.querySelector('#project-list');
 const todoUl = document.querySelector('#todo-list');
@@ -44,6 +44,8 @@ const sortFunctions = new Map([
 const EDIT = 0,
   ADD = 1;
 
+// projectMode and todoMode are state variables
+// I would create a state object to hold all the state variables
 let projToEdit = null;
 let projectMode = ADD;
 let selectedTodo = null;
@@ -100,6 +102,9 @@ const activateAddProj = () => {
       sidebarBtn.click();
     }
     projectMode = ADD;
+    // Usually you would want to use a class to style this.
+    // Have a class with display: flex, and add that class to the element
+    // That way styling logic is separated from the logic of the program
     projFormOverlay.style.display = 'flex';
     projNameField.value = '';
   });
