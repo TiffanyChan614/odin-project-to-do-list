@@ -109,7 +109,7 @@ main {
 }
 
 #project-container {
-  display: flex;
+  display: none;
   flex-direction: column;
   color: white;
   background-color: var(--blue);
@@ -218,9 +218,9 @@ main {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
   justify-content: center;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
   text-align: center;
 }
@@ -304,7 +304,7 @@ textarea::placeholder {
 
 #dropdown-menu {
   display: none;
-  width: 66%;
+  width: 50%;
   border: 0.07rem solid var(--pale-grey);
   border-radius: 0.5rem;
   background-color: white;
@@ -401,7 +401,7 @@ textarea::placeholder {
 }
 
 .todo:hover {
-  box-shadow: 0 0 0.2rem var(--medium-light-grey);
+  box-shadow: 0 0 0.2rem var(--light-grey);
 }
 
 .todo-upper {
@@ -466,8 +466,7 @@ textarea::placeholder {
   white-space: pre;
 }
 
-.todo-desc,
-.todo-date {
+.todo-lower {
   display: none;
 }
 
@@ -504,4 +503,12 @@ footer {
 
 .material-symbols-outlined .todo-icons {
   width: 1rem;
+}
+
+#project-form-overlay.flex,
+#todo-form-overlay.flex,
+#project-container.flex,
+#dropdown-menu.flex,
+.todo-lower.flex {
+  display: flex;
 }

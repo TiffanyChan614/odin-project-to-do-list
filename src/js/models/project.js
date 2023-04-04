@@ -9,8 +9,11 @@ class Project {
   #allTodos;
 
   constructor(id = null, name = 'New Project', allTodos = []) {
-    if (!id) this.#id = `project-${uuid.v4()}`;
-    else this.#id = id;
+    if (!id) {
+      this.#id = `project-${uuid.v4()}`;
+    } else {
+      this.#id = id;
+    }
     this.#name = name;
     this.#allTodos = [...allTodos];
   }
@@ -48,31 +51,35 @@ class Project {
   }
 
   isEmpty() {
-    this.#allTodos === 0 ? true : false;
+    return this.#allTodos === 0 ? true : false;
   }
 
   getNumTodo() {
-    this.#allTodos.length;
+    return this.#allTodos.length;
   }
 
   getNumChecked() {
-    this.checkedTodos.length;
+    return this.checkedTodos.length;
   }
 
   getNumUnchecked() {
-    this.uncheckedTodos.length;
+    return this.uncheckedTodos.length;
   }
 
   getTodoByTitle(title) {
-    if (this.isEmpty()) return;
+    if (this.isEmpty()) {
+      return;
+    }
     let matches = [];
     for (let todo of this.#allTodos) {
       if (todo.title === title) {
         matches.push(todo);
       }
     }
-    if (matches.length > 0) return matches;
-    else return null;
+    if (matches.length > 0) {
+      return matches;
+    }
+    return null;
   }
 
   getTodo(id) {
@@ -133,7 +140,7 @@ class Project {
   }
 
   equals(project) {
-    this.id === project.id;
+    return this.id === project.id;
   }
 
   clearAllTodos() {
@@ -204,7 +211,7 @@ class Project {
     });
   };
 
-  toString() {
+  getAsString() {
     let msg = `Project Name: ${this.name}\nProject ID: ${this.id}\n`;
     if (this.#allTodos.length > 0) {
       for (let i = 0; i < this.#allTodos.length; i++) {

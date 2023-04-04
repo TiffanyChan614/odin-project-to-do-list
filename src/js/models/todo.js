@@ -1,12 +1,5 @@
+import { setTimeZone } from '../services/utility.js';
 const uuid = require('uuid');
-
-// CR: This method does not belong to Todo class. It is a utility function. Move it to a separate file
-export const setTimeZone = () => {
-  const now = new Date();
-  const timezoneOffset = now.getTimezoneOffset() * 60000;
-  const localTime = new Date(now.getTime() - timezoneOffset);
-  return localTime.toISOString();
-};
 
 class Todo {
   #id;
@@ -27,14 +20,23 @@ class Todo {
     addDate = setTimeZone()
   ) {
     // Always use {} bracket around if else statements. It makes reading code easy and less error prone.
-    if (id !== null) this.#id = id;
-    else this.#id = `todo-${uuid.v4()}`;
+    if (id !== null) {
+      this.#id = id;
+    } else {
+      this.#id = `todo-${uuid.v4()}`;
+    }
 
-    if (title !== '') this.#title = title;
-    else this.#title = 'New Todo';
+    if (title !== '') {
+      this.#title = title;
+    } else {
+      this.#title = 'New Todo';
+    }
 
-    if (desc !== '') this.#desc = desc;
-    else this.#desc = 'None';
+    if (desc !== '') {
+      this.#desc = desc;
+    } else {
+      this.#desc = 'None';
+    }
 
     this.#date = date;
     this.#priority = priority;
@@ -110,11 +112,11 @@ class Todo {
 
   // CR: Not returning anything
   equals(todo) {
-    this.#id === todo.id;
+    return this.#id === todo.id;
   }
 
   // CR: toString is Javascript provided, I will try to not override it. Use something like getAsString
-  toString() {
+  getAsString() {
     return (
       `ID: ${this.#id}\n` +
       `Title: ${this.#title}\n` +

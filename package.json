@@ -10,7 +10,7 @@
     "watch": "npm-watch"
   },
   "watch": {
-    "build": "./src/*.js"
+    "build": "./src/js/*.js"
   },
   "repository": {
     "type": "git",

@@ -1,7 +1,8 @@
 import domCreator from './dom-creator';
-import Todo, { setTimeZone } from '../models/todo';
+import Todo from '../models/todo';
 import pm from './initialPM';
 import Project from '../models/project';
+import { setTimeZone } from '../services/utility.js';
 
 const projUl = document.querySelector('#project-list');
 const todoUl = document.querySelector('#todo-list');
@@ -31,14 +32,14 @@ const sortMenu = document.querySelector('#sort-menu');
 const sortBtn = document.querySelector('#sort-todo');
 
 const sortFunctions = new Map([
-  ['Due Date - Closest First', () => pm.sortByDateAsc()],
-  ['Due Date - Furthest First', () => pm.sortByDateDesc()],
-  ['Priority - Lowest First', () => pm.sortByPriorityAsc()],
-  ['Priority - Highest First', () => pm.sortByPriorityDesc()],
+  ['Due Date - New to Old', () => pm.sortByDateAsc()],
+  ['Due Date - Old to New', () => pm.sortByDateDesc()],
+  ['Priority - Low to High', () => pm.sortByPriorityAsc()],
+  ['Priority - High to Low', () => pm.sortByPriorityDesc()],
   ['Title - A to Z', () => pm.sortByTitleAsc()],
   ['Title - Z to A', () => pm.sortByTitleDesc()],
-  ['Date Created - Oldest First', () => pm.sortByAddDateAsc()],
-  ['Date Created - Newest First', () => pm.sortByAddDateDesc()],
+  ['Date Created - Old to New', () => pm.sortByAddDateAsc()],
+  ['Date Created - New to Old', () => pm.sortByAddDateDesc()],
 ]);
 
 const EDIT = 0,
@@ -46,12 +47,15 @@ const EDIT = 0,
 
 // projectMode and todoMode are state variables
 // I would create a state object to hold all the state variables
-let projToEdit = null;
-let projectMode = ADD;
-let selectedTodo = null;
-let todoMode = ADD;
-let showCompleted = false;
-let sortMode = 'Date Created - Oldest First';
+
+let state = {
+  projectMode: ADD,
+  todoMode: ADD,
+  selectedTodo: null,
+  projToEdit: null,
+  showCompleted: false,
+  sortMode: 'Date Created - Oldest First',
+};
 
 const clearProjects = () => {
   if (projUl) {
@@ -91,7 +95,7 @@ const refreshProjects = () => {
 const refreshTodos = () => {
   clearTodos();
   if (pm.currProject) {
-    if (showCompleted) showTodos(pm.currProject.allTodos);
+    if (state.showCompleted) showTodos(pm.currProject.allTodos);
     else showTodos(pm.currProject.uncheckedTodos);
   }
 };
@@ -101,27 +105,27 @@ const activateAddProj = () => {
     if (sidebar.classList.contains('close')) {
       sidebarBtn.click();
     }
-    projectMode = ADD;
+    state.projectMode = ADD;
     // Usually you would want to use a class to style this.
     // Have a class with display: flex, and add that class to the element
     // That way styling logic is separated from the logic of the program
-    projFormOverlay.style.display = 'flex';
+    projFormOverlay.classList.add('flex');
     projNameField.value = '';
   });
 };
 
 const handleProjFormSubmit = () => {
   let projName = projNameField.value;
-  if (projectMode === ADD) {
+  if (state.projectMode === ADD) {
     if (projName !== '') pm.addProject(new Project(null, projName));
     else pm.addProject(new Project());
-  } else if (projectMode === EDIT) {
-    if (projToEdit) {
-      pm.editProject(projToEdit.id, projName);
-      projToEdit = null;
+  } else if (state.projectMode === EDIT) {
+    if (state.projToEdit) {
+      pm.editProject(state.projToEdit.id, projName);
+      state.projToEdit = null;
     }
   }
-  projFormOverlay.style.display = 'none';
+  projFormOverlay.classList.add('flex');
   refreshProjects();
   refreshTodos();
 };
@@ -143,7 +147,7 @@ const activateProjForm = () => {
 const activateCancelProjForm = () => {
   cancelProjForm.addEventListener('click', (e) => {
     e.preventDefault();
-    projFormOverlay.style.display = 'none';
+    projFormOverlay.classList.remove('flex');
   });
 };
 
@@ -174,9 +178,11 @@ const activateClearProj = () => {
       (target.parentNode !== null &&
         target.parentNode.classList.contains('clear-project'))
     ) {
-      if (target.classList.contains('clear-project'))
+      if (target.classList.contains('clear-project')) {
         pm.removeProject(target.parentNode.parentNode.id);
-      else pm.removeProject(target.parentNode.parentNode.parentNode.id);
+      } else {
+        pm.removeProject(target.parentNode.parentNode.parentNode.id);
+      }
       refreshProjects();
       refreshTodos();
     }
@@ -192,29 +198,22 @@ const activateEditProj = () => {
         target.parentNode.classList.contains('edit-project'))
     ) {
       if (target.classList.contains('edit-project')) {
-        projToEdit = pm.getProject(target.parentNode.parentNode.id);
+        state.projToEdit = pm.getProject(target.parentNode.parentNode.id);
       } else {
-        projToEdit = pm.getProject(target.parentNode.parentNode.parentNode.id);
+        state.projToEdit = pm.getProject(
+          target.parentNode.parentNode.parentNode.id
+        );
       }
-      projectMode = EDIT;
-      projFormOverlay.style.display = 'flex';
-      let oldName = projToEdit.name;
+      state.projectMode = EDIT;
+      projFormOverlay.classList.add('flex');
+      let oldName = state.projToEdit.name;
       projNameField.value = oldName;
     }
   });
 };
 
 const showTodoDetail = (todoLi) => {
-  todoLi.style.backgroundColor = 'light pink';
-  const descP = todoLi.querySelector('.todo-desc');
-  const dateP = todoLi.querySelector('.todo-date');
-  if (window.getComputedStyle(descP).getPropertyValue('display') === 'none') {
-    descP.style.display = 'flex';
-    dateP.style.display = 'flex';
-  } else {
-    descP.style.display = 'none';
-    dateP.style.display = 'none';
-  }
+  todoLi.querySelector('.todo-lower').classList.toggle('flex');
 };
 
 const activateTodoEvent = () => {
@@ -258,8 +257,8 @@ const activateClearTodo = () => {
 
 const activateAddTodo = () => {
   addTodoBtn.addEventListener('click', (e) => {
-    todoMode = ADD;
-    todoFormOverlay.style.display = 'flex';
+    state.todoMode = ADD;
+    todoFormOverlay.classList.add('flex');
     todoTitleField.value = '';
     todoDescField.value = '';
     todoDateField.value = setTimeZone().slice(0, 10);
@@ -274,22 +273,27 @@ const activateEditTodo = () => {
       target.classList.contains('edit-todo') ||
       target.parentNode.classList.contains('edit-todo')
     ) {
-      todoMode = EDIT;
-      todoFormOverlay.style.display = 'flex';
+      state.todoMode = EDIT;
+      todoFormOverlay.classList.add('flex');
       if (target.classList.contains('edit-todo'))
-        selectedTodo = pm.getTodo(target.parentNode.parentNode.parentNode.id);
+        state.selectedTodo = pm.getTodo(
+          target.parentNode.parentNode.parentNode.id
+        );
       else {
-        selectedTodo = pm.getTodo(
+        state.selectedTodo = pm.getTodo(
           target.parentNode.parentNode.parentNode.parentNode.id
         );
       }
-      const oldTitle = selectedTodo.title;
-      const oldDesc = selectedTodo.desc;
-      const oldDate = selectedTodo.date;
-      const oldPriority = selectedTodo.priority;
+      const oldTitle = state.selectedTodo.title;
+      const oldDesc = state.selectedTodo.desc;
+      const oldDate = state.selectedTodo.date;
+      const oldPriority = state.selectedTodo.priority;
       todoTitleField.value = oldTitle;
-      if (oldDesc !== 'None') todoDescField.value = oldDesc;
-      else todoDescField.value = '';
+      if (oldDesc !== 'None') {
+        todoDescField.value = oldDesc;
+      } else {
+        todoDescField.value = '';
+      }
       todoDateField.value = oldDate;
       todoPriorityField.value = oldPriority;
     }
@@ -301,18 +305,18 @@ const handleTodoFormSubmit = () => {
   let desc = todoDescField.value;
   let date = todoDateField.value;
   let priority = todoPriorityField.value;
-  if (todoMode === ADD) {
+  if (state.todoMode === ADD) {
     let newTodo = new Todo(null, title, desc, date, priority);
     pm.addTodo(newTodo);
-  } else if (todoMode === EDIT) {
-    if (selectedTodo) {
+  } else if (state.todoMode === EDIT) {
+    if (state.selectedTodo) {
       desc = desc === '' ? 'None' : desc;
-      pm.editTodo(selectedTodo.id, title, desc, date, priority);
-      selectedTodo = null;
+      pm.editTodo(state.selectedTodo.id, title, desc, date, priority);
+      state.selectedTodo = null;
     }
   }
   refreshTodos();
-  todoFormOverlay.style.display = 'none';
+  todoFormOverlay.classList.remove('flex');
 };
 
 const activateTodoForm = () => {
@@ -331,7 +335,7 @@ const activateTodoForm = () => {
 const activateCancelTodoForm = () => {
   cancelTodoForm.addEventListener('click', (e) => {
     e.preventDefault();
-    todoFormOverlay.style.display = 'none';
+    todoFormOverlay.classList.remove('flex');
   });
 };
 
@@ -361,23 +365,14 @@ const activateClearAllTodos = () => {
 
 const activateSidebarBtn = () => {
   sidebarBtn.addEventListener('click', (e) => {
-    if (
-      window.getComputedStyle(projectContainer).getPropertyValue('display') ===
-      'none'
-    ) {
-      projectContainer.style.display = 'flex';
-      sidebar.classList.toggle('open');
-      sidebar.classList.toggle('close');
-    } else {
-      projectContainer.style.display = 'none';
-      sidebar.classList.toggle('open');
-      sidebar.classList.toggle('close');
-    }
+    projectContainer.classList.toggle('flex');
+    sidebar.classList.toggle('open');
+    sidebar.classList.toggle('close');
   });
 };
 
 const toggleShowCompletedbtn = () => {
-  if (showCompleted) {
+  if (state.showCompleted) {
     showCompletedBtn.textContent = 'Hide Completed';
   } else {
     showCompletedBtn.textContent = 'Show Completed';
@@ -386,7 +381,7 @@ const toggleShowCompletedbtn = () => {
 
 const activateShowCompleted = () => {
   showCompletedBtn.addEventListener('click', (e) => {
-    showCompleted = !showCompleted;
+    state.showCompleted = !state.showCompleted;
     toggleShowCompletedbtn();
     refreshTodos();
   });
@@ -402,9 +397,13 @@ const activateSearchBar = () => {
         for (let match of matches) {
           dropdownMenu.appendChild(domCreator.createResultDiv(match));
         }
-        dropdownMenu.style.display = 'flex';
-      } else dropdownMenu.style.display = 'none';
-    } else dropdownMenu.style.display = 'none';
+        dropdownMenu.classList.add('flex');
+      } else {
+        dropdownMenu.classList.remove('flex');
+      }
+    } else {
+      dropdownMenu.classList.remove('flex');
+    }
   });
 };
 
@@ -415,14 +414,16 @@ const activateDropdownMenu = () => {
       let projId = target.value.split(':')[0];
       let todoId = target.value.split(':')[1];
       pm.currProject = pm.getProject(projId);
-      if (pm.getTodo(todoId).check) showCompleted = true;
+      if (pm.getTodo(todoId).check) {
+        state.showCompleted = true;
+      }
       toggleShowCompletedbtn();
       refreshProjects();
       refreshTodos();
       const todoLi = document.querySelector(`#${todoId}`);
       showTodoDetail(todoLi);
     }
-    dropdownMenu.style.display = 'none';
+    dropdownMenu.classList.remove('flex');
     searchField.value = '';
   });
 };
@@ -435,20 +436,20 @@ const hideDropDownMenu = () => {
       target.id !== 'search-bar' &&
       target.id !== 'dropdown-menu'
     )
-      dropdownMenu.style.display = 'none';
+      dropdownMenu.classList.remove('flex');
     searchField.value = '';
   });
 };
 
 const activateSortMenu = () => {
   sortMenu.addEventListener('change', (e) => {
-    sortMode = e.target.value;
+    state.sortMode = e.target.value;
   });
 };
 
 const activateSortBtn = () => {
   sortBtn.addEventListener('click', (e) => {
-    sortFunctions.get(sortMode)();
+    sortFunctions.get(state.sortMode)();
     refreshTodos();
   });
 };

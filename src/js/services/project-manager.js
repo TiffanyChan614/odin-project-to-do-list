@@ -94,6 +94,11 @@ class ProjectManager {
     return null;
   }
 
+  createProject(name) {
+    let project = new Project(name);
+    this.addProject(project);
+  }
+
   addProject(project) {
     this.#projects.push(project);
     this.#currProject = project;

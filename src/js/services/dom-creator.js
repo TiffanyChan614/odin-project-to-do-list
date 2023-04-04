@@ -1,4 +1,5 @@
 const SVG_DEFAULT_CLASS = 'material-symbols-outlined';
+
 const createProject = (project, pm) => {
   let li = document.createElement('li');
   li.textContent = project.name;
