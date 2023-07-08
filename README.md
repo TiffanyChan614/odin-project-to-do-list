@@ -27,6 +27,7 @@ You can view my page here: [Todo List](https://tiffanychan614.github.io/odin-to-
 - OOP design in JavaScript
 - localStorage
 - CSS Flexbox
+- UI design
 
 ## Features
 
