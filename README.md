@@ -1,6 +1,6 @@
 # Todo List
 
-This is a simple todo list app inspired by The Odin Project - Todo list. I did this project to practice my skills in JavaScript that I learned from Web Scripting - Intro course in Fanshawe College. This project also allows me to explore more about DOM manipulation and how to use webpack to bundle my code.
+This is a simple todo list app inspired by [The Odin Project - Todo list](https://www.theodinproject.com/lessons/node-path-javascript-todo-list). I did this project to practice my skills in JavaScript that I learned from Web Scripting - Intro course in Fanshawe College. This project also allows me to explore more about DOM manipulation and how to use webpack to bundle my code.
 
 ## Live Demo
 
@@ -38,6 +38,6 @@ You can view my page here: [Todo List](https://tiffanychan614.github.io/odin-to-
 - You can mark a todo item as completed.
 - You can toggle between showing completed todo items or hiding them.
 - You can view all todo items or todo items by project.
-- You can minimize the sidebar
+- You can minimize the sidebar.
 - You can search for todo items by title.
 - Todo items are saved in localStorage.
