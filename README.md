@@ -64,7 +64,7 @@ Start the server
 - Webpack
 - ES6 Modules
 - OOP design in JavaScript
-- localStorage
+- Local Storage
 - CSS Flexbox
 - UI design
 
@@ -79,7 +79,7 @@ Start the server
 - You can view all todo items or todo items by project.
 - You can minimize the sidebar.
 - You can search for todo items by title.
-- Todo items are saved in localStorage.
+- Todo items are saved in local storage.
 
 ## License
 
